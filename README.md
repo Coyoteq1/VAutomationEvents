@@ -1,10 +1,8 @@
 # VAuto Arena System
 
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/your-repo/vauto-arena)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![V Rising](https://img.shields.io/badge/game-V%20Rising-red.svg)](https://vrisinggame.com/)
+[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/Coyoteq1/VAutomationVrising)[![V Rising](https://img.shields.io/badge/game-V%20Rising-red.svg)](https://vrisinggame.com/)
 
-A comprehensive arena automation system for V Rising servers, featuring dual character management, automated PvP zones, real-time map tracking, and extensive administrative tools.
+A comprehensive arena automation system for V Rising servers, featuring complete VBlood unlock integration, dual character management, automated PvP zones, real-time map tracking, and extensive administrative tools.
 
 ## 🎮 Features
 
@@ -17,11 +15,12 @@ A comprehensive arena automation system for V Rising servers, featuring dual cha
 - **🏗️ Service-Oriented Architecture** - Modular, scalable design
 
 ### Arena System
-- **Automatic Zone Detection** - Walk into zones to auto-enter arena
-- **State Preservation** - Complete snapshot-based state management
-- **Instant Unlocks** - All research, abilities, and blood types in arena
+- **Automatic Zone Detection** - Walk into zones to auto-enter arena (50m entry, 75m exit radius)
+- **Complete State Preservation** - Snapshot-based state management with full restoration
+- **VBlood Hook System** - All VBlood abilities appear unlocked in arena UI (100+ VBlood database)
 - **Crash Recovery** - Automatic state restoration on server restart
-- **VBlood Integration** - Spawn and test VBlood bosses
+- **VBlood Integration** - Spawn/despawn VBlood bosses with achievement unlock system
+- **Progression Integrity** - Real progression never modified, only UI override in arena
 
 ### Character Management
 - **Instant Character Switching** - No logout required
@@ -63,20 +62,21 @@ A comprehensive arena automation system for V Rising servers, featuring dual cha
 
 ### Basic Usage
 ```bash
-# Create PvP character
-.char create
+# Enter arena (automatic proximity or manual)
+.arena enter [build]
 
-# Enter arena
-.arena enter
+# Check arena status
+.arena status
 
-# Switch characters instantly
-.charswap
+# Switch builds while in arena
+.arena warrior
+.arena mage
 
 # Exit arena
 .arena exit
 
-# Check server status
-.system all
+# System information
+.arena info
 ```
 
 ### Admin Quick Commands
@@ -109,13 +109,19 @@ LogLevel = Info
 ArenaCenterX = -1000
 ArenaCenterY = 5
 ArenaCenterZ = -500
-ArenaRadius = 100
+ArenaEnterRadius = 50
+ArenaExitRadius = 75
 AutoEnter = true
 
 [Database]
 EnableDatabase = true
 DatabasePath = BepInEx/config/VAuto/Database.db
 EnableJsonFallback = true
+
+[VBlood]
+EnableVBloodSystem = true
+AutoSpawnEnabled = false
+AchievementUnlockEnabled = true
 ```
 
 ### Advanced Configuration
@@ -127,9 +133,10 @@ EnableJsonFallback = true
 ## 📖 Command Categories
 
 ### Player Commands
+- **Arena System** - `arena enter`, `arena exit`, `arena status`, `arena info`, `arena [build]`
 - **Character Management** - `char`, `character`, `stats`, `info`
 - **Quick Actions** - `tp`, `pos`, `hp`, `list`, `online`
-- **Arena System** - `arena enter`, `arena exit`, `arena status`
+- **VBlood System** - `vblood list`, `vblood spawn`, `vblood unlock`
 - **Utilities** - `time`, `weather`, `calc`, `random`
 
 ### Administrative Commands
@@ -170,11 +177,13 @@ EnableJsonFallback = true
 ```
 
 ### Key Services
-- **LifecycleService** - Player state management and arena lifecycle
-- **DatabaseService** - Centralized data persistence with fallback
-- **MapIconService** - Real-time player tracking on map
-- **ArenaVirtualContext** - Global arena state management
-- **ZoneService** - Enhanced zone management with thread safety
+- **SnapshotManagerService** - Complete arena entry/exit lifecycle management
+- **GameSystems** - VBlood hook activation/deactivation system
+- **ArenaProximitySystem** - Automatic arena entry/exit based on distance
+- **ArenaVirtualContext** - Single global flag for arena state management
+- **ProgressionCaptureService** - VBlood and ability capture/restore
+- **VBloodMapper** - 100+ VBlood boss database with complete GUID mapping
+- **AchievementUnlockService** - Multi-category achievement unlock system
 
 ## 💾 Database System
 
@@ -258,9 +267,10 @@ public static class NewService
 
 ### Common Issues
 1. **Commands not working** - Check admin privileges and command prefix
-2. **Arena entry fails** - Verify zone configuration and player state
-3. **Map icons not showing** - Check map icon service status
-4. **Database errors** - Enable JSON fallback and check permissions
+2. **Arena entry fails** - Verify zone configuration, player state, and VBlood hook status
+3. **VBlood abilities not showing** - Ensure GameSystems.MarkPlayerEnteredArena was called
+4. **State restoration issues** - Check snapshot integrity and service initialization
+5. **Database errors** - Enable JSON fallback and check permissions
 
 ### Debug Commands
 ```bash
@@ -287,10 +297,10 @@ public static class NewService
 - **Plugin API** - Third-party extension support
 
 ### Version History
-- **v1.0.0** - Initial release with core functionality
-- **v1.1.0** - Enhanced database integration (planned)
-- **v1.2.0** - Advanced admin tools (planned)
-- **v1.3.0** - Tournament system (planned)
+- **v1.0.0** - Initial release with complete arena lifecycle and VBlood hook system
+- **v1.1.0** - Enhanced VBlood database and achievement system (current)
+- **v1.2.0** - Multi-zone support and tournament system (planned)
+- **v1.3.0** - Advanced analytics and custom build editor (planned)
 
 ## 🤝 Contributing
 
