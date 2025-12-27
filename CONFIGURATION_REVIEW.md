@@ -1,17 +1,17 @@
-# VAuto Arena System - Configuration Review
+# VAuto Automation System - Configuration Review
 
 ## Overview
-This document provides a comprehensive review of the VAuto Arena System configuration files and their correct implementation.
+This document provides a comprehensive review of the VAuto Automation System configuration files and their correct implementation.
 
 ## Configuration Files Analysis
 
-### 1. Main Arena Configuration (`config/gg.vautomation.arena.cfg`)
+### 1. Main Automation Configuration (`config/gg.vautomation.arena.cfg`)
 
-#### ✅ Arena Settings
-- **Arena Center**: `-1000, 5, -500` (Default spawn point)
-- **Arena Radius**: `50` (Standard arena size)
+#### ✅ Automation Settings
+- **Service Center**: `-1000, 5, -500` (Default service location)
+- **Service Radius**: `50` (Standard service area)
 - **VBlood Guids**: Comprehensive list of 100+ VBlood GUIDs for full unlocks
-- **Auto-Enter**: Enabled via lifecycle system
+- **Auto-Lifecycle**: Enabled via lifecycle system
 - **State Restoration**: Enabled for complete player state recovery
 
 #### ✅ VBlood Unlock Configuration
@@ -36,18 +36,18 @@ VBloodGuids = -1905777458,-1541423745,1851788208,-1329110591,1847352945,-1590401
 
 ### 2. Advanced Configuration (`VAuto-Advanced-Config.json`)
 
-#### Arena System Configuration
+#### Automation System Configuration
 ```json
 "ArenaSystem": {
   "Enabled": true,
   "AutoEnterEnabled": true,
   "DefaultSpawnPoint": { "X": -1000.0, "Y": 5.0, "Z": -500.0 },
-  "ArenaRadius": 50.0,
+  "ServiceRadius": 50.0,
   "EntryCommands": ["heal", "unlock_all", "apply_buffs"],
   "ExitCommands": ["restore_inventory", "remove_buffs", "cleanup_achievements"],
-  "ZoneDetection": {
+  "LifecycleManagement": {
     "Enabled": true,
-    "AutoExitOnLeave": true,
+    "AutoLifecycle": true,
     "WarningDistance": 100.0,
     "ExitDistance": 600.0
   }
@@ -82,15 +82,15 @@ VBloodGuids = -1905777458,-1541423745,1851788208,-1329110591,1847352945,-1590401
 }
 ```
 
-### 3. Arena Zones Configuration (`config/VAuto.Arena/arena_zones.json`)
+### 3. Automation Zones Configuration (`config/VAuto.Arena/arena_zones.json`)
 
-#### Zone Definition
+#### Service Zone Definition
 ```json
 [
   {
     "Center": { "x": -1000.0, "y": -5.0, "z": -500.0 },
-    "Radius": 50.0,
-    "BuildName": null,
+    "ServiceRadius": 50.0,
+    "CharacterType": null,
     "UnlockAllVBloods": true
   }
 ]
@@ -100,7 +100,7 @@ VBloodGuids = -1905777458,-1541423745,1851788208,-1329110591,1847352945,-1590401
 
 - ⚠️ Y-coordinate mismatch: Config shows `y: -5.0` but CFG shows `y: 5`
 - ✅ VBlood unlock enabled
-- ✅ Standard radius (50 units)
+- ✅ Standard service radius (50 units)
 
 ### 4. Build Configuration (`config/VAuto.Arena/builds.json`)
 
@@ -127,26 +127,19 @@ VBloodGuids = -1905777458,-1541423745,1851788208,-1329110591,1847352945,-1590401
 
 ## Configuration Issues Found
 
-
 ### ❌ Critical Issues
-
 1. **Y-Coordinate Mismatch**: Arena center Y-coordinate inconsistency between CFG (5) and JSON (-5)
 
-
 ### ⚠️ Warnings
-
 1. **VBlood System Disabled**: VBloodSystem settings show `"Enabled": false` but should be true for arena functionality
 2. **Mapper Disabled**: `MapperEnabled: false` should be `true` for VBlood operations
 
-
 ### ✅ Correct Implementations
-
 1. **Comprehensive VBlood GUID List**: 100+ GUIDs for complete unlock coverage
 2. **Lifecycle System**: Proper auto-entry/exit configuration
 3. **Achievement Integration**: Full achievement unlock system enabled
 4. **Snapshot System**: UUID-based tracking implemented
 5. **Map Icon Service**: Complete player tracking system
-
 
 ## Recommendations
 
@@ -163,15 +156,16 @@ VBloodGuids = -1905777458,-1541423745,1851788208,-1329110591,1847352945,-1590401
 ## Validation Commands
 Use these commands to verify configuration:
 ```bash
-.arena status          # Check arena system status
-.arena config          # Display current configuration
-.system arena          # Show arena service status
+.automation status     # Check automation system status
+.service status        # Display current service configuration
+.system lifecycle      # Show lifecycle service status
 .debug performance     # Check system performance
 ```
 
 ## Next Steps
 1. Fix identified configuration issues
-2. Test arena entry/exit functionality
+2. Test automation lifecycle functionality
 3. Verify VBlood unlock system
 4. Validate snapshot system operation
-5. Test achievement unlock integration
+5. Test conveyor logistics automation
+6. Test dual character system

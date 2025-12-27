@@ -94,3 +94,32 @@ BepInEx/core/
 builds/
 *.log
 *.tmp
+
+# V Rising server specific
+server_data/
+logs/
+save_games/
+backups/
+
+# Plugin runtime
+VAuto-Advanced-Config.json
+VAuto.cfg
+
+# Documentation build outputs
+*.pdf
+*.docx
+*.doc
+
+# Test outputs
+test_results/
+benchmark_results/
+
+# Environment specific
+.env
+.env.local
+config.local.*
+
+# Generated documentation
+docs/generated/
+site/
+book/
