@@ -620,7 +620,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📞 Support
 
 - **GitHub Issues** - Bug reports and feature requests
-- **Discord** - Community support and discussion
+- **Discord Community** - [V Rising Mod Community](https://discord.gg/UDQaJgf4) - Join 10,253+ members for mod questions and latest developments
 - **Documentation** - Comprehensive guides and references
 
 ---
@@ -638,4 +638,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 *This app is currently progressing and will be integrated with the main VAuto system soon.*
 
-For more information, explore our [documentation](docs/) or join our [community](https://discord.gg/your-server).
+For more information, explore our [documentation](docs/) or join our [V Rising Mod Community Discord](https://discord.gg/UDQaJgf4).
