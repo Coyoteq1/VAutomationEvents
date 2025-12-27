@@ -2,11 +2,12 @@
 
 [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/Coyoteq1/VAutomationVrising)[![V Rising](https://img.shields.io/badge/game-V%20Rising-red.svg)](https://vrisinggame.com/)
 
-A comprehensive automation system for V Rising servers, featuring complete  lifecycle, Automation integration, dual character management, automated PvP/PVE zones, real-time map tracking, and extensive administrative tools.
+A comprehensive automation system for V Rising servers, featuring complete lifecycle, Automation integration, dual character management, automated PvP/PVE zones, real-time map tracking, and extensive administrative tools. Built with Kindred schematics as the main reference for detailed implementation, made easy for all users.
 
 ## 🎮 Features
 
 ### Core Functionality
+
 - **⚔️ Automated Zone Management** - Enter/exit zones with instant state changes
 - **👥 Dual Character System** - Switch between normal and PvP characters instantly
 - **🗺️ Global Map Icons** - Real-time player tracking on the map
@@ -15,6 +16,7 @@ A comprehensive automation system for V Rising servers, featuring complete  life
 - **🏗️ Service-Oriented Architecture** - Modular, scalable design
 
 ### Zone System
+
 - **Automatic Zone Detection** - Walk into zones to auto-enter (50m entry, 75m exit radius)
 - **Complete State Preservation** - Snapshot-based state management with full restoration
 - **VBlood Hook System** - All VBlood abilities appear unlocked in zone UI (100+ VBlood database)
@@ -24,7 +26,8 @@ A comprehensive automation system for V Rising servers, featuring complete  life
 
 ### Castle Management
 - **Castle Heart Management** - Automatic castle defense and maintenance systems
-- **Territory Control** - New Zone-based territory claiming and protection
+- **Territory Control** - Zone-based territory claiming and protection
+
 - **Resource Automation** - Automated resource collection and storage management
 - **Building Management** - Mass building operations and template systems
 - **Defense Systems** - Automated castle defenses and alert systems
@@ -51,6 +54,12 @@ A comprehensive automation system for V Rising servers, featuring complete  life
 - **Debug Tools** - Entity inspection, memory analysis
 
 ## 📚 Documentation
+
+### Kindred Schematics Reference
+- **Primary Reference** - Built using Kindred schematics as the main technical reference
+- **Simplified Implementation** - Complex schematics made easy to understand and use
+- **Detailed Coverage** - Comprehensive system design based on proven schematics
+- **User-Friendly** - Technical depth with accessible implementation
 
 ### User Documentation
 - **[Installation Guide](INSTALLATION_GUIDE.md)** - Step-by-step installation instructions
@@ -204,6 +213,7 @@ AchievementUnlockEnabled = true
 
 ### Key Services
 
+- **Kindred Schematics Foundation** - Built on proven Kindred schematics for robust system design
 - **SnapshotManagerService** - Complete arena entry/exit lifecycle management
 - **GameSystems** - VBlood hook activation/deactivation system
 - **ArenaProximitySystem** - Automatic arena entry/exit based on distance
@@ -305,8 +315,9 @@ public static class NewService
 ## 🐛 Troubleshooting
 
 ### Common Issues
+
 1. **Commands not working** - Check admin privileges and command prefix
-2. **Arena entry fails** - Verify zone configuration, player state, and VBlood hook status
+2. **Arena entry fails** - Verify zone configuration, player state, and  hook status
 3. **VBlood abilities not showing** - Ensure GameSystems.MarkPlayerEnteredArena was called
 4. **State restoration issues** - Check snapshot integrity and service initialization
 5. **Database errors** - Enable JSON fallback and check permissions
