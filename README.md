@@ -1,6 +1,6 @@
 # VAutomationEvents
 
-A \ automation mod for V Rising that provides automated arena management, player lifecycle handling, and PvP practice functionality.
+A powerful automation mod for V Rising that provides automated arena management, player lifecycle handling, and PvP practice functionality.
 
 ## Features
 
