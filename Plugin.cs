@@ -68,6 +68,13 @@ public class Plugin : BasePlugin
         Instance = this;
         Plugin.Log = Log;
 
+        // Ensure Log is initialized
+        if (Log == null)
+        {
+            Log = BepInEx.Logging.Logger.CreateLogSource("VAuto.Arena");
+        }
+        Plugin.Log = Log;
+
         Log.LogInfo($"=== VAuto Plugin Loading ===");
         Log.LogInfo($"Plugin: {MyPluginInfo.PLUGIN_GUID} v{MyPluginInfo.PLUGIN_VERSION}");
         Log.LogInfo($"Data Path: {DataPath}");

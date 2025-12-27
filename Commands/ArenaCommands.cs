@@ -383,19 +383,8 @@ namespace VAuto.Commands
 
                 Plugin.Logger?.LogInfo($"[{timestamp}] VBLOOD_SPAWN_EXECUTING - Spawning VBlood boss at {spawnPos}");
 
-                // Spawn the VBlood boss
-                // if (VBloodMapper.SpawnVBloodBoss(vBloodBoss.GuidHash, spawnPos))
-                {
-                    Plugin.Logger?.LogInfo($"[{timestamp}] VBLOOD_SPAWN_SUCCESS - Successfully spawned '{vBloodBoss.Name}' (GUID: {vBloodBoss.GuidHash})");
-                    ctx.Reply($"Spawned VBlood boss '{vBloodBoss.Name}'!");
-                    ctx.Reply($"Level: {vBloodBoss.Level} | Health: {vBloodBoss.Health:F0}");
-                    ctx.Reply($"Location: {spawnPos.x:F1}, {spawnPos.y:F1}, {spawnPos.z:F1}");
-                // }
-                // else
-                // {
-                    Plugin.Logger?.LogError($"[{timestamp}] VBLOOD_SPAWN_FAILED - VBloodMapper.SpawnVBloodBoss returned false");
-                    ctx.Reply("Failed to spawn VBlood boss.");
-                // }
+                Plugin.Logger?.LogInfo($"[{timestamp}] VBLOOD_SPAWN_DISABLED - VBlood spawning temporarily disabled");
+                ctx.Reply("VBlood spawning is temporarily disabled.");
             }
             catch (Exception ex)
             {

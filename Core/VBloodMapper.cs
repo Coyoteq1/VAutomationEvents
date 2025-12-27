@@ -233,9 +233,8 @@ namespace VAuto.Core
     /// </summary>
     public static bool SpawnBabyBlood(float3 position)
     {
-        const int babyBloodGuid = -1996241419; // Baby Blood GUID
-        // return SpawnVBloodBoss(babyBloodGuid, position);
-        Plugin.Logger?.LogInfo($"[VBloodMapper] SpawnBabyBlood called for {position} - method disabled");
+//babyblood@###    
+    Plugin.Logger?.LogInfo($"[VBloodMapper] SpawnBabyBlood called for {position} - method disabled");
         return false;
     }
 
