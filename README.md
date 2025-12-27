@@ -1,30 +1,42 @@
-# VAuto Arena System
+# VAuto Automation System
 
 [![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](https://github.com/Coyoteq1/VAutomationVrising)[![V Rising](https://img.shields.io/badge/game-V%20Rising-red.svg)](https://vrisinggame.com/)
 
-A comprehensive arena automation system for V Rising servers, featuring complete VBlood unlock integration, dual character management, automated PvP zones, real-time map tracking, and extensive administrative tools.
+A comprehensive automation system for V Rising servers, featuring complete  lifecycle, Automation integration, dual character management, automated PvP/PVE zones, real-time map tracking, and extensive administrative tools.
 
 ## 🎮 Features
 
 ### Core Functionality
-- **⚔️ Automated Arena Management** - Enter/exit arenas with instant state changes
+- **⚔️ Automated Zone Management** - Enter/exit zones with instant state changes
 - **👥 Dual Character System** - Switch between normal and PvP characters instantly
 - **🗺️ Global Map Icons** - Real-time player tracking on the map
 - **🔧 Comprehensive Command System** - 100+ commands for players and admins
 - **💾 Database Integration** - Persistent data storage with JSON fallback
 - **🏗️ Service-Oriented Architecture** - Modular, scalable design
 
-### Arena System
-
-- **Automatic Zone Detection** - Walk into zones to auto-enter arena (50m entry, 75m exit radius)
+### Zone System
+- **Automatic Zone Detection** - Walk into zones to auto-enter (50m entry, 75m exit radius)
 - **Complete State Preservation** - Snapshot-based state management with full restoration
-- **VBlood Hook System** - All VBlood abilities appear unlocked in arena UI (100+ VBlood database)
+- **VBlood Hook System** - All VBlood abilities appear unlocked in zone UI (100+ VBlood database)
 - **Crash Recovery** - Automatic state restoration on server restart
 - **VBlood Integration** - Spawn/despawn VBlood bosses with achievement unlock system
-- **Progression Integrity** - Real progression never modified, only UI override in arena
+- **Progression Integrity** - Real progression never modified, only UI override in zones
+
+### Castle Management
+- **Castle Heart Management** - Automatic castle defense and maintenance systems
+- **Territory Control** - New Zone-based territory claiming and protection
+- **Resource Automation** - Automated resource collection and storage management
+- **Building Management** - Mass building operations and template systems
+- **Defense Systems** - Automated castle defenses and alert systems
+
+### Treasury Management
+- **Resource Tracking** - Real-time inventory and treasury monitoring
+- **Automated Storage** - Smart resource sorting and container management
+- **Wealth Analytics** - Detailed economic statistics and trends
+- **Trading Integration** - Automated trading and market operations
+- **Tax Collection** - Automatic tax collection and distribution
 
 ### Character Management
-
 - **Instant Character Switching** - No logout required
 - **PvP Character Creation** - Automatic arena-ready characters
 - **Loadout Management** - Configurable gear sets and builds
@@ -142,8 +154,9 @@ AchievementUnlockEnabled = true
 ## 📖 Command Categories
 
 ### Player Commands
-
-- **Arena System** - `arena enter`, `arena exit`, `arena status`, `arena info`, `arena [build]`
+- **Zone System** - `arena enter`, `arena exit`, `arena status`, `arena info`, `arena [build]`
+- **Castle Management** - `castle claim`, `castle defend`, `castle build`, `castle upgrade`
+- **Treasury Management** - `treasury status`, `treasury sort`, `treasury trade`, `treasury collect`
 - **Character Management** - `char`, `character`, `stats`, `info`
 - **Quick Actions** - `tp`, `pos`, `hp`, `list`, `online`
 - **VBlood System** - `vblood list`, `vblood spawn`, `vblood unlock`
@@ -169,7 +182,7 @@ AchievementUnlockEnabled = true
 
 ```text
 ┌─────────────────────────────────────────────────────────────┐
-│                    VAuto Arena System                      │
+│                    VAuto Automation System                │
 ├─────────────────────────────────────────────────────────────┤
 │  Command Layer: VampireCommandFramework                    │
 │  ├── UtilityCommands  ├── AdminCommands                    │
@@ -198,6 +211,8 @@ AchievementUnlockEnabled = true
 - **ProgressionCaptureService** - VBlood and ability capture/restore
 - **VBloodMapper** - 100+ VBlood boss database with complete GUID mapping
 - **AchievementUnlockService** - Multi-category achievement unlock system
+- **CastleManagementService** - Castle defense, territory control, and building automation
+- **TreasuryManagementService** - Resource tracking, automated storage, and wealth analytics
 
 ## 💾 Database System
 
@@ -214,6 +229,8 @@ AchievementUnlockEnabled = true
 - **PlayerProgress** - Progress tracking and streaks
 - **PlayerSnapshots** - Arena entry/exit snapshots
 - **ArenaData** - Arena configurations and statistics
+- **CastleData** - Castle configurations, territory claims, and defense data
+- **TreasuryData** - Resource inventories, trading records, and economic statistics
 
 ## 🔧 Development
 
@@ -326,7 +343,7 @@ public static class NewService
 - **v1.1.0** - Enhanced VBlood database and achievement system (current)
 - **v1.2.0** - Multi-zone support and tournament system (planned)
 - **v1.3.0** - Advanced analytics and custom build editor (planned)
-
+- **v1.4.0** - Plugin API integration (planned)
 ## 🤝 Contributing
 
 We welcome contributions! Please see our contributing guidelines:
@@ -363,6 +380,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**VAuto Arena System** - *Enhancing the V Rising experience through automation and advanced tooling.*
+**VAuto Automation System** - *Enhancing the V Rising experience through automation and advanced tooling.*
 
 For more information, explore our [documentation](docs/) or join our [community](https://discord.gg/your-server).
