@@ -101,6 +101,7 @@ Thanks to hardcoded game integration, these powerful features become incredibly 
 - **Simplified Implementation** - Complex schematics made easy to understand and use
 - **Detailed Coverage** - Comprehensive system design based on proven schematics
 - **User-Friendly** - Technical depth with accessible implementation
+- **[📚 Master Technical Reference](KINDRED_SCHEMATICS_TECHNICAL_FOUNDATION.md)** - Complete technical foundation with implementation examples, architectural patterns, and developer guides
 
 ## 🏗️ Kindred Schematics Foundation
 
@@ -216,6 +217,8 @@ systemManager.ConfigureEventHandlers();
 - **[API Documentation](API_DOCUMENTATION.md)** - Developer API reference
 - **[Architecture Overview](ARCHITECTURE.md)** - System architecture details
 - **[Database Integration](DatabaseIntegrationGuide.md)** - Database setup and usage
+- **[Kindred Schematics Reference](KINDRED_SCHEMATICS_REFERENCE.md)** - Technical foundation and implementation patterns
+- **[Kindred Schematics Technical Foundation](KINDRED_SCHEMATICS_TECHNICAL_FOUNDATION.md)** - Master technical reference with comprehensive implementation details, code examples, and architectural patterns
 
 ### System Documentation
 
