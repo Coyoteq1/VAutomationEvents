@@ -20,7 +20,25 @@ namespace VAuto.Extensions
             try
             {
                 // First validate that the entity exists in this EntityManager
-                if (entity == Entity.Null || !entityManager.Exists(entity))
+                if (entity == Entity.Null)
+                {
+                    Plugin.Logger?.LogDebug("GetUserSafely: Entity is null");
+                    return default;
+                }
+
+                // Try to validate entity exists, but handle ArgumentException gracefully
+                bool entityExists = false;
+                try
+                {
+                    entityExists = entityManager.Exists(entity);
+                }
+                catch (ArgumentException argEx)
+                {
+                    Plugin.Logger?.LogWarning($"GetUserSafely: Entity {entity.Index} validation failed (possibly wrong EntityManager): {argEx.Message}");
+                    return default;
+                }
+
+                if (!entityExists)
                 {
                     Plugin.Logger?.LogDebug($"GetUserSafely: Entity {entity.Index} does not exist in EntityManager");
                     return default;
@@ -47,7 +65,25 @@ namespace VAuto.Extensions
             try
             {
                 // First validate that the entity exists in this EntityManager
-                if (entity == Entity.Null || !entityManager.Exists(entity))
+                if (entity == Entity.Null)
+                {
+                    Plugin.Logger?.LogDebug("GetTranslationSafely: Entity is null");
+                    return new Translation { Value = float3.zero };
+                }
+
+                // Try to validate entity exists, but handle ArgumentException gracefully
+                bool entityExists = false;
+                try
+                {
+                    entityExists = entityManager.Exists(entity);
+                }
+                catch (ArgumentException argEx)
+                {
+                    Plugin.Logger?.LogWarning($"GetTranslationSafely: Entity {entity.Index} validation failed (possibly wrong EntityManager): {argEx.Message}");
+                    return new Translation { Value = float3.zero };
+                }
+
+                if (!entityExists)
                 {
                     Plugin.Logger?.LogDebug($"GetTranslationSafely: Entity {entity.Index} does not exist in EntityManager");
                     return new Translation { Value = float3.zero };
