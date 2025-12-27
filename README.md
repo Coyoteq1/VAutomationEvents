@@ -15,6 +15,7 @@ A comprehensive arena automation system for V Rising servers, featuring complete
 - **🏗️ Service-Oriented Architecture** - Modular, scalable design
 
 ### Arena System
+
 - **Automatic Zone Detection** - Walk into zones to auto-enter arena (50m entry, 75m exit radius)
 - **Complete State Preservation** - Snapshot-based state management with full restoration
 - **VBlood Hook System** - All VBlood abilities appear unlocked in arena UI (100+ VBlood database)
@@ -23,12 +24,14 @@ A comprehensive arena automation system for V Rising servers, featuring complete
 - **Progression Integrity** - Real progression never modified, only UI override in arena
 
 ### Character Management
+
 - **Instant Character Switching** - No logout required
 - **PvP Character Creation** - Automatic arena-ready characters
 - **Loadout Management** - Configurable gear sets and builds
 - **Character Statistics** - Track progress and performance
 
 ### Administrative Tools
+
 - **Player Management** - Kick, ban, mute, teleport, heal players
 - **Server Administration** - Shutdown, restart, backup, maintenance
 - **World Management** - Time, weather, object manipulation
@@ -43,11 +46,13 @@ A comprehensive arena automation system for V Rising servers, featuring complete
 - **[Command Reference](COMMAND_REFERENCE.md)** - Comprehensive command documentation
 
 ### Developer Documentation
+
 - **[API Documentation](API_DOCUMENTATION.md)** - Developer API reference
 - **[Architecture Overview](ARCHITECTURE.md)** - System architecture details
 - **[Database Integration](DatabaseIntegrationGuide.md)** - Database setup and usage
 
 ### System Documentation
+
 - **[Dual Character System](DUAL_CHARACTER_SYSTEM.md)** - Character switching implementation
 - **[Global Map Icon System](GLOBAL_MAP_ICON_SYSTEM.md)** - Map tracking system
 - **[API Conversion Guide](API_CONVERSION_GUIDE.md)** - Migration guide for API changes
@@ -61,6 +66,7 @@ A comprehensive arena automation system for V Rising servers, featuring complete
 4. Start server and verify installation
 
 ### Basic Usage
+
 ```bash
 # Enter arena (automatic proximity or manual)
 .arena enter [build]
@@ -80,6 +86,7 @@ A comprehensive arena automation system for V Rising servers, featuring complete
 ```
 
 ### Admin Quick Commands
+
 ```bash
 # Player management
 .admin heal PlayerName
@@ -100,6 +107,7 @@ A comprehensive arena automation system for V Rising servers, featuring complete
 ## 🔧 Configuration
 
 ### Basic Configuration
+
 ```ini
 [General]
 Enabled = true
@@ -125,6 +133,7 @@ AchievementUnlockEnabled = true
 ```
 
 ### Advanced Configuration
+
 - **Map Icon System** - Configure player tracking and update intervals
 - **Dual Character System** - Customize character creation and naming
 - **Performance Tuning** - Adjust update frequencies for high player counts
@@ -133,6 +142,7 @@ AchievementUnlockEnabled = true
 ## 📖 Command Categories
 
 ### Player Commands
+
 - **Arena System** - `arena enter`, `arena exit`, `arena status`, `arena info`, `arena [build]`
 - **Character Management** - `char`, `character`, `stats`, `info`
 - **Quick Actions** - `tp`, `pos`, `hp`, `list`, `online`
@@ -140,12 +150,14 @@ AchievementUnlockEnabled = true
 - **Utilities** - `time`, `weather`, `calc`, `random`
 
 ### Administrative Commands
+
 - **Player Control** - `admin kick`, `admin ban`, `admin heal`, `admin teleport`
 - **Server Management** - `serveradmin shutdown`, `serveradmin save`, `serveradmin backup`
 - **World Control** - `world time`, `world weather`, `world clear`
 - **System Monitoring** - `system status`, `service restart`, `monitor performance`
 
 ### Development Commands
+
 - **Entity Debugging** - `entity info`, `entity query`, `entity inspect`
 - **Performance Analysis** - `perf start`, `perf fps`, `perf memory`
 - **Memory Debugging** - `memory info`, `memory gc`, `memory leaks`
@@ -154,7 +166,8 @@ AchievementUnlockEnabled = true
 ## 🏗️ Architecture
 
 ### Service Architecture
-```
+
+```text
 ┌─────────────────────────────────────────────────────────────┐
 │                    VAuto Arena System                      │
 ├─────────────────────────────────────────────────────────────┤
@@ -177,6 +190,7 @@ AchievementUnlockEnabled = true
 ```
 
 ### Key Services
+
 - **SnapshotManagerService** - Complete arena entry/exit lifecycle management
 - **GameSystems** - VBlood hook activation/deactivation system
 - **ArenaProximitySystem** - Automatic arena entry/exit based on distance
@@ -188,12 +202,14 @@ AchievementUnlockEnabled = true
 ## 💾 Database System
 
 ### Features
+
 - **LiteDB Integration** - Fast, efficient database storage
 - **JSON Fallback** - Automatic fallback if database fails
 - **Migration Support** - Automatic migration from JSON files
 - **Transaction Safety** - ACID compliance for data integrity
 
 ### Collections
+
 - **Players** - Player data and statistics
 - **PlayerProgress** - Progress tracking and streaks
 - **PlayerSnapshots** - Arena entry/exit snapshots
@@ -202,6 +218,7 @@ AchievementUnlockEnabled = true
 ## 🔧 Development
 
 ### Adding New Commands
+
 ```csharp
 [Command("newcommand", adminOnly: false, usage: ".newcommand [args]")]
 public static void NewCommand(ChatCommandContext ctx, string args = "")
@@ -220,6 +237,7 @@ public static void NewCommand(ChatCommandContext ctx, string args = "")
 ```
 
 ### Adding New Services
+
 ```csharp
 public static class NewService
 {
@@ -238,12 +256,14 @@ public static class NewService
 ## 📊 Performance
 
 ### Optimization Features
+
 - **Efficient Entity Queries** - Optimized ECS queries
 - **Concurrent Collections** - Thread-safe operations
 - **Lazy Service Initialization** - Initialize only when needed
 - **Configurable Update Intervals** - Tune for your server size
 
 ### Monitoring
+
 - **Real-time FPS Tracking** - Monitor server performance
 - **Memory Usage Analysis** - Detect memory leaks and pressure
 - **Entity Count Tracking** - Monitor ECS performance
@@ -251,13 +271,15 @@ public static class NewService
 
 ## 🛡️ Security
 
-### Features
+### Security Features
+
 - **Admin-Only Commands** - Sensitive operations require admin privileges
 - **Permission Validation** - Server-side permission checking
 - **Audit Logging** - Comprehensive operation logging
 - **Input Validation** - Sanitize all user inputs
 
 ### Best Practices
+
 - Regular security audits
 - Input sanitization
 - Permission-based access control
@@ -273,6 +295,7 @@ public static class NewService
 5. **Database errors** - Enable JSON fallback and check permissions
 
 ### Debug Commands
+
 ```bash
 .system all              # Check all system status
 .debug performance       # Performance analysis
@@ -290,6 +313,7 @@ public static class NewService
 ## 📈 Roadmap
 
 ### Upcoming Features
+
 - **Multi-Zone Support** - Multiple concurrent arena zones
 - **Tournament System** - Competitive arena events
 - **Advanced Statistics** - Player performance analytics
@@ -297,6 +321,7 @@ public static class NewService
 - **Plugin API** - Third-party extension support
 
 ### Version History
+
 - **v1.0.0** - Initial release with complete arena lifecycle and VBlood hook system
 - **v1.1.0** - Enhanced VBlood database and achievement system (current)
 - **v1.2.0** - Multi-zone support and tournament system (planned)
