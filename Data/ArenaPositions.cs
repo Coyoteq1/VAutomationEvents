@@ -491,7 +491,7 @@ namespace VAuto.Data
             ArenaConfiguration.AddArenaPosition(new float3(-1316.5f, 0f, -818.5f), 600, 720);
             ArenaConfiguration.AddArenaPosition(new float3(-1363.395f, -2.489852f, -926.29f), 15, 35);
             
-            Plugin.Instance.Log?.LogInfo($"[ArenaConfiguration] Initialized {ArenaConfiguration.GetPositionCount()} arena positions");
+            Plugin.Log?.LogInfo($"[ArenaConfiguration] Initialized {ArenaConfiguration.GetPositionCount()} arena positions");
         }
     }
 }

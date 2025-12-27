@@ -19,7 +19,7 @@ namespace VAuto.Services
         /// <summary>
         /// Achievement state for each player
         /// </summary>
-        private class AchievementState
+        public class AchievementState
         {
             public bool IsUnlocked { get; set; }
             public DateTime UnlockedAt { get; set; }
@@ -155,8 +155,9 @@ namespace VAuto.Services
                 {
                     try
                     {
-                        // Unlock progression for each VBlood boss
-                        if (VBloodMapper.VBloodUnlockSystem.UnlockVBloodProgression(Entity.Null, boss.GuidHash))
+                     ///test unlock new api
+                     /// 
+                        // if (VBloodMapper.VBloodUnlockSystem.UnlockVBloodProgression(Entity.Null, boss.GuidHash))
                         {
                             unlockedAchievements.Add($"VBlood_{boss.Name}_Defeated");
                             unlockedAchievements.Add($"VBlood_{boss.Name}_Progression");

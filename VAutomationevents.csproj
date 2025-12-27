@@ -173,12 +173,14 @@
     <Compile Include="Core/ArenaRuntime.cs" />
     <Compile Include="Core/DualCharacterState.cs" />
     <Compile Include="Core/MissingTypes.cs" />
+    <Compile Include="Core/VBloodMapper.cs" />
     <!-- Services - Unified Lifecycle Management -->
     <Compile Include="Services/UnifiedServices.cs" />
     <Compile Include="Services/MissingServices.cs" />
     <Compile Include="Services/CharacterSwapService.cs" />
     <Compile Include="Services/ArenaCharacterCreator.cs" />
     <Compile Include="Services/EnhancedInventoryManager.cs" />
+    <Compile Include="Services/AchievementUnlockService.cs" />
     <Compile Include="Commands/ArenaCommands.cs" />
     <Compile Include="Commands/ServiceCommands.cs" />
     <Compile Include="Commands/CharacterCommands.cs" />

@@ -25,18 +25,18 @@ namespace VAuto.Data
         public static void Populate()
         {
             var timestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            Plugin.Instance.Log?.LogInfo($"[{timestamp}] TILE_POPULATE_START - Beginning tile system population");
+            Plugin.Log?.LogInfo($"[{timestamp}] TILE_POPULATE_START - Beginning tile system population");
             
             try
             {
                 // TODO: Implement tile population when PrefabCollection access is fixed
-                Plugin.Instance.Log?.LogInfo($"[{timestamp}] TILE_POPULATE_SKIP - PrefabCollection access issues, tile population disabled");
-                Plugin.Instance.Log?.LogInfo($"[{timestamp}] TILE_POPULATE_COMPLETE - Tile system populated with 0 prefabs (disabled mode)");
+                Plugin.Log?.LogInfo($"[{timestamp}] TILE_POPULATE_SKIP - PrefabCollection access issues, tile population disabled");
+                Plugin.Log?.LogInfo($"[{timestamp}] TILE_POPULATE_COMPLETE - Tile system populated with 0 prefabs (disabled mode)");
             }
             catch (System.Exception ex)
             {
-                Plugin.Instance.Log?.LogError($"[{timestamp}] TILE_POPULATE_ERROR - Failed to populate tile system: {ex.Message}");
-                Plugin.Instance.Log?.LogError($"[{timestamp}] TILE_POPULATE_STACK_TRACE - {ex.StackTrace}");
+                Plugin.Log?.LogError($"[{timestamp}] TILE_POPULATE_ERROR - Failed to populate tile system: {ex.Message}");
+                Plugin.Log?.LogError($"[{timestamp}] TILE_POPULATE_STACK_TRACE - {ex.StackTrace}");
             }
         }
 

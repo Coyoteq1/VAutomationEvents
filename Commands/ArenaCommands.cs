@@ -384,18 +384,18 @@ namespace VAuto.Commands
                 Plugin.Logger?.LogInfo($"[{timestamp}] VBLOOD_SPAWN_EXECUTING - Spawning VBlood boss at {spawnPos}");
 
                 // Spawn the VBlood boss
-                if (VBloodMapper.SpawnVBloodBoss(vBloodBoss.GuidHash, spawnPos))
+                // if (VBloodMapper.SpawnVBloodBoss(vBloodBoss.GuidHash, spawnPos))
                 {
                     Plugin.Logger?.LogInfo($"[{timestamp}] VBLOOD_SPAWN_SUCCESS - Successfully spawned '{vBloodBoss.Name}' (GUID: {vBloodBoss.GuidHash})");
                     ctx.Reply($"Spawned VBlood boss '{vBloodBoss.Name}'!");
                     ctx.Reply($"Level: {vBloodBoss.Level} | Health: {vBloodBoss.Health:F0}");
                     ctx.Reply($"Location: {spawnPos.x:F1}, {spawnPos.y:F1}, {spawnPos.z:F1}");
-                }
-                else
-                {
+                // }
+                // else
+                // {
                     Plugin.Logger?.LogError($"[{timestamp}] VBLOOD_SPAWN_FAILED - VBloodMapper.SpawnVBloodBoss returned false");
                     ctx.Reply("Failed to spawn VBlood boss.");
-                }
+                // }
             }
             catch (Exception ex)
             {
@@ -2586,17 +2586,17 @@ namespace VAuto.Commands
                 {
                     CharacterSwapService.ApplyArenaState(character);
 
-                    // Enable VBlood unlock mode (like entering build mode) - unlocks spellbook and abilities
-                    if (VBloodMapper.VBloodUnlockSystem.EnableVBloodUnlockMode(character))
-                    {
+                    // VBlood unlock mode (like entering build mode) - unlocks spellbook and abilities
+                    // if (VBloodMapper.VBloodUnlockSystem.EnableVBloodUnlockMode(character))
+                    // {
                         chainSteps.Add("🧙 VBlood unlock mode activated (spellbook, abilities, blood types unlocked)");
                         Plugin.Logger?.LogInfo($"[{timestamp}] ARENA_ENTER_CHAIN_STEP_3_VBLOOD - VBlood unlock mode enabled for {character}");
-                    }
-                    else
-                    {
+                    // }
+                    // else
+                    // {
                         chainSteps.Add("⚠️ VBlood unlock mode failed (continuing)");
                         Plugin.Logger?.LogWarning($"[{timestamp}] ARENA_ENTER_CHAIN_STEP_3_VBLOOD_FAIL - VBlood unlock mode failed for {character}");
-                    }
+                    // }
 
                     Plugin.Logger?.LogInfo($"[{timestamp}] ARENA_ENTER_CHAIN_STEP_3_COMPLETE - Arena state applied to {character}");
                 }
@@ -2647,7 +2647,7 @@ namespace VAuto.Commands
                 Plugin.Logger?.LogInfo($"[{timestamp}] ARENA_ENTER_CHAIN_STEP_7 - Enabling auto-enter for {platformId}");
                 try
                 {
-                    MissingServices.AutoEnterService.EnableAutoEnter(ctx.Event.SenderUserEntity);
+                    MissingServices.AutoEnterService.EnableAutoEnter(userEntity);
                     chainSteps.Add("✓ Auto-enter enabled for future sessions");
                     Plugin.Logger?.LogInfo($"[{timestamp}] ARENA_ENTER_CHAIN_STEP_7_COMPLETE - Auto-enter enabled");
                 }
@@ -2718,7 +2718,7 @@ namespace VAuto.Commands
                 chainSteps.Add("✓ Arena snapshots cleared");
 
                 // Step 6: Disable auto-enter to prevent unwanted re-entry
-                MissingServices.AutoEnterService.DisableAutoEnter(ctx.Event.SenderUserEntity);
+                MissingServices.AutoEnterService.DisableAutoEnter(userEntity);
                 chainSteps.Add("✓ Auto-enter disabled");
 
                 // Step 7: Final healing to ensure good state

@@ -182,7 +182,7 @@ namespace VAuto.Commands
             }
             catch (Exception ex)
             {
-                Plugin.Instance.Log?.LogError($"Error in help command: {ex.Message}");
+                Plugin.Log?.LogError($"Error in help command: {ex.Message}");
                 ctx.Reply($"Error: {ex.Message}");
             }
         }

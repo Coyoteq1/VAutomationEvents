@@ -94,7 +94,7 @@ namespace VAuto.Commands
             }
             catch (Exception ex)
             {
-                Plugin.Instance.Log?.LogError($"Error in character command {action}: {ex.Message}");
+                Plugin.Log?.LogError($"Error in character command {action}: {ex.Message}");
                 ctx.Reply($"Error: {ex.Message}");
             }
         }
@@ -142,7 +142,7 @@ namespace VAuto.Commands
             }
             catch (Exception ex)
             {
-                Plugin.Instance.Log?.LogError($"Error getting character info: {ex.Message}");
+                Plugin.Log?.LogError($"Error getting character info: {ex.Message}");
                 ctx.Reply($"Error: {ex.Message}");
             }
         }
@@ -184,7 +184,7 @@ namespace VAuto.Commands
             }
             catch (Exception ex)
             {
-                Plugin.Instance.Log?.LogError($"Error getting character stats: {ex.Message}");
+                Plugin.Log?.LogError($"Error getting character stats: {ex.Message}");
                 ctx.Reply($"Error: {ex.Message}");
             }
         }
@@ -206,7 +206,7 @@ namespace VAuto.Commands
             }
             catch (Exception ex)
             {
-                Plugin.Instance.Log?.LogError($"Error getting character inventory: {ex.Message}");
+                Plugin.Log?.LogError($"Error getting character inventory: {ex.Message}");
                 ctx.Reply($"Error: {ex.Message}");
             }
         }
@@ -228,7 +228,7 @@ namespace VAuto.Commands
             }
             catch (Exception ex)
             {
-                Plugin.Instance.Log?.LogError($"Error getting character equipment: {ex.Message}");
+                Plugin.Log?.LogError($"Error getting character equipment: {ex.Message}");
                 ctx.Reply($"Error: {ex.Message}");
             }
         }
@@ -266,7 +266,7 @@ namespace VAuto.Commands
             }
             catch (Exception ex)
             {
-                Plugin.Instance.Log?.LogError($"Error getting character position: {ex.Message}");
+                Plugin.Log?.LogError($"Error getting character position: {ex.Message}");
                 ctx.Reply($"Error: {ex.Message}");
             }
         }
@@ -305,7 +305,7 @@ namespace VAuto.Commands
             }
             catch (Exception ex)
             {
-                Plugin.Instance.Log?.LogError($"Error getting character health: {ex.Message}");
+                Plugin.Log?.LogError($"Error getting character health: {ex.Message}");
                 ctx.Reply($"Error: {ex.Message}");
             }
         }
@@ -327,7 +327,7 @@ namespace VAuto.Commands
             }
             catch (Exception ex)
             {
-                Plugin.Instance.Log?.LogError($"Error getting character abilities: {ex.Message}");
+                Plugin.Log?.LogError($"Error getting character abilities: {ex.Message}");
                 ctx.Reply($"Error: {ex.Message}");
             }
         }
@@ -376,7 +376,7 @@ namespace VAuto.Commands
             }
             catch (Exception ex)
             {
-                Plugin.Instance.Log?.LogError($"Error teleporting character: {ex.Message}");
+                Plugin.Log?.LogError($"Error teleporting character: {ex.Message}");
                 ctx.Reply($"Error: {ex.Message}");
             }
         }
@@ -427,7 +427,7 @@ namespace VAuto.Commands
             }
             catch (Exception ex)
             {
-                Plugin.Instance.Log?.LogError($"Error in character swap: {ex.Message}");
+                Plugin.Log?.LogError($"Error in character swap: {ex.Message}");
                 ctx.Reply("❌ Error during character swap.");
             }
         }
@@ -472,7 +472,7 @@ namespace VAuto.Commands
             }
             catch (Exception ex)
             {
-                Plugin.Instance.Log?.LogError($"Error creating arena character: {ex.Message}");
+                Plugin.Log?.LogError($"Error creating arena character: {ex.Message}");
                 ctx.Reply("❌ Error creating arena character.");
             }
         }
@@ -517,7 +517,7 @@ namespace VAuto.Commands
             }
             catch (Exception ex)
             {
-                Plugin.Instance.Log?.LogError($"Error getting character status: {ex.Message}");
+                Plugin.Log?.LogError($"Error getting character status: {ex.Message}");
                 ctx.Reply("❌ Error getting character status.");
             }
         }
@@ -565,7 +565,7 @@ namespace VAuto.Commands
             }
             catch (Exception ex)
             {
-                Plugin.Instance.Log?.LogError($"Error resetting character system: {ex.Message}");
+                Plugin.Log?.LogError($"Error resetting character system: {ex.Message}");
                 ctx.Reply("❌ Error resetting character system.");
             }
         }
@@ -594,7 +594,7 @@ namespace VAuto.Commands
             }
             catch (Exception ex)
             {
-                Plugin.Instance.Log?.LogError($"Error resetting character: {ex.Message}");
+                Plugin.Log?.LogError($"Error resetting character: {ex.Message}");
                 ctx.Reply($"Error: {ex.Message}");
             }
         }
@@ -624,7 +624,7 @@ namespace VAuto.Commands
             }
             catch (Exception ex)
             {
-                Plugin.Instance.Log?.LogError($"Error spawning character: {ex.Message}");
+                Plugin.Log?.LogError($"Error spawning character: {ex.Message}");
                 ctx.Reply($"Error: {ex.Message}");
             }
         }
@@ -654,7 +654,7 @@ namespace VAuto.Commands
             }
             catch (Exception ex)
             {
-                Plugin.Instance.Log?.LogError($"Error listing characters: {ex.Message}");
+                Plugin.Log?.LogError($"Error listing characters: {ex.Message}");
                 ctx.Reply($"Error: {ex.Message}");
             }
         }
@@ -688,7 +688,7 @@ namespace VAuto.Commands
             }
             catch (Exception ex)
             {
-                Plugin.Instance.Log?.LogError($"Error checking online status: {ex.Message}");
+                Plugin.Log?.LogError($"Error checking online status: {ex.Message}");
                 ctx.Reply($"Error: {ex.Message}");
             }
         }
@@ -741,7 +741,7 @@ namespace VAuto.Commands
             }
             catch (Exception ex)
             {
-                Plugin.Instance.Log?.LogError($"Error in character arena command: {ex.Message}");
+                Plugin.Log?.LogError($"Error in character arena command: {ex.Message}");
                 ctx.Reply($"Error: {ex.Message}");
             }
         }
@@ -777,7 +777,7 @@ namespace VAuto.Commands
             }
             catch (Exception ex)
             {
-                Plugin.Instance.Log?.LogError($"Error in character zone command: {ex.Message}");
+                Plugin.Log?.LogError($"Error in character zone command: {ex.Message}");
                 ctx.Reply($"Error: {ex.Message}");
             }
         }

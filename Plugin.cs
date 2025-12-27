@@ -93,7 +93,17 @@ public class Plugin : BasePlugin
 
             // Step 5: Initialize services
             Log.LogInfo("[VAuto] Initializing services...");
-            InitializeServices();
+            try
+            {
+                InitializeServices();
+            }
+            catch (Exception serviceEx)
+            {
+                Log.LogError($"[VAuto] Service initialization failed: {serviceEx.Message}");
+                Log.LogError($"[VAuto] Stack trace: {serviceEx.StackTrace}");
+                Log.LogWarning("[VAuto] Continuing with plugin load despite service initialization failure");
+                // Don't re-throw - allow plugin to continue loading
+            }
 
             // Step 6: Harmony patching
             Log.LogInfo("[VAuto] Applying Harmony patches...");

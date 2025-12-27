@@ -51,7 +51,7 @@ namespace VAuto.Core
         /// </summary>
         public static void LogException(System.Exception e, [CallerMemberName] string caller = null)
         {
-            Plugin.Instance.Log.LogError($"Failure in {caller}\nMessage: {e.Message} Inner:{e.InnerException?.Message}\n\nStack: {e.StackTrace}\nInner Stack: {e.InnerException?.StackTrace}");
+            Plugin.Log.LogError($"Failure in {caller}\nMessage: {e.Message} Inner:{e.InnerException?.Message}\n\nStack: {e.StackTrace}\nInner Stack: {e.InnerException?.StackTrace}");
         }
 
         /// <summary>

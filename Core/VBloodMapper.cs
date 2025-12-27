@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Transforms;
+using Stunlock.Core;
+using ProjectM;
 
 namespace VAuto.Core
 {
@@ -188,6 +191,7 @@ namespace VAuto.Core
         return _activeVBloodEntities;
     }
 
+    /* 
     /// <summary>
     /// Spawn VBlood boss at location
     /// </summary>
@@ -222,6 +226,7 @@ namespace VAuto.Core
             return false;
         }
     }
+    */
 
     /// <summary>
     /// Spawn Baby Blood (special training VBlood)
@@ -229,7 +234,9 @@ namespace VAuto.Core
     public static bool SpawnBabyBlood(float3 position)
     {
         const int babyBloodGuid = -1996241419; // Baby Blood GUID
-        return SpawnVBloodBoss(babyBloodGuid, position);
+        // return SpawnVBloodBoss(babyBloodGuid, position);
+        Plugin.Logger?.LogInfo($"[VBloodMapper] SpawnBabyBlood called for {position} - method disabled");
+        return false;
     }
 
     /// <summary>
@@ -352,6 +359,7 @@ namespace VAuto.Core
         return float3.zero;
     }
 
+    /* 
     /// <summary>
     /// VBlood Unlock System - Simulates VBlood progression to unlock spellbook and abilities
     /// Works like build mode - activates on enter, deactivates on exit using ability modifications
@@ -706,5 +714,6 @@ namespace VAuto.Core
     {
         return GetVBloodBoss(GetBabyBloodGuid());
     }
+    */
 }
 }
