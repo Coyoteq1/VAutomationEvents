@@ -491,7 +491,7 @@ GitHub: github.com/Coyoteq1/VAutomationVrising
 Special Thanks: For making V Rising automation accessible to everyone
 📞 Support
 GitHub Issues - Bug reports and feature requests
-Discord - Community support and discussion
+Discord - Community support and discussion: https://discord.gg/68JZU5zaq7
 Documentation - Comprehensive guides and references
 VAuto Automation System - Enhancing the V Rising experience through comprehensive automation and advanced service coordination.
 
