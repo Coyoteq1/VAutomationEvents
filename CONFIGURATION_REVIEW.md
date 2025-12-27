@@ -32,16 +32,17 @@ VBloodGuids = -1905777458,-1541423745,1851788208,-1329110591,1847352945,-1590401
   - Normal Players: Blue (1.0 scale)
   - Arena Players: Orange (1.2 scale)
   - PvP Players: Red (1.5 scale)
+  - Admins: Purple (2.0 scale)
 
 ### 2. Advanced Configuration (`VAuto-Advanced-Config.json`)
 
-#### ✅ Arena System Configuration
+#### Arena System Configuration
 ```json
 "ArenaSystem": {
   "Enabled": true,
   "AutoEnterEnabled": true,
-  "DefaultSpawnPoint": { "X": 0.0, "Y": 0.0, "Z": 0.0 },
-  "ArenaRadius": 500.0,
+  "DefaultSpawnPoint": { "X": -1000.0, "Y": 5.0, "Z": -500.0 },
+  "ArenaRadius": 50.0,
   "EntryCommands": ["heal", "unlock_all", "apply_buffs"],
   "ExitCommands": ["restore_inventory", "remove_buffs", "cleanup_achievements"],
   "ZoneDetection": {
@@ -83,7 +84,7 @@ VBloodGuids = -1905777458,-1541423745,1851788208,-1329110591,1847352945,-1590401
 
 ### 3. Arena Zones Configuration (`config/VAuto.Arena/arena_zones.json`)
 
-#### ✅ Zone Definition
+#### Zone Definition
 ```json
 [
   {
@@ -95,14 +96,14 @@ VBloodGuids = -1905777458,-1541423745,1851788208,-1329110591,1847352945,-1590401
 ]
 ```
 
-**Issues Found:**
+### Issues Found:
 - ⚠️ Y-coordinate mismatch: Config shows `y: -5.0` but CFG shows `y: 5`
 - ✅ VBlood unlock enabled
 - ✅ Standard radius (50 units)
 
 ### 4. Build Configuration (`config/VAuto.Arena/builds.json`)
 
-#### ✅ Default Build (Offensive Setup)
+#### Default Build (Offensive Setup)
 ```json
 "default": {
   "Armors": {
