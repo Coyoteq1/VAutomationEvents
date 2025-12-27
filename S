@@ -1,0 +1,357 @@
+using System;
+using System.Collections.Generic;
+using Unity.Entities;
+using Unity.Mathematics;
+using Unity.Transforms;
+using Unity.Rendering;
+using ProjectM;
+using Stunlock.Network;
+using VAuto.Core;
+using VAuto.Helpers;
+
+namespace VAuto.Services
+{
+    #region Arena Visual Service Implementation
+    public static class ArenaVisualService
+    {
+        // Visual state tracking
+        private static readonly Dictionary<Entity, Entity> _playerArenaBorders = new();
+        private static readonly Dictionary<Entity, Entity> _playerSpawnGlows = new();
+        private static readonly HashSet<Entity> _activeVisualPlayers = new();
+        
+        // Prefab GUIDs for visual effects (you'll need to replace with actual prefab IDs)
+        private static PrefabGUID _borderPrefabGuid = new PrefabGUID(12345); // Replace with actual border prefab
+        private static PrefabGUID _spawnGlowPrefabGuid = new PrefabGUID(12346); // Replace with actual glow prefab
+        private static PrefabGUID _arenaCornerPrefabGuid = new PrefabGUID(12347); // Replace with actual corner prefab
+        
+        // Visual configuration
+        private static readonly float3 _arenaSize = new float3(50f, 0f, 50f); // 50x50 arena
+        private static readonly float _borderHeight = 5f;
+        private static readonly float _glowRadius = 3f;
+
+        public static void Initialize()
+        {
+            Plugin.Logger.LogInfo("ArenaVisualService initialized");
+            // Preload prefabs if needed
+            PreloadVisualPrefabs();
+        }
+
+        private static void PreloadVisualPrefabs()
+        {
+            try
+            {
+                // Validate prefabs exist
+                var borderPrefab = VRCore.PrefabCollection.GetPrefab(_borderPrefabGuid);
+                var glowPrefab = VRCore.PrefabCollection.GetPrefab(_spawnGlowPrefabGuid);
+                var cornerPrefab = VRCore.PrefabCollection.GetPrefab(_arenaCornerPrefabGuid);
+                
+                Plugin.Logger.LogInfo("Visual prefabs loaded successfully");
+            }
+            catch (Exception ex)
+            {
+                Plugin.Logger.LogError($"Failed to load visual prefabs: {ex.Message}");
+            }
+        }
+
+        public static void ShowArenaBorders(Entity player, float3 centerPosition)
+        {
+            try
+            {
+                if (_playerArenaBorders.ContainsKey(player))
+                {
+                    RemoveArenaBorders(player);
+                }
+
+                // Create border walls (4 sides)
+                CreateBorderWalls(player, centerPosition);
+                
+                // Create corner markers
+                CreateCornerMarkers(player, centerPosition);
+                
+                _activeVisualPlayers.Add(player);
+                Plugin.Logger.LogDebug($"Arena borders shown for player {player.Index}");
+            }
+            catch (Exception ex)
+            {
+                Plugin.Logger.LogError($"Error showing arena borders: {ex.Message}");
+            }
+        }
+
+        public static void HideArenaBorders(Entity player)
+        {
+            try
+            {
+                RemoveArenaBorders(player);
+                _activeVisualPlayers.Remove(player);
+                Plugin.Logger.LogDebug($"Arena borders hidden for player {player.Index}");
+            }
+            catch (Exception ex)
+            {
+                Plugin.Logger.LogError($"Error hiding arena borders: {ex.Message}");
+            }
+        }
+
+        private static void CreateBorderWalls(Entity player, float3 center)
+        {
+            var entityManager = VRCore.EntityManager;
+            
+            // North wall
+            CreateBorderWall(player, center + new float3(0, 0, _arenaSize.z * 0.5f), 
+                           new float3(_arenaSize.x, _borderHeight, 0.5f));
+            
+            // South wall
+            CreateBorderWall(player, center + new float3(0, 0, -_arenaSize.z * 0.5f), 
+                           new float3(_arenaSize.x, _borderHeight, 0.5f));
+            
+            // East wall
+            CreateBorderWall(player, center + new float3(_arenaSize.x * 0.5f, 0, 0), 
+                           new float3(0.5f, _borderHeight, _arenaSize.z));
+            
+            // West wall
+            CreateBorderWall(player, center + new float3(-_arenaSize.x * 0.5f, 0, 0), 
+                           new float3(0.5f, _borderHeight, _arenaSize.z));
+        }
+
+        private static void CreateBorderWall(Entity player, float3 position, float3 scale)
+        {
+            try
+            {
+                var entityManager = VRCore.EntityManager;
+                var wallEntity = entityManager.CreateEntity();
+                
+                // Add transform
+                entityManager.AddComponentData(wallEntity, LocalTransform.FromPositionRotationScale(
+                    position, quaternion.identity, 1f));
+                
+                // Add scale component if needed
+                if (entityManager.HasComponent<NonUniformScale>(wallEntity))
+                {
+                    entityManager.SetComponentData(wallEntity, new NonUniformScale { Value = scale });
+                }
+                
+                // Add render components (you'll need to adjust these based on actual VRising rendering)
+                AddRenderComponents(wallEntity, _borderPrefabGuid);
+                
+                // Track the border entity
+                if (!_playerArenaBorders.ContainsKey(player))
+                {
+                    _playerArenaBorders[player] = wallEntity;
+                }
+            }
+            catch (Exception ex)
+            {
+                Plugin.Logger.LogError($"Error creating border wall: {ex.Message}");
+            }
+        }
+
+        private static void CreateCornerMarkers(Entity player, float3 center)
+        {
+            var corners = new float3[]
+            {
+                center + new float3(_arenaSize.x * 0.5f, 0, _arenaSize.z * 0.5f),
+                center + new float3(-_arenaSize.x * 0.5f, 0, _arenaSize.z * 0.5f),
+                center + new float3(_arenaSize.x * 0.5f, 0, -_arenaSize.z * 0.5f),
+                center + new float3(-_arenaSize.x * 0.5f, 0, -_arenaSize.z * 0.5f)
+            };
+
+            foreach (var corner in corners)
+            {
+                CreateCornerMarker(player, corner);
+            }
+        }
+
+        private static void CreateCornerMarker(Entity player, float3 position)
+        {
+            try
+            {
+                var entityManager = VRCore.EntityManager;
+                var cornerEntity = entityManager.CreateEntity();
+                
+                // Add transform
+                entityManager.AddComponentData(cornerEntity, LocalTransform.FromPositionRotationScale(
+                    position, quaternion.identity, 1f));
+                
+                // Add render components
+                AddRenderComponents(cornerEntity, _arenaCornerPrefabGuid);
+            }
+            catch (Exception ex)
+            {
+                Plugin.Logger.LogError($"Error creating corner marker: {ex.Message}");
+            }
+        }
+
+        private static void AddRenderComponents(Entity entity, PrefabGUID prefabGuid)
+        {
+            var entityManager = VRCore.EntityManager;
+            
+            try
+            {
+                // Add prefab reference
+                var prefab = VRCore.PrefabCollection.GetPrefab(prefabGuid);
+                if (prefab != Entity.Null)
+                {
+                    entityManager.AddComponentData(entity, new Prefab { Value = prefab });
+                }
+                
+                // Add common render components (adjust based on VRising requirements)
+                // These might need to be different depending on the game version
+                
+                // Network identity for syncing
+                if (entityManager.HasComponent<Prefab>(entity))
+                {
+                    entityManager.AddComponentData(entity, new NetworkIdentity());
+                }
+            }
+            catch (Exception ex)
+            {
+                Plugin.Logger.LogError($"Error adding render components: {ex.Message}");
+            }
+        }
+
+        public static void ShowSpawnGlows(Entity player, float3 spawnPosition)
+        {
+            try
+            {
+                if (_playerSpawnGlows.ContainsKey(player))
+                {
+                    HideSpawnGlows(player);
+                }
+
+                CreateSpawnGlow(player, spawnPosition);
+                _activeVisualPlayers.Add(player);
+                Plugin.Logger.LogDebug($"Spawn glows shown for player {player.Index}");
+            }
+            catch (Exception ex)
+            {
+                Plugin.Logger.LogError($"Error showing spawn glows: {ex.Message}");
+            }
+        }
+
+        public static void HideSpawnGlows(Entity player)
+        {
+            try
+            {
+                if (_playerSpawnGlows.TryGetValue(player, out var glowEntity))
+                {
+                    var entityManager = VRCore.EntityManager;
+                    if (entityManager.Exists(glowEntity))
+                    {
+                        entityManager.DestroyEntity(glowEntity);
+                    }
+                    _playerSpawnGlows.Remove(player);
+                }
+                Plugin.Logger.LogDebug($"Spawn glows hidden for player {player.Index}");
+            }
+            catch (Exception ex)
+            {
+                Plugin.Logger.LogError($"Error hiding spawn glows: {ex.Message}");
+            }
+        }
+
+        private static void CreateSpawnGlow(Entity player, float3 spawnPosition)
+        {
+            try
+            {
+                var entityManager = VRCore.EntityManager;
+                var glowEntity = entityManager.CreateEntity();
+                
+                // Add transform with glow effect
+                entityManager.AddComponentData(glowEntity, LocalTransform.FromPositionRotationScale(
+                    spawnPosition + new float3(0, 0.1f, 0), quaternion.identity, 1f));
+                
+                // Add glow-specific scale
+                entityManager.AddComponentData(glowEntity, new NonUniformScale 
+                { 
+                    Value = new float3(_glowRadius, 0.1f, _glowRadius) 
+                });
+                
+                // Add render components
+                AddRenderComponents(glowEntity, _spawnGlowPrefabGuid);
+                
+                _playerSpawnGlows[player] = glowEntity;
+            }
+            catch (Exception ex)
+            {
+                Plugin.Logger.LogError($"Error creating spawn glow: {ex.Message}");
+            }
+        }
+
+        public static void UpdateVisuals()
+        {
+            // Optional per-frame updates for animated effects
+            try
+            {
+                foreach (var player in _activeVisualPlayers)
+                {
+                    UpdatePlayerVisuals(player);
+                }
+            }
+            catch (Exception ex)
+            {
+                Plugin.Logger.LogError($"Error updating visuals: {ex.Message}");
+            }
+        }
+
+        private static void UpdatePlayerVisuals(Entity player)
+        {
+            // Add any per-frame visual updates here
+            // For example: pulsing glows, animated borders, etc.
+        }
+
+        private static void RemoveArenaBorders(Entity player)
+        {
+            try
+            {
+                if (_playerArenaBorders.TryGetValue(player, out var borderEntity))
+                {
+                    var entityManager = VRCore.EntityManager;
+                    if (entityManager.Exists(borderEntity))
+                    {
+                        entityManager.DestroyEntity(borderEntity);
+                    }
+                    _playerArenaBorders.Remove(player);
+                }
+            }
+            catch (Exception ex)
+            {
+                Plugin.Logger.LogError($"Error removing arena borders: {ex.Message}");
+            }
+        }
+
+        public static void CleanupPlayerVisuals(Entity player)
+        {
+            HideArenaBorders(player);
+            HideSpawnGlows(player);
+            _activeVisualPlayers.Remove(player);
+        }
+
+        public static void Shutdown()
+        {
+            // Clean up all visual entities
+            var entityManager = VRCore.EntityManager;
+            
+            foreach (var kvp in _playerArenaBorders)
+            {
+                if (entityManager.Exists(kvp.Value))
+                {
+                    entityManager.DestroyEntity(kvp.Value);
+                }
+            }
+            
+            foreach (var kvp in _playerSpawnGlows)
+            {
+                if (entityManager.Exists(kvp.Value))
+                {
+                    entityManager.DestroyEntity(kvp.Value);
+                }
+            }
+            
+            _playerArenaBorders.Clear();
+            _playerSpawnGlows.Clear();
+            _activeVisualPlayers.Clear();
+            
+            Plugin.Logger.LogInfo("ArenaVisualService shutdown complete");
+        }
+    }
+    #endregion
+}

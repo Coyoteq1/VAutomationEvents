@@ -1,0 +1,248 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AssemblyName>Automation</AssemblyName>
+    <RootNamespace>VAuto</RootNamespace>
+    <LangVersion>10.0</LangVersion>
+    <OutputType>Library</OutputType>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <Platforms>AnyCPU</Platforms>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>embedded</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <NoWarn>CS0108,CS0169,CS0649,CS8618,CS8600,CS8602,CS8603,CS8604,CS8625,CS1998,CS0109,CS0114,CS1573,CS1591,CS1701,CS1702,CS1705,CS1720,CS1735,CS1996,CS3001,CS3002,CS3003,CS3005,CS3008,CS4014,CS4019,CS7008,CS7022,CS7035,CS7069,CS8019,CS8321,CS8601,CS8609,CS8610,CS8614,CS8620,CS8621,CS8622,CS8629,CS8631,CS8632,CS8765,CS8766,CS8767,CS8769,CS8774,CS8795,CS8974,CS8981,CS9046</NoWarn>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  
+
+  <ItemGroup>
+    <PackageReference Include="Iced" Version="1.21.0" />
+    
+    <!-- Core Dependencies -->
+    <Reference Include="VampireCommandFramework">
+      <HintPath>libs\VampireCommandFramework.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="BepInEx.Core">
+      <HintPath>libs\BepInEx.Core.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="BepInEx.Unity.IL2CPP">
+      <HintPath>libs\BepInEx.Unity.IL2CPP.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>libs\0Harmony.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    
+    <!-- IL2CPP Runtime -->
+    <Reference Include="Il2Cppmscorlib">
+      <HintPath>libs\Il2Cppmscorlib.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Il2CppSystem">
+      <HintPath>libs\Il2CppSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <!-- IL2CPP Runtime Interop - Provides runtime interop between managed and IL2CPP code -->
+    <Reference Include="Il2CppInterop.Runtime">
+      <HintPath>libs\Il2CppInterop.Runtime.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Il2CppInterop.Common">
+      <HintPath>libs\Il2CppInterop.Common.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    
+    <!-- ProjectM Dependencies -->
+    <Reference Include="ProjectM">
+      <HintPath>libs\ProjectM.dll</HintPath>
+      <Private>true</Private>
+      <SpecificVersion>false</SpecificVersion>
+    </Reference>
+    <Reference Include="ProjectM.Shared">
+      <HintPath>libs\ProjectM.Shared.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ProjectM.Shared.Systems">
+      <HintPath>libs\ProjectM.Shared.Systems.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ProjectM.Gameplay.Systems">
+      <HintPath>libs\ProjectM.Gameplay.Systems.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ProjectM.Gameplay.Scripting">
+      <HintPath>libs\ProjectM.Gameplay.Scripting.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ProjectM.CodeGeneration">
+      <HintPath>libs\ProjectM.CodeGeneration.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ProjectM.Conversion">
+      <HintPath>libs\ProjectM.Conversion.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ProjectM.Misc.Systems">
+      <HintPath>libs\ProjectM.Misc.Systems.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ProjectM.Presentation.Systems">
+      <HintPath>libs\ProjectM.Presentation.Systems.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ProjectM.ScriptableSystems">
+      <HintPath>libs\ProjectM.ScriptableSystems.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ProjectM.HUD">
+      <HintPath>libs\ProjectM.HUD.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ProjectM.CastleBuilding.Systems">
+      <HintPath>libs\ProjectM.CastleBuilding.Systems.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ProjectM.Behaviours">
+      <HintPath>libs\ProjectM.Behaviours.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ProjectM.Camera">
+      <HintPath>libs\ProjectM.Camera.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ProjectM.Terrain">
+      <HintPath>libs\ProjectM.Terrain.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ProjectM.Pathfinding">
+      <HintPath>libs\ProjectM.Pathfinding.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ProjectM.Steam">
+      <HintPath>libs\ProjectM.Steam.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    
+    <!-- Unity Dependencies -->
+    <Reference Include="Unity.Mathematics">
+      <HintPath>libs\Unity.Mathematics.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <!-- Missing core DOTS assemblies -->
+    <Reference Include="Unity.Entities">
+      <HintPath>libs\Unity.Entities.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Unity.Transforms">
+      <HintPath>libs\Unity.Transforms.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>libs\UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Stunlock.Core">
+      <HintPath>libs\Stunlock.Core.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Plugin Info --><Compile Include="MyPluginInfo.cs" /><!-- Core -->
+    <Compile Include="Plugin.cs" />
+    <Compile Include="Core/Core.cs" />
+    <Compile Include="Core/VRCore.cs" />
+    <Compile Include="Core/VRisingCore.cs" />
+    <Compile Include="Core/TypeAliases.cs" />
+    <Compile Include="Core/Constants.cs" />
+    <Compile Include="Core/InitManager.cs" />
+    <Compile Include="Core/ArenaBootstrap.cs" />
+    <Compile Include="Core/ArenaRuntime.cs" />
+    <Compile Include="Core/DualCharacterState.cs" />
+    <Compile Include="Core/MissingTypes.cs" />
+    <!-- Services - Unified Lifecycle Management -->
+    <Compile Include="Services/UnifiedServices.cs" />
+    <Compile Include="Services/MissingServices.cs" />
+    <Compile Include="Services/CharacterSwapService.cs" />
+    <Compile Include="Services/ArenaCharacterCreator.cs" />
+    <Compile Include="Services/EnhancedInventoryManager.cs" />
+    <Compile Include="Commands/ArenaCommands.cs" />
+    <Compile Include="Commands/ServiceCommands.cs" />
+    <Compile Include="Commands/CharacterCommands.cs" />
+    <Compile Include="Commands/ShortcutCommands.cs" />
+
+    <!-- Extensions -->
+    <Compile Include="Extensions/MissingExtensions.cs" />
+
+    <!-- Data -->
+    <Compile Include="Data/Prefabs.cs" />
+    <Compile Include="Data/ArenaConfiguration.cs" />
+    <Compile Include="Data/ArenaPositions.cs" />
+    <Compile Include="Data/Tile.cs" />
+    <Compile Include="Data/ArenaTypes.cs" />
+
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Il2CppInterop.Common" Version="1.4.0" />
+    <PackageReference Include="UniTask" Version="2.3.3" />
+    
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Additional References -->
+    <Reference Include="Unity.Collections">
+      <HintPath>libs\Unity.Collections.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Unity.Entities.Hybrid">
+      <HintPath>libs\Unity.Entities.Hybrid.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <Reference Include="Unity.RenderPipelines.Core.Runtime">
+      <HintPath>libs\Unity.RenderPipelines.Core.Runtime.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Unity.Serialization">
+      <HintPath>libs\Unity.Serialization.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="VRising.GameData">
+      <HintPath>libs\VRising.GameData.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+  
+  <PropertyGroup>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <!-- Auto-deploy built DLL and config to BepInEx/plugins after build -->
+  <Target Name="PostBuild" AfterTargets="Build">
+    <PropertyGroup>
+      <DeployPluginsDir>C:\BepInEx\DedicatedServerLauncher\VRisingServer\BepInEx\plugins</DeployPluginsDir>
+      <ConfigSourcePath>config\gg.vautomation.arena.cfg</ConfigSourcePath>
+    </PropertyGroup>
+    <MakeDir Directories="$(DeployPluginsDir)" Condition="!Exists('$(DeployPluginsDir)')" />
+    <Copy SourceFiles="$(OutDir)$(AssemblyName).dll" DestinationFolder="$(DeployPluginsDir)" SkipUnchangedFiles="true" />
+    <!-- Copy config file from config directory -->
+    <Copy SourceFiles="$(ConfigSourcePath)" DestinationFolder="$(DeployPluginsDir)" SkipUnchangedFiles="true" Condition="Exists('$(ConfigSourcePath)')" />
+  </Target>
+</Project>
