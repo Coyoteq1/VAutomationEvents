@@ -9,7 +9,6 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using VAuto.Core;
 using VAuto.Services;
-using VAuto.Services;
 
 namespace VAuto.Commands
 {
@@ -343,13 +342,12 @@ namespace VAuto.Commands
                 Plugin.Logger?.LogInfo($"[{timestamp}] VBLOOD_SPAWN_VALIDATION - Looking up VBlood boss '{bossName}'");
 
                 // Get VBlood boss by name
-                var vBloodBoss = VAuto.Core.VBloodMapper.GetVBloodBossByName(bossName);
+                var vBloodBoss = VBloodMapper.GetVBloodBossByName(bossName);
                 if (vBloodBoss == null)
-                {
                 {
                     Plugin.Logger?.LogWarning($"[{timestamp}] VBLOOD_SPAWN_NOT_FOUND - VBlood boss '{bossName}' not found");
                     ctx.Reply($"VBlood boss '{bossName}' not found. Available bosses:");
-                    foreach (var boss in VAuto.Core.VBloodMapper.GetAllVBloodBosses())
+                    foreach (var boss in VBloodMapper.GetAllVBloodBosses())
                     {
                         ctx.Reply($"  • {boss.Name} (Level {boss.Level})");
                     }
@@ -386,7 +384,7 @@ namespace VAuto.Commands
                 Plugin.Logger?.LogInfo($"[{timestamp}] VBLOOD_SPAWN_EXECUTING - Spawning VBlood boss at {spawnPos}");
 
                 // Spawn the VBlood boss
-                if (VAuto.Core.VBloodMapper.SpawnVBloodBoss(vBloodBoss.GuidHash, spawnPos))
+                if (VBloodMapper.SpawnVBloodBoss(vBloodBoss.GuidHash, spawnPos))
                 {
                     Plugin.Logger?.LogInfo($"[{timestamp}] VBLOOD_SPAWN_SUCCESS - Successfully spawned '{vBloodBoss.Name}' (GUID: {vBloodBoss.GuidHash})");
                     ctx.Reply($"Spawned VBlood boss '{vBloodBoss.Name}'!");
@@ -444,7 +442,7 @@ namespace VAuto.Commands
                 Plugin.Logger?.LogInfo($"[{timestamp}] BABY_BLOOD_EXECUTING - Spawning Baby Blood using mapper");
 
                 // Spawn Baby Blood using the mapper
-                if (VAuto.Core.VBloodMapper.SpawnBabyBlood(spawnPos))
+                if (VBloodMapper.SpawnBabyBlood(spawnPos))
                 {
                     // var babyBlood = VBloodMapper.GetBabyBloodBoss();
                     // Plugin.Logger?.LogInfo($"[{timestamp}] BABY_BLOOD_SUCCESS - Spawned Baby Blood (GUID: {VBloodMapper.GetBabyBloodGuid()})");
@@ -477,7 +475,7 @@ namespace VAuto.Commands
                 Plugin.Logger?.LogInfo($"[{timestamp}] VBLOOD_DESPAWN_START - PlatformId: {platformId}, BossName: {bossName}");
 
                 // Get VBlood boss by name
-                var vBloodBoss = VAuto.Core.VBloodMapper.GetVBloodBossByName(bossName);
+                var vBloodBoss = VBloodMapper.GetVBloodBossByName(bossName);
                 if (vBloodBoss == null)
                 {
                     Plugin.Logger?.LogWarning($"[{timestamp}] VBLOOD_DESPAWN_NOT_FOUND - VBlood boss '{bossName}' not found");
