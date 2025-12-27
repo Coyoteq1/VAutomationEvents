@@ -1,0 +1,10 @@
+{
+  "name": "VAutomationEvents",
+  "version_number": "1.0.0",
+  "website_url": "https://github.com/Coyoteq1/VAutomationEvents",
+  "description": "A powerful automation mod for V Rising that provides automated arena management, player lifecycle handling, and PvP practice functionality. Features include dynamic zone detection, snapshot-based state management, build system integration, and comprehensive admin commands.",
+  "dependencies": [
+    "BepInEx-BepInExPack-5.4.2100",
+    "molenzwiebel-VampireCommandFramework-0.9.0"
+  ]
+}
