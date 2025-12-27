@@ -22,7 +22,7 @@ namespace VAuto.Services
         public static ManualLogSource Log => _log;
 
         #region Initialization
-        public static void Initialize(ManualLogSource logger)
+        public static void Initialize()
         {
             lock (_lock)
             {
@@ -30,8 +30,8 @@ namespace VAuto.Services
                 
                 try
                 {
-                    _log = logger;
-                    logger?.LogInfo("[ServiceManager] Initializing service manager...");
+                    _log = Plugin.Logger;
+                    Plugin.Logger?.LogInfo("[ServiceManager] Initializing service manager...");
                     
                     // Define service dependencies
                     InitializeDependencies();
@@ -41,11 +41,11 @@ namespace VAuto.Services
                     
                     _initialized = true;
                     
-                    logger?.LogInfo("[ServiceManager] Service manager initialized successfully");
+                    Plugin.Logger?.LogInfo("[ServiceManager] Service manager initialized successfully");
                 }
                 catch (Exception ex)
                 {
-                    logger?.LogError($"[ServiceManager] Failed to initialize: {ex.Message}");
+                    Plugin.Logger?.LogError($"[ServiceManager] Failed to initialize: {ex.Message}");
                     throw;
                 }
             }
@@ -59,7 +59,7 @@ namespace VAuto.Services
                 
                 try
                 {
-                    _log?.LogInfo("[ServiceManager] Cleaning up service manager...");
+                    Plugin.Logger?.LogInfo("[ServiceManager] Cleaning up service manager...");
                     
                     // Cleanup services in reverse dependency order
                     CleanupServices();
@@ -68,11 +68,11 @@ namespace VAuto.Services
                     _dependencies.Clear();
                     _initialized = false;
                     
-                    _log?.LogInfo("[ServiceManager] Service manager cleaned up successfully");
+                    Plugin.Logger?.LogInfo("[ServiceManager] Service manager cleaned up successfully");
                 }
                 catch (Exception ex)
                 {
-                    _log?.LogError($"[ServiceManager] Failed to cleanup: {ex.Message}");
+                    Plugin.Logger?.LogError($"[ServiceManager] Failed to cleanup: {ex.Message}");
                 }
             }
         }
@@ -131,7 +131,7 @@ namespace VAuto.Services
 
             // Core services have no dependencies
             _dependencies[typeof(PlayerService)] = new List<Type>();
-            _dependencies[typeof(MapIconService)] = new List<Type>();
+
             _dependencies[typeof(GameSystems)] = new List<Type>();
             _dependencies[typeof(RespawnPreventionService)] = new List<Type>();
             _dependencies[typeof(NameTagService)] = new List<Type>();
@@ -139,6 +139,11 @@ namespace VAuto.Services
             _dependencies[typeof(ConveyorService)] = new List<Type>();
 
             _dependencies[typeof(AchievementUnlockService)] = new List<Type>();
+
+            _dependencies[typeof(AutoEnterService)] = new List<Type>
+            {
+                typeof(LifecycleService)
+            };
 
             _log?.LogDebug("[ServiceManager] Service dependencies initialized");
         }
@@ -256,8 +261,7 @@ namespace VAuto.Services
                 return new ArenaObjectServiceWrapper();
             else if (serviceType == typeof(PlayerService))
                 return new PlayerServiceWrapper();
-            else if (serviceType == typeof(MapIconService))
-                return new MapIconServiceWrapper();
+
             else if (serviceType == typeof(GameSystems))
                 return new GameSystemsWrapper();
             else if (serviceType == typeof(RespawnPreventionService))
@@ -733,38 +737,7 @@ namespace VAuto.Services
             public string GetLastError() => null;
         }
 
-        private class MapIconServiceWrapper : IService, IServiceHealthMonitor
-        {
-            public bool IsInitialized => MapIconService.IsInitialized;
-            public ManualLogSource Log => MapIconService.Log;
-            
-            public void Initialize() => MapIconService.Initialize();
-            public void Cleanup() => MapIconService.Cleanup();
-            
-            public ServiceHealthStatus GetHealthStatus()
-            {
-                return new ServiceHealthStatus
-                {
-                    ServiceName = "MapIconService",
-                    IsHealthy = IsInitialized,
-                    Status = IsInitialized ? "Running" : "Stopped",
-                    LastCheck = DateTime.UtcNow
-                };
-            }
-            
-            public ServicePerformanceMetrics GetPerformanceMetrics()
-            {
-                return new ServicePerformanceMetrics
-                {
-                    ServiceName = "MapIconService",
-                    ActiveOperations = MapIconService.GetActiveIconCount(),
-                    MeasuredAt = DateTime.UtcNow
-                };
-            }
-            
-            public int GetErrorCount() => 0;
-            public string GetLastError() => null;
-        }
+
 
         private class GameSystemsWrapper : IService, IServiceHealthMonitor
         {

@@ -94,36 +94,21 @@ namespace VAuto.Commands
             var userEntity = ctx.Event.SenderUserEntity;
             var character = ctx.Event.SenderCharacterEntity;
 
-            try
-            {
-                Plugin.Logger?.LogInfo($"[{timestamp}] ARENA_ENTER_COMMAND_START - PlatformId: {platformId}, UserEntity: {userEntity}, CharacterEntity: {character}");
+            Plugin.Logger?.LogInfo($"[{timestamp}] ARENA_ENTER_COMMAND_MANUAL - === MANUAL ARENA ENTER COMMAND RECEIVED ===");
+            Plugin.Logger?.LogInfo($"[{timestamp}] ARENA_ENTER_COMMAND_MANUAL - Player: {platformId}");
+            Plugin.Logger?.LogInfo($"[{timestamp}] ARENA_ENTER_COMMAND_MANUAL - Using same chain as auto-enter for consistency");
 
-                Plugin.Logger?.LogInfo($"[{timestamp}] ARENA_ENTER_VALIDATION - Checking if player {platformId} is already in arena");
-                if (MissingServices.LifecycleService.IsPlayerInArena(platformId))
-                {
-                    Plugin.Logger?.LogWarning($"[{timestamp}] ARENA_ENTER_REJECTED - Player {platformId} already in arena");
-                    ctx.Reply("You are already in the arena!");
-                    return;
-                }
-
-                Plugin.Logger?.LogInfo($"[{timestamp}] ARENA_ENTER_EXECUTING - Calling lifecycle service for arena entry");
-                // Use full lifecycle service for consistent arena entry
-                if (MissingServices.LifecycleService.EnterArena(userEntity, character))
-                {
-                    Plugin.Logger?.LogInfo($"[{timestamp}] ARENA_ENTER_SUCCESS - Player {platformId} entered arena successfully");
-                    ctx.Reply("Entered arena successfully!");
-                }
-                else
-                {
-                    Plugin.Logger?.LogError($"[{timestamp}] ARENA_ENTER_FAILED - Lifecycle service returned false for {platformId}");
-                    ctx.Reply("Failed to enter arena.");
-                }
-            }
-            catch (Exception ex)
+            // Use the same chain API as .arena enter for full functionality
+            var enterChainResult = TeleportCommands.ExecuteArenaEnterChain(platformId, userEntity, character);
+            if (!enterChainResult.Success)
             {
-                Plugin.Logger?.LogError($"[{timestamp}] ARENA_ENTER_CRITICAL_ERROR - PlatformId: {platformId}, Error: {ex.Message}");
-                ctx.Reply("An error occurred while entering the arena.");
+                ctx.Reply($"Arena entry failed: {enterChainResult.Message}");
+                Plugin.Logger?.LogError($"[{timestamp}] ARENA_ENTER_COMMAND_MANUAL - Chain execution failed: {enterChainResult.Message}");
+                return;
             }
+
+            ctx.Reply(enterChainResult.Message);
+            Plugin.Logger?.LogInfo($"[{timestamp}] ARENA_ENTER_COMMAND_MANUAL - === MANUAL ARENA ENTRY COMPLETED SUCCESSFULLY ===");
         }
 
         [Command("exit", adminOnly: true, usage: ".exit")]

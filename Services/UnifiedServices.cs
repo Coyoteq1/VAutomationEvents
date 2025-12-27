@@ -43,6 +43,7 @@ namespace VAuto.Services
                     GameSystems.Initialize();
                     RespawnPreventionService.Initialize();
                     NameTagService.Initialize();
+                    PlayerProgressStore.Initialize();
 
                     _initialized = true;
                     Log?.LogInfo("[UnifiedServices] Unified service manager initialized successfully");
@@ -71,6 +72,7 @@ namespace VAuto.Services
                     GameSystems.Cleanup();
                     MapIconService.Cleanup();
                     PlayerService.Cleanup();
+                    PlayerProgressStore.Cleanup();
 
                     _initialized = false;
                     Log?.LogInfo("[UnifiedServices] Unified service manager cleaned up successfully");
@@ -92,7 +94,8 @@ namespace VAuto.Services
                 ["MapIconService"] = new { Status = MapIconService.IsInitialized ? "Running" : "Stopped", Icons = MapIconService.GetActiveIconCount() },
                 ["GameSystems"] = new { Status = GameSystems.IsInitialized ? "Running" : "Stopped", Hooks = GameSystems.GetActiveHookedPlayers().Count },
                 ["RespawnPrevention"] = new { Status = RespawnPreventionService.IsInitialized ? "Running" : "Stopped", Cooldowns = RespawnPreventionService.GetActiveCooldownCount() },
-                ["NameTagService"] = new { Status = NameTagService.IsInitialized ? "Running" : "Stopped", Tags = NameTagService.GetActiveTagCount() }
+                ["NameTagService"] = new { Status = NameTagService.IsInitialized ? "Running" : "Stopped", Tags = NameTagService.GetActiveTagCount() },
+                ["PlayerProgressStore"] = new { Status = PlayerProgressStore.IsInitialized ? "Running" : "Stopped", CachedPlayers = PlayerProgressStore.GetCachedPlayerCount() }
             };
         }
 
@@ -264,68 +267,7 @@ namespace VAuto.Services
         }
     }
 
-    /// <summary>
-    /// Unified Map Icon Service - Map icon management
-    /// </summary>
-    public static class MapIconService
-    {
-        private static bool _initialized = false;
-        private static readonly Dictionary<ulong, MapIconData> _icons = new();
 
-        public static bool IsInitialized => _initialized;
-
-        public static void Initialize()
-        {
-            if (_initialized) return;
-            
-            _icons.Clear();
-            _initialized = true;
-            Plugin.Logger?.LogInfo("[MapIconService] Initialized");
-        }
-
-        public static void Cleanup()
-        {
-            if (!_initialized) return;
-            
-            _icons.Clear();
-            _initialized = false;
-            Plugin.Logger?.LogInfo("[MapIconService] Cleaned up");
-        }
-
-        public static void RefreshPlayerIcons()
-        {
-            var players = PlayerService.GetAllOnlinePlayers();
-            foreach (var player in players)
-            {
-                if (player.IsOnline)
-                {
-                    _icons[player.PlatformId] = new MapIconData
-                    {
-                        Player = player,
-                        Position = GetPlayerPosition(player.CharacterEntity),
-                        LastUpdate = DateTime.UtcNow
-                    };
-                }
-            }
-        }
-
-        public static int GetActiveIconCount() => _icons.Count;
-
-        private static float3 GetPlayerPosition(Entity characterEntity)
-        {
-            try
-            {
-                if (characterEntity == Entity.Null || !VAutoCore.EntityManager.Exists(characterEntity))
-                    return float3.zero;
-                    
-                return characterEntity.GetTranslationSafely(VAutoCore.EntityManager).Value;
-            }
-            catch
-            {
-                return float3.zero;
-            }
-        }
-    }
 
     /// <summary>
     /// Unified Game Systems Service - Game system hooks and management
@@ -496,12 +438,7 @@ namespace VAuto.Services
         // Same as PlayerData but named for clarity
     }
 
-    public class MapIconData
-    {
-        public UserData Player { get; set; }
-        public float3 Position { get; set; }
-        public DateTime LastUpdate { get; set; }
-    }
+
 
     public class CooldownData
     {

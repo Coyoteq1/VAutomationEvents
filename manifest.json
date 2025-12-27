@@ -6,5 +6,129 @@
   "dependencies": [
     "BepInEx-BepInExPack-5.4.2100",
     "molenzwiebel-VampireCommandFramework-0.9.0"
-  ]
+  ],
+  "config": {
+    "gg.vautomation.arena": {
+      "General": {
+        "Enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable the entire plugin"
+        },
+        "LogLevel": {
+          "type": "string",
+          "default": "Info",
+          "description": "Logging level (Debug, Info, Warning, Error)"
+        },
+        "DebugMode": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable debug mode for additional logging and features"
+        }
+      },
+      "Arena": {
+        "ArenaEnable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable arena functionality"
+        },
+        "Center": {
+          "type": "string",
+          "default": "-1000, 5, -500",
+          "description": "Arena center coordinates as 'x, y, z'"
+        },
+        "Radius": {
+          "type": "float",
+          "default": 50.0,
+          "description": "Arena radius in meters"
+        },
+        "ArenaEnterRadius": {
+          "type": "float",
+          "default": 50.0,
+          "description": "Radius for entering arena zone"
+        },
+        "ArenaExitRadius": {
+          "type": "float",
+          "default": 75.0,
+          "description": "Radius for exiting arena zone"
+        },
+        "ArenaCheckInterval": {
+          "type": "float",
+          "default": 2.0,
+          "description": "Interval for checking arena status in seconds"
+        },
+        "MaxPlayers": {
+          "type": "integer",
+          "default": 0,
+          "description": "Maximum players allowed in arena (0 = unlimited)"
+        },
+        "DamageMultiplier": {
+          "type": "float",
+          "default": 1.0,
+          "description": "Arena damage multiplier (1.0 = normal)"
+        },
+        "AutoBloodType": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically set blood type in arena"
+        },
+        "PracticeModeDuration": {
+          "type": "integer",
+          "default": 0,
+          "description": "Practice mode duration in minutes (0 = unlimited)"
+        },
+        "VBloodUnlock": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable VBlood unlock system in arena"
+        }
+      },
+      "GlobalMapIconService": {
+        "Enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable global map icon service"
+        },
+        "UpdateInterval": {
+          "type": "float",
+          "default": 5.0,
+          "description": "Map refresh interval in seconds"
+        },
+        "ShowNormalPlayers": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show player names on global map"
+        }
+      },
+      "LifecycleSystem": {
+        "Enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable player respawn system"
+        },
+        "RespawnCooldown": {
+          "type": "integer",
+          "default": 30,
+          "description": "Respawn cooldown in seconds"
+        }
+      },
+      "Data": {
+        "DatabaseEnable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable database functionality"
+        },
+        "DatabaseType": {
+          "type": "string",
+          "default": "SQLite",
+          "description": "Database type (SQLite, MySQL, PostgreSQL)"
+        },
+        "DatabasePath": {
+          "type": "string",
+          "default": "./VAuto_Data/database.db",
+          "description": "Database file path"
+        }
+      }
+    }
+  }
 }

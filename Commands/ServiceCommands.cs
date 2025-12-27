@@ -25,6 +25,115 @@ namespace VAuto.Commands
             // Commands are auto-registered via attributes
         }
 
+        #region Player Progress Commands
+        [Command("progress", "progress <action> [platformId]", "Manage player progress data", adminOnly: true)]
+        public static void ProgressCommand(ChatCommandContext ctx, string action, string platformIdStr = "")
+        {
+            switch (action.ToLower())
+            {
+                case "get":
+                    GetPlayerProgress(ctx, platformIdStr);
+                    break;
+                case "list":
+                    ListAllProgress(ctx);
+                    break;
+                case "save":
+                    ForceSaveProgress(ctx);
+                    break;
+                case "remove":
+                    RemovePlayerProgress(ctx, platformIdStr);
+                    break;
+                case "status":
+                    ProgressStatus(ctx);
+                    break;
+                default:
+                    ctx.Reply($"Unknown progress action: {action}. Available: get, list, save, remove, status");
+                    break;
+            }
+        }
+
+        private static void GetPlayerProgress(ChatCommandContext ctx, string platformIdStr)
+        {
+            if (!ulong.TryParse(platformIdStr, out var platformId))
+            {
+                ctx.Reply("Invalid platform ID. Usage: .progress get <platformId>");
+                return;
+            }
+
+            var progress = PlayerProgressStore.Get(platformId);
+            if (progress == null)
+            {
+                ctx.Reply($"No progress data found for platform ID {platformId}");
+                return;
+            }
+
+            ctx.Reply($"Progress for {progress.CharacterName} (ID: {progress.PlatformId}):");
+            ctx.Reply($"  Level: {progress.Level}");
+            ctx.Reply($"  Experience: {progress.Experience:F1}");
+            ctx.Reply($"  Unlocked VBloods: {progress.UnlockedVBloods.Count}");
+            ctx.Reply($"  Ability Levels: {progress.AbilityLevels.Count}");
+            ctx.Reply($"  Completed Quests: {progress.CompletedQuests.Count}");
+            ctx.Reply($"  Last Updated: {progress.LastUpdated:yyyy-MM-dd HH:mm:ss}");
+        }
+
+        private static void ListAllProgress(ChatCommandContext ctx)
+        {
+            var allProgress = PlayerProgressStore.GetAll();
+            var count = allProgress.Count;
+            
+            if (count == 0)
+            {
+                ctx.Reply("No player progress data stored.");
+                return;
+            }
+
+            ctx.Reply($"Found {count} cached players:");
+            foreach (var kvp in allProgress.Take(10)) // Show first 10 to avoid spam
+            {
+                var progress = kvp.Value;
+                ctx.Reply($"  {progress.CharacterName} (ID: {progress.PlatformId}) - Level {progress.Level} - Updated: {progress.LastUpdated:MM/dd}");
+            }
+
+            if (count > 10)
+            {
+                ctx.Reply($"  ... and {count - 10} more players");
+            }
+        }
+
+        private static void ForceSaveProgress(ChatCommandContext ctx)
+        {
+            PlayerProgressStore.ForceSave();
+            ctx.Reply("Player progress data force-saved to disk.");
+        }
+
+        private static void RemovePlayerProgress(ChatCommandContext ctx, string platformIdStr)
+        {
+            if (!ulong.TryParse(platformIdStr, out var platformId))
+            {
+                ctx.Reply("Invalid platform ID. Usage: .progress remove <platformId>");
+                return;
+            }
+
+            var progress = PlayerProgressStore.Get(platformId);
+            if (progress == null)
+            {
+                ctx.Reply($"No progress data found for platform ID {platformId}");
+                return;
+            }
+
+            PlayerProgressStore.Remove(platformId);
+            ctx.Reply($"Removed progress data for {progress.CharacterName} (ID: {platformId})");
+        }
+
+        private static void ProgressStatus(ChatCommandContext ctx)
+        {
+            var count = PlayerProgressStore.GetCachedPlayerCount();
+            ctx.Reply($"PlayerProgressStore Status: {(PlayerProgressStore.IsInitialized ? "Running" : "Stopped")}");
+            ctx.Reply($"  Cached players: {count}");
+            ctx.Reply($"  Storage location: BepInEx/config/VAuto.Arena/player_progress.json");
+        }
+        #endregion
+
         #region Map Icon Commands
         [Command("mapicon", "mapicon <action> [args]", "Manage map icons", adminOnly: true)]
         public static void MapIconCommand(ChatCommandContext ctx, string action, string args = "")
@@ -573,15 +682,3 @@ namespace VAuto.Commands
         #endregion
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-

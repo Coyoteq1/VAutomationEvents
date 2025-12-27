@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <AssemblyName>Automation</AssemblyName>
+    <AssemblyName>VautomatonEvents</AssemblyName>
     <RootNamespace>VAuto</RootNamespace>
     <LangVersion>10.0</LangVersion>
     <OutputType>Library</OutputType>
@@ -177,6 +177,8 @@
     <!-- Services - Unified Lifecycle Management -->
     <Compile Include="Services/UnifiedServices.cs" />
     <Compile Include="Services/MissingServices.cs" />
+    <Compile Include="Services/MapIconService.cs" />
+    <Compile Include="Services/PlayerProgressStore.cs" />
     <Compile Include="Services/CharacterSwapService.cs" />
     <Compile Include="Services/ArenaCharacterCreator.cs" />
     <Compile Include="Services/EnhancedInventoryManager.cs" />
