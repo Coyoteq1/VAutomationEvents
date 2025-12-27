@@ -1,4 +1,4 @@
-VAuto Automation System
+V Automation System
 VersionV Rising
 
 A comprehensive automation system for V Rising servers, featuring complete lifecycle, Automation integration, dual character management, automated PvP/PVE zones, real-time map tracking, and extensive administrative tools. Built with Kindred schematics as the main reference for detailed implementation, made easy for all users.
