@@ -51,7 +51,7 @@ namespace VAuto.Commands
             ".castle radius <radius> - Set castle radius",
             ".castle clear - Clear castle radius",
             ".castle delete - Delete castle configuration",
-            ".castle enhance <level> - Set advanced enhancement level",
+            ".castle enhance <level> - Set advanced enhancement level",,
             ".castle info - Show castle system information",
             ".castle status - Show castle system status",
             ".build mode - Toggle build mode on/off",
