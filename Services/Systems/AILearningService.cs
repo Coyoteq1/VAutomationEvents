@@ -4,6 +4,7 @@ using System.Linq;
 using LiteDB;
 using VAuto.Commands;
 using VAuto.Services.Systems;
+using VAuto.Services.Interfaces;
 using BepInEx;
 using BepInEx.Logging;
 

@@ -11,7 +11,6 @@ namespace VAuto.Commands
     /// Comprehensive command parser for the Vauto automation system
     /// Handles all command types: arena, automation, zone, schematic, castle, and logistics
     /// </summary>
-    /* TEMPORARILY DISABLED DUE TO UNRESOLVED TYPE REFERENCES
     public class CommandParser
     {
         private readonly ZoneManagerService _zoneManager;
@@ -1221,5 +1220,4 @@ namespace VAuto.Commands
         Castle,
         Logistics
     }
-    */
 }

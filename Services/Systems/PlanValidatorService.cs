@@ -263,17 +263,6 @@ namespace VAuto.Services.Systems
             return new ServicePerformanceMetrics
             {
                 ServiceName = "PlanValidatorService",
-                OperationCount = 0,
-                AverageExecutionTime = 0,
-                LastExecutionTime = 0
-            };
-        }
-    }
-}cs GetPerformanceMetrics()
-        {
-            return new ServicePerformanceMetrics
-            {
-                ServiceName = "PlanValidatorService",
                 ActiveOperations = 0,
                 MeasuredAt = DateTime.UtcNow
             };

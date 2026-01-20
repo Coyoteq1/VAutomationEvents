@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <PackageReference Include="Iced" Version="1.21.0" />
+    <PackageReference Include="LiteDB" Version="5.0.21" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     
     <!-- Core Dependencies -->
@@ -193,12 +194,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!-- Additional References -->
-    <Reference Include="Unity.Collections">
-      <HintPath>libs\Unity.Collections.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="Unity.Entities.Hybrid">
+    <Reference Include="Unity.Collections" />
+    <Reference Include="ProjectM" />
+    <Reference Include="ProjectM.Shared" />
+    <Reference Include="ProjectM.Gameplay.Systems" />
+    <Reference Include="ProjectM.Build" />
+    <Reference Include="ProjectM.Structures" />
+    <Reference Include="ProjectM.Permissions" />
+</ItemGroup>
+  
+  <ItemGroup>
+    <Unity.Entities.Hybrid>
       <HintPath>libs\Unity.Entities.Hybrid.dll</HintPath>
       <Private>false</Private>
     </Reference>
@@ -217,22 +223,6 @@
     </Reference>
   </ItemGroup>
   
-  <ItemGroup>
-    <!-- Core working services -->
-    <Compile Include="Services\Systems\ServiceManager.cs" />
-    <Compile Include="Services\Interfaces\IService.cs" />
-    <Compile Include="Services\Systems\AutomationAPI.cs" />
-    <Compile Include="Services\Systems\GameSystems.cs" />
-    <Compile Include="Services\Systems\RespawnPreventionService.cs" />
-    <Compile Include="Services\Systems\NameTagService.cs" />
-    
-    <!-- Plugin and Core files -->
-    <Compile Include="Plugin.cs" />
-    <Compile Include="MyPluginInfo.cs" />
-    <Compile Include="GlobalUsings.cs" />
-    <Compile Include="Utilities\*.cs" />
-  </ItemGroup>
-
   <ItemGroup>
     <Compile Remove="ComponentSaver\**\*.cs" />
     <Compile Remove="Data\ComponentSaver\**\*.cs" />

@@ -20,7 +20,6 @@ using VAuto.Data;
 using VAuto.Services;
 using VAuto.Services.Systems;
 using BepInEx.Logging;
-using CommandAttribute = VampireCommandFramework.CommandAttribute;
 
 namespace VAuto.Commands
 {

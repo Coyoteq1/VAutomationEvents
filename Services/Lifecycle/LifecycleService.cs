@@ -376,221 +376,257 @@ namespace VAuto.Services.Lifecycle
 
         public bool EnterArena(Entity userEntity, Entity character, string arenaId)
         {
-            if (!VAuto.Core.Core.Exists(userEntity)) return false;
-            if (!VAuto.Core.Core.TryRead<User>(userEntity, out var user)) return false;
+            if (!VAuto.Core.Core.Exists(userEntity) || !VAuto.Core.Core.TryRead(userEntity, out User user))
+            {
+                _log?.LogWarning("[Lifecycle] EnterArena called with invalid user entity.");
+                return false;
+            }
 
             var platformId = user.PlatformId;
-            if (_playerStates.ContainsKey(platformId)) return false;
+            if (_playerStates.ContainsKey(platformId))
+            {
+                _log?.LogWarning($"[Lifecycle] Player {platformId} is already in the arena. Ignoring EnterArena request.");
+                return false;
+            }
+
+            var serverCharacter = user.LocalCharacter._Entity;
+            if (!VAuto.Core.Core.Exists(serverCharacter))
+            {
+                _log?.LogError($"[Lifecycle] Server character entity does not exist for {platformId}.");
+                return false;
+            }
+
+            _log?.LogInfo($"Player {platformId} entering arena '{arenaId}'.");
 
             try
             {
-                // Get server-side character entity from User component
-                var serverCharacter = user.LocalCharacter._Entity;
-                if (!VAuto.Core.Core.Exists(serverCharacter))
-                {
-                    _log?.LogError($"[Lifecycle] Server character entity does not exist for {platformId}");
-                    return false;
-                }
+                var originalPosition = GetEntityPosition(serverCharacter);
 
-                // 1. Validate player state
-                float3 originalPosition = GetEntityPosition(serverCharacter);
+                CapturePlayerSnapshot(userEntity, serverCharacter);
+                RegisterPlayerInArena(platformId, userEntity, serverCharacter, originalPosition);
 
-                // 2. Create player snapshot
-                _log?.LogInfo($"[Lifecycle] Capturing snapshot for {platformId}");
-                try
-                {
-                    if (!EnhancedArenaSnapshotService.CreateSnapshot(userEntity, serverCharacter, "practice"))
-                    {
-                        _log?.LogError($"[Lifecycle] Failed to capture snapshot for {platformId}");
-                        return false;
-                    }
-                }
-                catch (Exception snapshotEx)
-                {
-                    _log?.LogWarning($"[Lifecycle] Snapshot capture error (non-critical): {snapshotEx.Message}");
-                    // Continue anyway - snapshot is not critical for arena entry
-                }
+                ApplyArenaUnlocksAndAbilities(platformId, userEntity, serverCharacter);
+                ApplyPvpIdentity(platformId, userEntity, serverCharacter);
+                ApplyArenaGear(serverCharacter);
+                TeleportPlayerToArena(serverCharacter);
+                ShowArenaUIElements(platformId);
 
-                // 3. Register player state
-                _playerStates[platformId] = new PlayerState
-                {
-                    Character = serverCharacter,
-                    UserEntity = userEntity,
-                    EnteredAt = DateTime.UtcNow,
-                    OriginalPosition = originalPosition
-                };
-
-                // 4. Add player to zone (triggers zone activation if needed)
-                // ZoneService.AddPlayerToZone(0, platformId); // Use arena ID 0 for default
-
-                // 5. Unlock VBloods
-                ApplyVBloodHook(platformId);
-
-                // 5a. Unlock all abilities for PvP arena
-                AbilityOverrideService.Instance.UnlockAllAbilities(userEntity, serverCharacter);
-
-                // 5b. Additionally make sure VBlood unlock system is enabled for full spell access
-                VAuto.Core.VBloodMapper.VBloodUnlockSystem.EnableVBloodUnlockMode(serverCharacter);
-                
-                // 5c. Force open the spellbook UI to make spells visible
-                VAuto.Core.VBloodMapper.VBloodUnlockSystem.OpenSpellbookUI(serverCharacter);
-
-                // 5d. Force unlocks are handled by LifecycleService (moved from AchievementUnlockService)
-                try
-                {
-                    ForceUnlockIfEnabled(platformId, userEntity);
-                }
-                catch (Exception ex)
-                {
-                    _log?.LogWarning($"[Lifecycle] Failed to perform forced unlocks: {ex.Message}");
-                }
-
-                // 6. Apply PvP identity changes
-                _log?.LogInfo($"[Lifecycle] Applying PvP identity for {platformId}");
-
-                // Change player name to [PvP] prefix (Rule 5.2)
-                if (VAuto.Core.Core.TryRead<User>(userEntity, out var userData))
-                {
-                    var originalName = userData.CharacterName.ToString();
-                    var pvpName = $"[PvP]{originalName}";
-                    userData.CharacterName = new FixedString64Bytes(pvpName);
-                    VAuto.Core.Core.Write(userEntity, userData);
-                    _log?.LogInfo($"[Lifecycle] Changed player name from '{originalName}' to '{pvpName}'");
-                }
-
-                // Override blood type (Rule 5.2)
-                if (VAuto.Core.Core.TryRead<ProjectM.Blood>(serverCharacter, out var blood))
-                {
-                    blood.BloodType = new PrefabGUID(-1464869978); // PvP blood type from config
-                    blood.Quality = 100.0f; // Max quality for PvP
-                    VAuto.Core.Core.Write(serverCharacter, blood);
-                    _log?.LogInfo($"[Lifecycle] Set PvP blood type for {platformId}");
-                }
-
-                // 7. Apply arena gear
-                _log?.LogInfo($"[Lifecycle] Applying arena gear for {platformId}");
-                if (!ArenaBuildService.ApplyBuild(serverCharacter, "Dracula_Scholar"))
-                {
-                    _log?.LogWarning($"[Lifecycle] Failed to apply arena gear for {platformId}");
-                }
-
-                // 8. Teleport to arena center
-                var arenaCenter = new float3(-1000f, 5f, -500f); // ZoneService.GetZoneState(0)?.Zone.Center ?? new float3(-1000f, 5f, -500f);
-                _log?.LogInfo($"[Lifecycle] Teleporting {platformId} to arena center {arenaCenter}");
-                FastTeleport(serverCharacter, arenaCenter);
-
-                // 9. Show arena UI
-                ArenaUIManager.ShowArenaUI();
-
-                // 10. Show ability slots UI
-                try
-                {
-                    var abilityUI = VAuto.UI.AbilitySlotUI.Instance;
-                    abilityUI.OpenAbilitySlots(platformId);
-                }
-                catch (Exception ex)
-                {
-                    _log?.LogWarning($"[Lifecycle] Failed to open ability slots UI: {ex.Message}");
-                }
-
-                // Raise event for other systems
                 RaisePlayerEnterEvent(platformId);
-                
-                _log?.LogInfo($"[Lifecycle] Player {platformId} entered arena successfully");
+                _log?.LogInfo($"Player {platformId} entered arena '{arenaId}' successfully.");
                 return true;
             }
             catch (Exception ex)
             {
-                _log?.LogError($"[Lifecycle] Error during arena entry for {platformId}: {ex}");
+                _log?.LogError($"[Lifecycle] Critical error during arena entry for {platformId}: {ex}");
+                // Attempt to roll back
+                if (_playerStates.ContainsKey(platformId))
+                {
+                    _log?.LogInfo($"[Lifecycle] Attempting to roll back arena entry for {platformId}.");
+                    ExitArena(userEntity, character);
+                }
                 return false;
             }
         }
 
+        private void CapturePlayerSnapshot(Entity userEntity, Entity serverCharacter)
+        {
+            var platformId = VAuto.Core.Core.EntityManager.GetComponentData<User>(userEntity).PlatformId;
+            _log?.LogInfo($"[Lifecycle] Capturing snapshot for {platformId}.");
+            try
+            {
+                if (!EnhancedArenaSnapshotService.CreateSnapshot(userEntity, serverCharacter, "practice"))
+                {
+                    // This is a critical failure, throw an exception to trigger rollback
+                    throw new InvalidOperationException($"Failed to capture snapshot for player {platformId}.");
+                }
+            }
+            catch (Exception ex)
+            {
+                _log?.LogWarning($"[Lifecycle] Snapshot capture error (non-critical): {ex.Message}");
+                // Decide if this should be a critical failure. For now, we'll allow it.
+            }
+        }
+
+        private void RegisterPlayerInArena(ulong platformId, Entity userEntity, Entity serverCharacter, float3 originalPosition)
+        {
+            _playerStates[platformId] = new PlayerState
+            {
+                Character = serverCharacter,
+                UserEntity = userEntity,
+                EnteredAt = DateTime.UtcNow,
+                OriginalPosition = originalPosition
+            };
+            _log?.LogInfo($"[Lifecycle] Player {platformId} registered in arena state.");
+        }
+
+        private void ApplyArenaUnlocksAndAbilities(ulong platformId, Entity userEntity, Entity serverCharacter)
+        {
+            _log?.LogInfo($"[Lifecycle] Applying VBlood hook and abilities for {platformId}.");
+            ApplyVBloodHook(platformId);
+            AbilityOverrideService.Instance.UnlockAllAbilities(userEntity, serverCharacter);
+            VAuto.Core.VBloodMapper.VBloodUnlockSystem.EnableVBloodUnlockMode(serverCharacter);
+            VAuto.Core.VBloodMapper.VBloodUnlockSystem.OpenSpellbookUI(serverCharacter);
+            try
+            {
+                ForceUnlockIfEnabled(platformId, userEntity);
+            }
+            catch (Exception ex)
+            {
+                _log?.LogWarning($"[Lifecycle] Failed to perform forced unlocks: {ex.Message}");
+            }
+        }
+
+        private void ApplyPvpIdentity(ulong platformId, Entity userEntity, Entity serverCharacter)
+        {
+            _log?.LogInfo($"[Lifecycle] Applying PvP identity for {platformId}.");
+            // Change player name
+            if (VAuto.Core.Core.TryRead(userEntity, out User userData))
+            {
+                var originalName = userData.CharacterName.ToString();
+                var pvpName = $"[PvP]{originalName}";
+                userData.CharacterName = new FixedString64Bytes(pvpName);
+                VAuto.Core.Core.Write(userEntity, userData);
+                _log?.LogInfo($"[Lifecycle] Changed player name from '{originalName}' to '{pvpName}'.");
+            }
+
+            // Override blood type
+            if (VAuto.Core.Core.TryRead(serverCharacter, out Blood blood))
+            {
+                blood.BloodType = new PrefabGUID(Plugin.GetConfigInt("Arena.Lifecycle", "PvPBloodTypeGuid", -1464869978));
+                blood.Quality = 100.0f;
+                VAuto.Core.Core.Write(serverCharacter, blood);
+                _log?.LogInfo($"[Lifecycle] Set PvP blood type for {platformId}.");
+            }
+        }
+
+        private void ApplyArenaGear(Entity serverCharacter)
+        {
+            var platformId = VAuto.Core.Core.EntityManager.GetComponentData<User>(VAuto.Core.Core.EntityManager.GetComponentData<PlayerCharacter>(serverCharacter).UserEntity).PlatformId;
+            _log?.LogInfo($"[Lifecycle] Applying arena gear for {platformId}.");
+            var buildName = Plugin.GetConfigValue("Arena.Lifecycle", "DefaultBuildName", "Dracula_Scholar");
+            if (!ArenaBuildService.ApplyBuild(serverCharacter, buildName))
+            {
+                _log?.LogWarning($"[Lifecycle] Failed to apply arena gear for {platformId}.");
+            }
+        }
+
+        private void TeleportPlayerToArena(Entity serverCharacter)
+        {
+            var platformId = VAuto.Core.Core.EntityManager.GetComponentData<User>(VAuto.Core.Core.EntityManager.GetComponentData<PlayerCharacter>(serverCharacter).UserEntity).PlatformId;
+            var arenaCenter = Plugin.GetConfigFloat3("Arena.Lifecycle", "ArenaCenter", new float3(-1000f, 5f, -500f));
+            _log?.LogInfo($"[Lifecycle] Teleporting {platformId} to arena center {arenaCenter}.");
+            FastTeleport(serverCharacter, arenaCenter);
+        }
+
+        private void ShowArenaUIElements(ulong platformId)
+        {
+            _log?.LogInfo($"[Lifecycle] Showing arena UI for {platformId}.");
+            ArenaUIManager.ShowArenaUI();
+            try
+            {
+                VAuto.UI.AbilitySlotUI.Instance.OpenAbilitySlots(platformId);
+            }
+            catch (Exception ex)
+            {
+                _log?.LogWarning($"[Lifecycle] Failed to open ability slots UI: {ex.Message}");
+            }
+        }
+
+
         public bool ExitArena(Entity userEntity, Entity character)
         {
-            if (!VAuto.Core.Core.Exists(userEntity)) return false;
-            if (!VAuto.Core.Core.TryRead<User>(userEntity, out var user)) return false;
+            if (!VAuto.Core.Core.Exists(userEntity) || !VAuto.Core.Core.TryRead(userEntity, out User user))
+            {
+                _log?.LogWarning("[Lifecycle] ExitArena called with invalid user entity.");
+                return false;
+            }
 
             var platformId = user.PlatformId;
-            if (!_playerStates.TryRemove(platformId, out var state)) return false;
+            if (!_playerStates.TryRemove(platformId, out var state))
+            {
+                _log?.LogWarning($"[Lifecycle] Player {platformId} is not in the arena. Ignoring ExitArena request.");
+                return false;
+            }
+
+            _log?.LogInfo($"Player {platformId} exiting arena.");
 
             try
             {
-                // Get server-side character entity from User component
                 var serverCharacter = user.LocalCharacter._Entity;
                 if (!VAuto.Core.Core.Exists(serverCharacter))
                 {
-                    _log?.LogError($"[Lifecycle] Server character entity does not exist for {platformId}");
+                    _log?.LogError($"[Lifecycle] Server character entity does not exist for {platformId}. Cannot proceed with exit.");
                     return false;
                 }
 
-                // 1. Clear PvP inventory (Rule 7.2: Restoration order)
-                _log?.LogInfo($"[Lifecycle] Clearing PvP inventory for {platformId}");
-                // PvP inventory is already cleared by snapshot restoration
+                RestorePlayerSnapshot(platformId);
+                RestorePlayerAbilities(platformId, userEntity, serverCharacter);
+                TeleportPlayerToOriginalPosition(serverCharacter, state.OriginalPosition);
+                CleanUpArenaState(platformId);
+                HideArenaUIElements(platformId);
 
-                // 2. Restore snapshot inventory
-                _log?.LogInfo($"[Lifecycle] Restoring snapshot for {platformId}");
-                if (!EnhancedArenaSnapshotService.RestoreSnapshot(platformId.ToString(), "practice"))
-                {
-                    _log?.LogError($"[Lifecycle] Failed to restore snapshot for {platformId}");
-                }
-
-                // 3. Player name and blood type restoration is handled by EnhancedArenaSnapshotService.RestoreSnapshot()
-
-                // 4. Restore abilities
-                AbilityOverrideService.Instance.RestoreAbilities(userEntity, serverCharacter);
-
-                // 4b. Additionally make sure VBlood unlock system is disabled
-                VAuto.Core.VBloodMapper.VBloodUnlockSystem.DisableVBloodUnlockMode(serverCharacter);
-
-                // 4c. Remove achievement unlocks applied during arena entry (handles forced debug unlocks too)
-                try
-                {
-                    RemoveForcedUnlocksIfEnabled(platformId, serverCharacter);
-                }
-                catch (Exception ex)
-                {
-                    _log?.LogWarning($"[Lifecycle] Failed to remove forced unlocks: {ex.Message}");
-                }
-
-                // 5. Restore equipment (handled by snapshot)
-                // 6. Restore UI state (placeholder)
-                // 7. Restore passives & buffs (placeholder)
-
-                // 2. Remove player from zone (triggers zone deactivation if last player)
-                // ZoneService.RemovePlayerFromZone(0, platformId);
-
-                // 3. Teleport back to original position
-                _log?.LogInfo($"[Lifecycle] Teleporting {platformId} back to {state.OriginalPosition}");
-                FastTeleport(serverCharacter, state.OriginalPosition);
-
-                // 4. Clean VBlood hooks
-                ReleaseVBloodHook(platformId);
-
-                // 5. Hide arena UI
-                ArenaUIManager.HideArenaUI();
-
-                // 6. Close ability slots UI
-                try
-                {
-                    var abilityUI = VAuto.UI.AbilitySlotUI.Instance;
-                    abilityUI.CloseAbilitySlots(platformId);
-                }
-                catch (Exception ex)
-                {
-                    _log?.LogWarning($"[Lifecycle] Failed to close ability slots UI: {ex.Message}");
-                }
-
-                // Raise event for other systems
                 RaisePlayerExitEvent(platformId);
-                
-                _log?.LogInfo($"[Lifecycle] Player {platformId} exited arena successfully");
+                _log?.LogInfo($"Player {platformId} exited arena successfully.");
                 return true;
             }
             catch (Exception ex)
             {
-                _log?.LogError($"[Lifecycle] Error during arena exit for {platformId}: {ex}");
+                _log?.LogError($"[Lifecycle] Critical error during arena exit for {platformId}: {ex}");
+                // At this point, the player is in an inconsistent state.
+                // We should probably try to do more to recover, but for now, we just log the error.
                 return false;
+            }
+        }
+
+        private void RestorePlayerSnapshot(ulong platformId)
+        {
+            _log?.LogInfo($"[Lifecycle] Restoring snapshot for {platformId}.");
+            if (!EnhancedArenaSnapshotService.RestoreSnapshot(platformId.ToString(), "practice"))
+            {
+                _log?.LogError($"[Lifecycle] Failed to restore snapshot for {platformId}.");
+                // This is a critical failure. The player might be stuck with arena gear.
+            }
+        }
+
+        private void RestorePlayerAbilities(ulong platformId, Entity userEntity, Entity serverCharacter)
+        {
+            _log?.LogInfo($"[Lifecycle] Restoring abilities for {platformId}.");
+            AbilityOverrideService.Instance.RestoreAbilities(userEntity, serverCharacter);
+            VAuto.Core.VBloodMapper.VBloodUnlockSystem.DisableVBloodUnlockMode(serverCharacter);
+            try
+            {
+                RemoveForcedUnlocksIfEnabled(platformId, serverCharacter);
+            }
+            catch (Exception ex)
+            {
+                _log?.LogWarning($"[Lifecycle] Failed to remove forced unlocks: {ex.Message}");
+            }
+        }
+
+        private void TeleportPlayerToOriginalPosition(Entity serverCharacter, float3 originalPosition)
+        {
+            var platformId = VAuto.Core.Core.EntityManager.GetComponentData<User>(VAuto.Core.Core.EntityManager.GetComponentData<PlayerCharacter>(serverCharacter).UserEntity).PlatformId;
+            _log?.LogInfo($"[Lifecycle] Teleporting {platformId} back to {originalPosition}.");
+            FastTeleport(serverCharacter, originalPosition);
+        }
+
+        private void CleanUpArenaState(ulong platformId)
+        {
+            _log?.LogInfo($"[Lifecycle] Cleaning up arena state for {platformId}.");
+            ReleaseVBloodHook(platformId);
+        }
+
+        private void HideArenaUIElements(ulong platformId)
+        {
+            _log?.LogInfo($"[Lifecycle] Hiding arena UI for {platformId}.");
+            ArenaUIManager.HideArenaUI();
+            try
+            {
+                VAuto.UI.AbilitySlotUI.Instance.CloseAbilitySlots(platformId);
+            }
+            catch (Exception ex)
+            {
+                _log?.LogWarning($"[Lifecycle] Failed to close ability slots UI: {ex.Message}");
             }
         }
 

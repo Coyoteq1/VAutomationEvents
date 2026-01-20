@@ -27,12 +27,20 @@ public class Plugin : BasePlugin
 {
     internal static ManualLogSource Log;
     internal static BepInEx.Configuration.ConfigFile Cfg;
+    internal static ConfigurationManager Config;
     private static Harmony _harmony;
 
     public static Harmony Harmony => _harmony;
     public static ManualLogSource Logger => Log;
     public static Plugin Instance { get; private set; }
     public static string ConfigPath => BepInEx.Paths.ConfigPath;
+
+    // Configuration helper methods
+    public static string GetConfigValue(string section, string key, string defaultValue = "") => Config?.GetConfigValue(section, key, defaultValue) ?? defaultValue;
+    public static bool GetConfigBool(string section, string key, bool defaultValue = false) => Config?.GetConfigBool(section, key, defaultValue) ?? defaultValue;
+    public static int GetConfigInt(string section, string key, int defaultValue = 0) => Config?.GetConfigInt(section, key, defaultValue) ?? defaultValue;
+    public static float GetConfigFloat(string section, string key, float defaultValue = 0f) => Config?.GetConfigFloat(section, key, defaultValue) ?? defaultValue;
+    public static float3 GetConfigFloat3(string section, string key, float3 defaultValue) => Config?.GetConfigFloat3(section, key, defaultValue) ?? defaultValue;
 
     // BepInEx Configuration Entries
     public static ConfigEntry<bool> EnablePlugin { get; private set; }
@@ -93,9 +101,7 @@ public class Plugin : BasePlugin
             _harmony.PatchAll(System.Reflection.Assembly.GetExecutingAssembly());
             Log.LogInfo("[VAuto] Harmony patches applied");
 
-            // Step 5: Register commands (149 commands)
-            CommandRegistry.RegisterAll();
-            Log.LogInfo("[VAuto] Commands registered");
+            // Step 5: VCF auto-discovers commands via reflection
 
             // Step 6: Initialize game systems
             InitializeGameSystems();
@@ -115,6 +121,11 @@ public class Plugin : BasePlugin
     /// </summary>
     private void InitializeConfiguration()
     {
+        // Initialize ConfigurationManager
+        var configPath = Path.Combine(ConfigPath, "VAuto.cfg");
+        var arenaConfigPath = Path.Combine(ConfigPath, "gg.vautomation.arena.cfg");
+        Config = new ConfigurationManager(configPath, arenaConfigPath);
+        
         // Core Settings
         EnablePlugin = Config.Bind("Core Settings", "Enable Plugin", true, "Enable or disable the VAuto plugin");
         DebugMode = Config.Bind("Core Settings", "Debug Mode", false, "Enable debug logging");

@@ -232,11 +232,9 @@ namespace VAuto.Services.Systems
         }
     }
 
-    public class ValidationResult
+    public class ZoneValidationResult
     {
         public bool IsValid { get; set; }
         public List<string> Messages { get; set; }
-        public bool RequiresDevApproval { get; set; }
-        public bool RequiresSnapshot { get; set; }
     }
 }

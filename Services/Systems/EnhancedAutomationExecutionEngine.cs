@@ -975,4 +975,9 @@ namespace VAuto.Services.Systems
             _log?.LogInfo($"[TestExecution] Testing zone '{zone.Name}' ({zone.ZoneId})");
 
             // Test zone creation
-            _log?.LogDebug($"[TestExecution] Would create zone '{zone.Name}' at ({zone.Location.Center.X}, {zone.Location.Center.Y}, {zone.Location.Center.Z}) with radius {zone.Location.R
+            _log?.LogDebug($"[TestExecution] Would create zone '{zone.Name}' at ({zone.Location.Center.X}, {zone.Location.Center.Y}, {zone.Location.Center.Z}) with radius {zone.Location.Radius}");
+        }
+
+        #endregion
+    }
+}
