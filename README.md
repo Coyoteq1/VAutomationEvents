@@ -341,6 +341,29 @@ The system uses comprehensive logging with:
 
 ---
 
+## 🔗 Repository & Community
+
+### GitHub Repository
+📍 **Official Repository**: [https://github.com/Coyoteq1/VAutomationEvents](https://github.com/Coyoteq1/VAutomationEvents)
+
+**Repository Details:**
+- **Owner**: Coyoteq1
+- **License**: [Your License Here]
+- **Stars**: ⭐ [Check GitHub]
+- **Forks**: 🍴 [Check GitHub]
+- **Issues**: 🐛 [Report Issues]
+- **Pull Requests**: 🔄 [Contribute]
+
+### V Rising Modding Community
+💬 **Discord Server**: [https://discord.gg/xcN6H6ep](https://discord.gg/xcN6H6ep)
+
+**Community Features:**
+- **Support Channels**: Get help with installation and usage
+- **Development Discussion**: Collaborate on new features
+- **Bug Reporting**: Report issues and get assistance
+- **Feature Requests**: Suggest new functionality
+- **Announcements**: Stay updated with latest releases
+
 ## 🎉 Summary
 
 This enhanced version of VAutomationEvents provides:
@@ -353,3 +376,26 @@ This enhanced version of VAutomationEvents provides:
 ✅ **Modern Patterns** - Up-to-date .NET practices and patterns
 
 The system is now easier to use, maintain, and extend while preserving all the powerful automation capabilities users expect from VAutomationEvents.
+
+---
+
+**📦 Installation**
+```bash
+git clone https://github.com/Coyoteq1/VAutomationEvents.git
+cd VAutomationEvents
+dotnet restore
+dotnet build
+```
+
+**📖 Documentation**: [README.md](README.md) | [Wiki](https://github.com/Coyoteq1/VAutomationEvents/wiki)
+
+**🐛 Issues**: [GitHub Issues](https://github.com/Coyoteq1/VAutomationEvents/issues)
+
+**💡 Contributing**: [CONTRIBUTING.md](CONTRIBUTING.md)
+
+**📜 License**: [LICENSE](LICENSE)
+
+---
+
+**© 2026 VAutomationEvents - Enhanced Automation System for V Rising**
+**Version**: 2.0.0 | **Status**: ✅ Production Ready | **Last Updated**: January 17, 2026
