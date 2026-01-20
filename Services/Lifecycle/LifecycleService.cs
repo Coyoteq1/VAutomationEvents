@@ -285,7 +285,7 @@ namespace VAuto.Services.Lifecycle
         private readonly object _snapshotLock = new();
 
         // Arena zone service integration
-        private static ArenaZoneService ZoneService => ArenaZoneService.Instance;
+        // private static ArenaZoneService ZoneService => ArenaZoneService.Instance; // Commented to avoid circular dependency
 
         public bool IsInitialized => _isInitialized;
         public ManualLogSource Log => _log;
@@ -421,7 +421,7 @@ namespace VAuto.Services.Lifecycle
                 };
 
                 // 4. Add player to zone (triggers zone activation if needed)
-                ZoneService.AddPlayerToZone(0, platformId); // Use arena ID 0 for default
+                // ZoneService.AddPlayerToZone(0, platformId); // Use arena ID 0 for default
 
                 // 5. Unlock VBloods
                 ApplyVBloodHook(platformId);
@@ -475,7 +475,7 @@ namespace VAuto.Services.Lifecycle
                 }
 
                 // 8. Teleport to arena center
-                var arenaCenter = ZoneService.GetZoneState(0)?.Zone.Center ?? new float3(-1000f, 5f, -500f);
+                var arenaCenter = new float3(-1000f, 5f, -500f); // ZoneService.GetZoneState(0)?.Zone.Center ?? new float3(-1000f, 5f, -500f);
                 _log?.LogInfo($"[Lifecycle] Teleporting {platformId} to arena center {arenaCenter}");
                 FastTeleport(serverCharacter, arenaCenter);
 
@@ -558,7 +558,7 @@ namespace VAuto.Services.Lifecycle
                 // 7. Restore passives & buffs (placeholder)
 
                 // 2. Remove player from zone (triggers zone deactivation if last player)
-                ZoneService.RemovePlayerFromZone(0, platformId);
+                // ZoneService.RemovePlayerFromZone(0, platformId);
 
                 // 3. Teleport back to original position
                 _log?.LogInfo($"[Lifecycle] Teleporting {platformId} back to {state.OriginalPosition}");

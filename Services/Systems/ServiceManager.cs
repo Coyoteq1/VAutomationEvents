@@ -315,61 +315,6 @@ namespace VAuto.Services
                 return new GlobalMapIconServiceWrapper();
             else if (serviceType == typeof(AutomationAPI))
                 return AutomationAPI.Instance;
-            // Add missing services
-            else if (serviceType == typeof(AILearningService))
-                return new AILearningServiceWrapper();
-            else if (serviceType == typeof(AutomationExecutionEngine))
-                return new AutomationExecutionEngineWrapper();
-            else if (serviceType == typeof(AutomationSchedulerService))
-                return new AutomationSchedulerServiceWrapper();
-            else if (serviceType == typeof(BossRewardBindingService))
-                return new BossRewardBindingServiceWrapper();
-            else if (serviceType == typeof(BuildJsonService))
-                return new BuildJsonServiceWrapper();
-            else if (serviceType == typeof(ChatGrammarService))
-                return new ChatGrammarServiceWrapper();
-            else if (serviceType == typeof(ConveyorService))
-                return new ConveyorServiceWrapper();
-            else if (serviceType == typeof(EnhancedAutomationExecutionEngine))
-                return new EnhancedAutomationExecutionEngineWrapper();
-            else if (serviceType == typeof(EnhancedValidationEngine))
-                return new EnhancedValidationEngineWrapper();
-            else if (serviceType == typeof(ExtendedArenaSnapshotService))
-                return new ExtendedArenaSnapshotServiceWrapper();
-            else if (serviceType == typeof(KindredExtractService))
-                return new KindredExtractServiceWrapper();
-            else if (serviceType == typeof(LogisticsAutomationService))
-                return new LogisticsAutomationServiceWrapper();
-            else if (serviceType == typeof(PlanValidatorService))
-                return new PlanValidatorServiceWrapper();
-            else if (serviceType == typeof(PlanVisualizationService))
-                return new PlanVisualizationServiceWrapper();
-            else if (serviceType == typeof(PrefabResolverService))
-                return new PrefabResolverServiceWrapper();
-            else if (serviceType == typeof(SettingsService))
-                return new SettingsServiceWrapper();
-            else if (serviceType == typeof(ZoneManagerService))
-                return new ZoneManagerServiceWrapper();
-            else if (serviceType == typeof(ZoneValidatorService))
-                return new ZoneValidatorServiceWrapper();
-            else if (serviceType == typeof(ArenaProximitySystem))
-                return new ArenaProximitySystemWrapper();
-            else if (serviceType == typeof(ArenaZoneService))
-                return new ArenaZoneServiceWrapper();
-            else if (serviceType == typeof(CharacterFreezeService))
-                return new CharacterFreezeServiceWrapper();
-            else if (serviceType == typeof(CharacterSwapService))
-                return new CharacterSwapServiceWrapper();
-            else if (serviceType == typeof(DualCharacterManager))
-                return new DualCharacterManagerWrapper();
-            else if (serviceType == typeof(EnhancedInventoryManager))
-                return new EnhancedInventoryManagerWrapper();
-            else if (serviceType == typeof(PvPCharacterSpawner))
-                return new PvPCharacterSpawnerWrapper();
-            else if (serviceType == typeof(AchievementUnlockService))
-                return new AchievementUnlockServiceWrapper();
-            else if (serviceType == typeof(ArenaCharacterCreator))
-                return new ArenaCharacterCreatorWrapper();
 
             Plugin.Log?.LogInfo($"[ServiceManager] Creating service: {serviceType.Name} - {serviceType.FullName}");
             throw new NotSupportedException($"Service type {serviceType.Name} is not supported");

@@ -24,8 +24,8 @@ namespace VAuto.Services.Systems
 
         // Dependencies
         private LifecycleService _lifecycleService => ServiceManager.GetService<LifecycleService>();
-        private ArenaZoneService _zoneService => ArenaZoneService.Instance;
         private ArenaBuildingService _buildService => ServiceManager.GetService<ArenaBuildingService>();
+        // private ArenaZoneService ZoneService => ServiceManager.GetService<ArenaZoneService>(); // Commented to avoid circular dependency
         // private ArenaObjectService _objectService => ArenaObjectService.Instance; // Uncomment when available
         
         // State
@@ -138,7 +138,7 @@ namespace VAuto.Services.Systems
             if (_lifecycleService.EnterArena(userEntity, character, arenaId.ToString()))
             {
                 // 3. Ensure Zone Service tracks it (Lifecycle might do this, but double check)
-                _zoneService.AddPlayerToZone(arenaId, user.PlatformId);
+                // ZoneService.AddPlayerToZone(arenaId, user.PlatformId);
                 
                 return ArenaResult.Ok($"Joined Arena {arenaId}");
             }
@@ -190,7 +190,7 @@ namespace VAuto.Services.Systems
             if (state.Status == "InProgress")
                 return ArenaResult.Fail("Match already in progress");
 
-            var playerCount = _zoneService.GetActivePlayerCount(arenaId);
+            var playerCount = 0; // ZoneService.GetActivePlayerCount(arenaId);
             if (playerCount < 2)
                 return ArenaResult.Fail("Not enough players to start (min 2)");
 
@@ -217,7 +217,7 @@ namespace VAuto.Services.Systems
             ClearEntities(arenaId);
 
             // 3. Heal Players & Reset Cooldowns
-            var players = _zoneService.GetActivePlayers(arenaId);
+            var players = new List<ulong>(); // ZoneService.GetActivePlayers(arenaId);
             foreach (var platformId in players)
             {
                 // Logic to heal/reset would go here
@@ -451,7 +451,7 @@ namespace VAuto.Services.Systems
             return new ArenaStateSummary
             {
                 ArenaId = arenaId,
-                PlayerCount = _zoneService.GetActivePlayerCount(arenaId),
+                PlayerCount = ZoneService.GetActivePlayerCount(arenaId),
                 Status = status,
                 Timer = timer
             };
@@ -459,12 +459,12 @@ namespace VAuto.Services.Systems
 
         public List<ArenaSummary> GetAll()
         {
-            var ids = _zoneService.GetActiveArenaIds();
+            var ids = new List<int>(); // ZoneService.GetActiveArenaIds();
             return ids.Select(id => new ArenaSummary
             {
                 ArenaId = id,
                 Name = $"Arena {id}",
-                PlayerCount = _zoneService.GetActivePlayerCount(id),
+                PlayerCount = 0, // ZoneService.GetActivePlayerCount(id)
                 IsActive = true
             }).ToList();
         }

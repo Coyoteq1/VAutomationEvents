@@ -34,6 +34,26 @@ public class Plugin : BasePlugin
     public static Plugin Instance { get; private set; }
     public static string ConfigPath => BepInEx.Paths.ConfigPath;
 
+    // BepInEx Configuration Entries
+    public static ConfigEntry<bool> EnablePlugin { get; private set; }
+    public static ConfigEntry<bool> DebugMode { get; private set; }
+    public static ConfigEntry<string> LogLevel { get; private set; }
+    
+    // Arena Configuration
+    public static ConfigEntry<bool> ArenaEnable { get; private set; }
+    public static ConfigEntry<string> ArenaCenter { get; private set; }
+    public static ConfigEntry<float> ArenaRadius { get; private set; }
+    public static ConfigEntry<float> ArenaEnterRadius { get; private set; }
+    public static ConfigEntry<float> ArenaExitRadius { get; private set; }
+    public static ConfigEntry<float> ArenaCheckInterval { get; private set; }
+    
+    // Services Configuration
+    public static ConfigEntry<bool> AutomationEnable { get; private set; }
+    public static ConfigEntry<bool> DatabaseEnable { get; private set; }
+    public static ConfigEntry<string> DatabasePath { get; private set; }
+    public static ConfigEntry<bool> RespawnEnable { get; private set; }
+    public static ConfigEntry<int> RespawnCooldown { get; private set; }
+
     public override void Load()
     {
         Instance = this;
@@ -44,6 +64,9 @@ public class Plugin : BasePlugin
         Log.LogInfo($"[VAuto] Loading {MyPluginInfo.PLUGIN_NAME} v{MyPluginInfo.PLUGIN_VERSION}");
         Log.LogInfo($"[VAuto] Plugin GUID: {MyPluginInfo.PLUGIN_GUID}");
 
+        // Initialize BepInEx Configuration
+        InitializeConfiguration();
+        
         try
         {
             // Step 0: Ensure all directories exist
@@ -87,6 +110,34 @@ public class Plugin : BasePlugin
         }
     }
 
+    /// <summary>
+    /// Initialize BepInEx configuration entries
+    /// </summary>
+    private void InitializeConfiguration()
+    {
+        // Core Settings
+        EnablePlugin = Config.Bind("Core Settings", "Enable Plugin", true, "Enable or disable the VAuto plugin");
+        DebugMode = Config.Bind("Core Settings", "Debug Mode", false, "Enable debug logging");
+        LogLevel = Config.Bind("Core Settings", "Log Level", "Info", "Set logging level (Debug, Info, Warning, Error)");
+        
+        // Arena Settings
+        ArenaEnable = Config.Bind("Arena Settings", "Enable Arena", true, "Enable arena functionality");
+        ArenaCenter = Config.Bind("Arena Settings", "Arena Center", "-1000, 5, -500", "Arena center coordinates (x, y, z)");
+        ArenaRadius = Config.Bind("Arena Settings", "Arena Radius", 50f, "Arena radius in meters");
+        ArenaEnterRadius = Config.Bind("Arena Settings", "Enter Radius", 50f, "Arena auto-enter radius in meters");
+        ArenaExitRadius = Config.Bind("Arena Settings", "Exit Radius", 75f, "Arena auto-exit radius in meters");
+        ArenaCheckInterval = Config.Bind("Arena Settings", "Check Interval", 3f, "Arena proximity check interval in seconds");
+        
+        // Services Settings
+        AutomationEnable = Config.Bind("Services Settings", "Enable Automation", true, "Enable automation services");
+        DatabaseEnable = Config.Bind("Services Settings", "Enable Database", true, "Enable database persistence");
+        DatabasePath = Config.Bind("Services Settings", "Database Path", "./VAuto_Data/database.db", "Database file path");
+        RespawnEnable = Config.Bind("Services Settings", "Enable Respawn Prevention", true, "Enable respawn prevention system");
+        RespawnCooldown = Config.Bind("Services Settings", "Respawn Cooldown", 30, "Default respawn cooldown in seconds");
+        
+        Log.LogInfo("[VAuto] BepInEx configuration initialized");
+    }
+
     private static void InitializeCoreSystems()
     {
         // Initialize core systems
@@ -102,11 +153,11 @@ public class Plugin : BasePlugin
         // Initialize game systems
     }
 
-    // Directory and file management
-    public static string VAutoConfigDir => Path.Combine(ConfigPath, "Vautomation");
+    // Directory and file management - Use proper BepInEx plugin GUID
+    public static string VAutoConfigDir => Path.Combine(ConfigPath, MyPluginInfo.PLUGIN_GUID);
     public static string VAutoDataDir => Path.Combine(VAutoConfigDir, "Data");
     public static string VAutoBackupDir => Path.Combine(VAutoConfigDir, "Backups");
-    public static string VAutoArenaDir => Path.Combine(VAutoConfigDir, "Arena");
+    public static string VAutoArenaDir => Path.Combine(ConfigPath, "VAuto.Arena");
 
     /// <summary>
     /// Ensure all required directories exist
@@ -243,22 +294,32 @@ public class Plugin : BasePlugin
         return schematics;
     }
 
-    // Configuration properties (using unified settings)
-    public static bool Enable => PluginSettings.GetSettings().Core.Enable;
-    public static bool DebugMode => PluginSettings.GetSettings().Core.DebugMode;
-    public static VAuto.Core.LogLevel LogLevel => Enum.Parse<VAuto.Core.LogLevel>(PluginSettings.GetSettings().Core.LogLevel);
-    public static bool ZoneEnable => PluginSettings.GetSettings().Arena.Enable;
-    public static float3 ZoneCenter => PluginSettings.GetSettings().Arena.Center;
-    public static float ZoneRadius => PluginSettings.GetSettings().Arena.Radius;
-    public static float ZoneEnterRadius => PluginSettings.GetSettings().Arena.EnterRadius;
-    public static float ZoneExitRadius => PluginSettings.GetSettings().Arena.ExitRadius;
-    public static float ZoneCheckInterval => PluginSettings.GetSettings().Arena.CheckInterval;
-    public static bool RespawnEnable => PluginSettings.GetSettings().Respawn.IsEnabled;
-    public static int RespawnCooldown => PluginSettings.GetSettings().Respawn.DefaultCooldownSeconds;
-    public static bool AutomationEnable => PluginSettings.GetSettings().Services.EnableAutomation;
-    public static float AutomationTickRate => PluginSettings.GetSettings().Services.AutomationTickRate;
-    public static bool DatabaseEnable => PluginSettings.GetSettings().Services.EnableDatabase;
-    public static string DatabasePath => PluginSettings.GetSettings().Services.DatabasePath;
+    // Configuration properties (using BepInEx config entries)
+    public static bool IsEnabled => EnablePlugin.Value;
+    public static bool IsDebugMode => DebugMode.Value;
+    public static string CurrentLogLevel => LogLevel.Value;
+    public static bool IsZoneEnabled => ArenaEnable.Value;
+    public static float3 ZoneCenter
+    {
+        get
+        {
+            var coords = ArenaCenter.Value.Split(',');
+            if (coords.Length == 3)
+            {
+                return new float3(float.Parse(coords[0]), float.Parse(coords[1]), float.Parse(coords[2]));
+            }
+            return new float3(-1000, 5, -500);
+        }
+    }
+    public static float ZoneRadiusValue => ArenaRadius.Value;
+    public static float ZoneEnterRadiusValue => ArenaEnterRadius.Value;
+    public static float ZoneExitRadiusValue => ArenaExitRadius.Value;
+    public static float ZoneCheckIntervalValue => ArenaCheckInterval.Value;
+    public static bool IsRespawnEnabled => RespawnEnable.Value;
+    public static int RespawnCooldownValue => RespawnCooldown.Value;
+    public static bool IsAutomationEnabled => AutomationEnable.Value;
+    public static bool IsDatabaseEnabled => DatabaseEnable.Value;
+    public static string DatabasePathValue => DatabasePath.Value;
 
     public override bool Unload()
     {

@@ -218,52 +218,26 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Compile Remove="ComponentSaver\RestrictedInventory_Saver.cs" />
-    <Compile Remove="ComponentSaver\RestrictedInventory_Standalone.cs" />
-    <Compile Remove="Tests\**\*.cs" />
-    <Compile Remove="Commands\AnalyticsCommands.cs" />
-    <Compile Remove="Patches\**\*.cs" />
-    <!-- Exclude problematic services but keep the ones we need -->
-    <Compile Remove="Services\**\*.cs" />
-    <Compile Include="Services\ServiceManager.cs" />
-    <Compile Include="Services\Interfaces\*.cs" />
+    <!-- Core working services -->
+    <Compile Include="Services\Systems\ServiceManager.cs" />
+    <Compile Include="Services\Interfaces\IService.cs" />
     <Compile Include="Services\Systems\AutomationAPI.cs" />
-    <Compile Include="Services\Lifecycle\LifecycleService.cs" />
-    <Compile Include="Services\Lifecycle\IArenaLifecycleService.cs" />
-    <Compile Include="Services\Systems\ArenaZoneService.cs" />
-    <Compile Include="Services\Systems\ArenaBuildingService.cs" />
-    <Compile Include="Services\Systems\ArenaBuildService.cs" />
-    <Compile Include="Services\Systems\ZoneService.cs" />
-    <Compile Include="Services\Systems\ArenaGlowService.cs" />
-    <Compile Include="Services\Systems\ArenaObjectService.cs" />
     <Compile Include="Services\Systems\GameSystems.cs" />
-    <Compile Include="Services\Systems\MapIconService.cs" />
-    <Compile Include="Services\Systems\GlobalMapIconService.cs" />
-    <Compile Include="Services\Systems\DatabaseService.cs" />
-    <Compile Include="Services\Systems\EnhancedDataPersistenceService.cs" />
-    <Compile Include="Services\Systems\EnhancedArenaSnapshotService.cs" />
-    <Compile Include="Services\Systems\AutoComponentSaver.cs" />
-    <Compile Include="Services\Systems\ArenaDataSaver.cs" />
-    <Compile Include="Services\PlayerService.cs" />
-    <Compile Include="Services\World\*.cs" />
     <Compile Include="Services\Systems\RespawnPreventionService.cs" />
     <Compile Include="Services\Systems\NameTagService.cs" />
-    <!-- Exclude problematic files -->
-    <!-- <Compile Remove="Core\DualCharacterManager.cs" /> -->
-    <Compile Remove="Commands\LogisticsCommands.cs" />
-    <Compile Remove="Commands\AIAssistantCommands.cs" />
-    <Compile Remove="Commands\Automation\LogisticsCommands.cs" />
-
-    <!-- Exclude command files with placeholder implementations causing build errors -->
-    <Compile Remove="Commands\Dev\AnalyticsCommands.cs" />
-    <Compile Remove="Commands\Dev\AIAssistantCommands.cs" />
-    <Compile Remove="Commands\Utilities\ShortcutCommands.cs" />
     
-    <Compile Include="Services\AchievementUnlockService.cs" />
-    <Compile Include="Services\EventService.cs" />
-    <Compile Include="Services\Systems\AutoEnterService.cs" />
-    <Compile Include="Services\Systems\CastleObjectIntegrationService.cs" />
-    <Compile Include="Services\Systems\AbilityOverrideService.cs" />
+    <!-- Plugin and Core files -->
+    <Compile Include="Plugin.cs" />
+    <Compile Include="MyPluginInfo.cs" />
+    <Compile Include="GlobalUsings.cs" />
+    <Compile Include="Utilities\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="ComponentSaver\**\*.cs" />
+    <Compile Remove="Data\ComponentSaver\**\*.cs" />
+    <Compile Remove="Tests\**\*.cs" />
+    <Compile Remove="Patches\**\*.cs" />
     <Compile Remove="KindredSchematicsHelper.cs" />
   </ItemGroup>
 
