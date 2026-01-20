@@ -1,348 +1,355 @@
-# VAuto Plugin
+# VAutomationEvents - Enhanced Automation System
 
-**Comprehensive Management System for V Rising**
+## 🎯 Overview
 
-![Status](https://img.shields.io/badge/Status-Production%20Ready-brightgreen)
-![Build](https://img.shields.io/badge/Build-0%20Errors-brightgreen)
-![Version](https://img.shields.io/badge/Version-1.0.0-blue)
-![Commands](https://img.shields.io/badge/Commands-149-blue)
-![Services](https://img.shields.io/badge/Services-25%2B-blue)
+VAutomationEvents is a comprehensive automation system for V Rising, built with modern architecture and enhanced logging capabilities. This version represents a complete cleanup and enhancement of legacy codebase, providing users with a streamlined, powerful automation experience.
 
----
+## 🏗️ Architecture
 
-## Overview
-
-VAuto is a comprehensive BepInEx plugin for V Rising that provides complete management functionality. It handles player lifecycle management, snapshot capture/restore, ability unlocking, zone control, and database persistence.
-
-### Key Features
-
-- **Player Lifecycle Management** - Automatic snapshot capture on entry, restore on exit
-- **Ability Management** - Unlock all abilities on entry, restore on exit
-- **Zone Management** - Multi-zone support with auto-detection
-- **Snapshot System** - Full player state persistence (inventory, equipment, blood type, name)
-- **VBlood System** - Automatic VBlood unlock and spellbook opening
-- **PvP Identity** - Name prefix and blood type override
-- **Gear System** - Automatic gear application on entry
-- **UI System** - Ability slots display and UI management
-- **Database Persistence** - JSON-based data storage
-- **Comprehensive Logging** - Structured logging with multiple levels
-- **149 Commands** - Full command suite across 8 categories
-- **25+ Services** - Modular service architecture
-
----
-
-## Quick Start
-
-### Installation
-
-1. **Download** the latest release
-2. **Extract** `Automation.dll` to `C:\BepInEx\DedicatedServerLauncher\VRisingServer\BepInEx\plugins\`
-3. **Start** V Rising Server
-4. **Verify** plugin loads (check logs for "VAuto Plugin loaded successfully")
-
-### Basic Usage
+### Clean Structure
+The project follows a clean, modular architecture designed for scalability and maintainability:
 
 ```
-# Enter with full unlocks
-.enter
-
-# Exit and restore state
-.exit
-
-# Check status
-.status
-
-# View all commands
-.help
+VAutomationEvents/
+├── API/                    # External interfaces and contracts
+├── Automation/             # Core automation logic and workflows
+├── Commands/               # User command handlers
+│   ├── Arena/             # Arena-specific commands
+│   ├── Automation/        # Automation system commands
+│   ├── Character/         # Character management commands
+│   ├── Dev/               # Development and debugging commands
+│   ├── Player/            # Player interaction commands
+│   ├── Utilities/        # Utility commands
+│   ├── World/             # World manipulation commands
+│   └── Zone/              # Zone management commands
+├── Core/                   # Core system components and abstractions
+├── Data/                   # Data access layer and models
+├── Extensions/             # Extension methods and utilities
+├── Patches/               # Game patches and hooks
+├── Services/              # Business logic services
+│   ├── Interfaces/        # Service interfaces
+│   ├── Lifecycle/         # Lifecycle management services
+│   ├── Snapshot/          # State snapshot services
+│   ├── Systems/           # System-specific services
+│   └── World/             # World interaction services
+├── UI/                    # User interface components
+├── Utilities/             # Helper utilities and tools
+├── config/                # Configuration files
+├── docs/                  # Documentation
+├── libs/                  # External libraries
+├── plans/                 # Development plans and specifications
+├── scripts/               # Build and deployment scripts
+└── archive/               # Legacy code archive
 ```
 
----
+## 🚀 Key Features
 
-## Architecture
+### 1. **Modular Design**
+- **Separation of Concerns**: Each module has a single responsibility
+- **Loose Coupling**: Components interact through well-defined interfaces
+- **High Cohesion**: Related functionality is grouped together
 
-### Service Architecture
+### 2. **Service-Oriented Architecture**
+- **Dependency Injection**: Modern DI container for service management
+- **Interface-Based Design**: All services implement clear interfaces
+- **Lifecycle Management**: Automatic service initialization and cleanup
 
-The plugin uses a modular service-based architecture with 25+ services:
+### 3. **Enhanced Logging System**
+- **Comprehensive Visibility**: All services log with complete detail
+- **Service Organization**: Clear service identification in logs
+- **Status Tracking**: Complete/incomplete/failed states visible
+- **Real-time Monitoring**: Live service status and operations
 
-```
-ServiceManager (Coordinator)
-├── LifecycleService (Player state management)
-├── DatabaseService (Data persistence)
-├── ZoneService (Zone management)
-├── AbilityOverrideService (Ability unlocking)
-├── EnhancedSnapshotService (Snapshot capture/restore)
-├── GlowService (Glow effects)
-├── BuildService (Build application)
-├── PlayerService (Player management)
-├── GameSystems (Game system hooks)
-├── GlobalMapIconService (Map icons)
-├── EventService (Event management)
-├── AutoEnterService (Auto-enter functionality)
-├── RespawnPreventionService (Respawn prevention)
-├── NameTagService (Name tag management)
-├── MapIconService (Map icon management)
-├── ObjectService (Object management)
-├── DataSaver (Data saving)
-├── AutoComponentSaver (Component saving)
-├── EnhancedDataPersistenceService (Data persistence)
-├── CastleObjectIntegrationService (Castle integration)
-├── AutomationAPI (Automation API)
-├── AutomationExecutionEngine (Automation execution)
-├── AutomationSchedulerService (Automation scheduling)
-└── [Additional services as needed]
-```
+### 4. **Command System**
+- **Categorized Commands**: Commands organized by functionality
+- **Context-Aware**: Commands have access to execution context
+- **Extensible**: Easy to add new commands and categories
 
-### Command Categories
+### 5. **Configuration Management**
+- **JSON-Based Configuration**: Modern, human-readable configuration
+- **Environment Support**: Different configs for different environments
+- **Hot Reload**: Configuration changes without restart
 
-- **Main** (12 commands) - Core management
-- **Automation** (8 commands) - Automation control
-- **Character** (15 commands) - Character management
-- **Dev** (18 commands) - Development tools
-- **Player** (20 commands) - Player management
-- **Utilities** (35 commands) - Utility commands
-- **World** (12 commands) - World management
-- **Zone** (14 commands) - Zone management
+## 📚 User Guide
 
----
+### Quick Start
 
-## Configuration
+1. **Installation**
+   ```bash
+   # Clone repository
+   git clone https://github.com/Coyoteq1/VAutomationEvents.git
+   cd VAutomationEvents
 
-### Main Configuration File
-`C:\BepInEx\config\VAuto\VAuto-Advanced-Config.json`
+   # Restore dependencies
+   dotnet restore
 
-All systems are enabled by default:
-- ✅ Core System
-- ✅ Conveyor System
-- ✅ Achievement System
-- ✅ VBlood System
-- ✅ Inventory Management
-- ✅ Character System
-- ✅ Castle System
-- ✅ Build System
-- ✅ Plant System
-- ✅ Zone System
-- ✅ Portal System
-- ✅ Glow System
-- ✅ Debug System
+   # Build project
+   dotnet build
+   ```
 
-### 2D Settings File
-`C:\BepInEx\config\VAuto\VAuto-2D-Settings.json`
+2. **Configuration**
+   - Edit `config/appsettings.json` for basic settings
+   - Add `config/plugins.json` for plugin configuration
+   - Adjust logging levels as needed
 
-Separate configuration for 2D UI and map settings.
+3. **Running**
+   ```bash
+   dotnet run
+   ```
 
-### BepInEx Configuration
-`C:\BepInEx\config\VAuto\VAuto.cfg`
+### Basic Commands
 
-Standard BepInEx INI-style configuration.
+#### Arena Commands
+- `.arena enter` - Enter arena zone
+- `.arena exit` - Exit arena zone
+- `.arena status` - Check arena status
 
----
+#### Automation Commands
+- `.automation start` - Start automation systems
+- `.automation stop` - Stop automation systems
+- `.automation status` - Check automation status
 
-## Player Flow
+#### Character Commands
+- `.character create` - Create new character
+- `.character switch` - Switch between characters
+- `.character stats` - View character statistics
 
-### Entry Sequence (200-300ms)
-1. Snapshot captured (inventory, equipment, blood type, name)
-2. Player state registered
-3. Zone activated
-4. VBlood hook applied
-5. All abilities unlocked
-6. Spellbook opened
-7. PvP identity applied ([PvP] prefix, PvP blood type)
-8. Gear applied
-9. Player teleported to center
-10. UI shown
-11. Ability slots displayed
+#### Utility Commands
+- `.help` - Show available commands
+- `.status` - Show system status
+- `.config reload` - Reload configuration
 
-### Exit Sequence (150-200ms)
-1. PvP inventory cleared
-2. Snapshot restored (inventory, equipment, blood type, name)
-3. Abilities restored
-4. VBlood system disabled
-5. Achievement unlocks removed
-6. Player removed from zone
-7. Player teleported back to original position
-8. UI hidden
-9. Ability slots UI closed
+## 🔧 Configuration
 
----
-
-## Performance
-
-### Load Time
-- **Plugin Load**: 326-551ms
-- **Service Initialization**: 100-200ms
-- **Command Registration**: 50-100ms
-
-### Memory Usage
-- **Plugin Base**: ~50MB
-- **Services**: ~30MB
-- **Commands**: ~10MB
-- **Database**: ~5MB
-- **Per Player Snapshot**: ~10MB
-
-### Operations
-- **Player Entry**: 200-300ms
-- **Snapshot Capture**: 100-150ms
-- **Ability Unlock**: 50-100ms
-- **Player Exit**: 150-200ms
-- **Snapshot Restore**: 100-150ms
-
----
-
-## Database
-
-### Location
-`C:\BepInEx\config\VAuto\Database.json`
-
-### Structure
-```
-C:\BepInEx\config\VAuto\
-├── Database.json          (Main database)
-├── Data/                       (Player snapshots)
-├── Backups/                    (Backup files)
-├── KindredExtract/             (Kindred extract data)
-└── CustomUuids/                (Custom UUID mappings)
+### appsettings.json Structure
+```json
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "VAutomationEvents": "Debug"
+    }
+  },
+  "VAutomationEvents": {
+    "Arena": {
+      "Enabled": true,
+      "Center": { "X": -1000, "Y": -5, "Z": -500 },
+      "Radius": 50
+    },
+    "Automation": {
+      "Enabled": true,
+      "UpdateInterval": 30
+    }
+  }
+}
 ```
 
-### Auto-Save
-- **Interval**: 300 seconds
-- **Backup Frequency**: Daily
-- **Retention**: 7 days
+### Logging Configuration
+The system uses comprehensive logging with:
+- **Service Organization**: Each service logs with clear identification
+- **Complete Visibility**: All log levels enabled (Debug, Info, Warning, Error)
+- **Status Tracking**: Real-time service status and completion states
+- **Harmony Integration**: Full patch and hook logging
+
+## 🏛️ Service Architecture
+
+### Core Services
+
+#### 1. Plugin Manager
+- **Purpose**: Manages plugin lifecycle and dependencies
+- **Features**: Dynamic loading, unloading, and hot reload
+
+#### 2. Command Registry
+- **Purpose**: Registers and executes user commands
+- **Features**: Command discovery, validation, and execution
+
+#### 3. Configuration Service
+- **Purpose**: Manages application configuration
+- **Features**: Hot reload, environment-specific settings
+
+#### 4. Logging Service
+- **Purpose**: Provides structured logging with service organization
+- **Features**: Multiple providers, log levels, filtering, status tracking
+
+### Specialized Services
+
+#### Arena Service
+- **Purpose**: Manages arena zones and player interactions
+- **Features**: Zone detection, player management, state tracking
+
+#### Automation Service
+- **Purpose**: Handles automated tasks and workflows
+- **Features**: Task scheduling, event handling, state management
+
+#### Character Service
+- **Purpose**: Manages player characters and progression
+- **Features**: Character creation, switching, statistics
+
+## 🧩 Development Guide
+
+### Adding New Commands
+
+1. **Create Command Class**
+   ```csharp
+   using VAutomationEvents.Commands.Interfaces;
+
+   namespace VAutomationEvents.Commands.MyCategory
+   {
+       public class MyCommands : ICommandCategory
+       {
+           public string Category => "MyCategory";
+
+           [Command("mycommand")]
+           public void MyCommand(CommandContext context, string parameter)
+           {
+               context.Reply("Command executed!");
+           }
+       }
+   }
+   ```
+
+2. **Register Command**
+   ```csharp
+   // In Program.cs or service registration
+   services.AddTransient<ICommandCategory, MyCommands>();
+   ```
+
+### Adding New Services
+
+1. **Define Interface**
+   ```csharp
+   public interface IMyService
+   {
+       Task DoWorkAsync();
+   }
+   ```
+
+2. **Implement Service**
+   ```csharp
+   public class MyService : IMyService
+   {
+       private readonly ILogger<MyService> _logger;
+
+       public MyService(ILogger<MyService> logger)
+       {
+           _logger = logger;
+       }
+
+       public async Task DoWorkAsync()
+       {
+           _logger.LogInformation("Doing work...");
+           // Implementation here
+       }
+   }
+   ```
+
+3. **Register Service**
+   ```csharp
+   services.AddSingleton<IMyService, MyService>();
+   ```
+
+## 📊 Performance Considerations
+
+### Optimization Features
+- **Lazy Loading**: Services loaded only when needed
+- **Caching**: Intelligent caching for frequently accessed data
+- **Async Operations**: Non-blocking operations where possible
+- **Resource Management**: Proper disposal and cleanup
+
+### Monitoring
+- **Health Checks**: Built-in service health monitoring
+- **Metrics**: Performance metrics and counters
+- **Logging**: Structured logging for debugging
+- **Diagnostics**: Runtime diagnostics and profiling
+
+## 🛡️ Security
+
+### Built-in Security
+- **Input Validation**: All user inputs validated
+- **Permission System**: Role-based access control
+- **Audit Logging**: All actions logged for security
+- **Error Handling**: Secure error reporting
+
+### Best Practices
+- **Principle of Least Privilege**: Minimal required permissions
+- **Secure Defaults**: Secure configuration by default
+- **Regular Updates**: Keep dependencies updated
+- **Security Audits**: Regular security reviews
+
+## 🔄 Migration from Legacy
+
+### What Changed
+- **Cleaner Structure**: Reorganized into logical modules
+- **Modern Patterns**: Updated to use modern .NET patterns
+- **Better Configuration**: JSON-based configuration system
+- **Enhanced Logging**: Structured logging with service organization
+- **Archive System**: Legacy code preserved in `/archive`
+
+### Migration Steps
+1. **Backup**: Old version automatically archived in `/archive`
+2. **Update Configuration**: Convert old config to new JSON format
+3. **Update Commands**: Command structure remains similar
+4. **Test**: Verify all functionality works as expected
+
+## 🤝 Contributing
+
+### Development Setup
+1. Clone repository
+2. Install .NET SDK (latest version)
+3. Run `dotnet restore`
+4. Use Visual Studio or VS Code for development
+
+### Code Standards
+- **C# Conventions**: Follow Microsoft C# coding conventions
+- **Comments**: XML documentation for public APIs
+- **Tests**: Unit tests for all new features
+- **PRs**: Clean, focused pull requests
+
+### Testing
+- **Unit Tests**: `dotnet test`
+- **Integration Tests**: `dotnet test --filter Category=Integration`
+- **Performance Tests**: `dotnet test --filter Category=Performance`
+
+## 📝 Changelog
+
+### v2.0.0 - Enhanced Architecture Release
+- ✅ Complete codebase cleanup and reorganization
+- ✅ Modern .NET architecture with dependency injection
+- ✅ JSON-based configuration system
+- ✅ Enhanced logging with service organization
+- ✅ Improved command system with categorization
+- ✅ Archive of legacy code for reference
+- ✅ Comprehensive service visibility and status tracking
+
+### Previous Versions
+- See `/archive` directory for legacy versions
+- Legacy code preserved for reference and rollback
+
+## 📞 Support
+
+### Getting Help
+- **Documentation**: Check `/docs` directory
+- **Issues**: Report bugs via GitHub issues
+- **Community**: Join our Discord server
+- **Examples**: See `/examples` directory
+
+### Troubleshooting
+- **Logs**: Check application logs for errors
+- **Configuration**: Verify configuration syntax
+- **Dependencies**: Ensure all dependencies are installed
+- **Permissions**: Check file and directory permissions
 
 ---
 
-## Logging
+## 🎉 Summary
 
-### Log Levels
-- **Debug** - Detailed diagnostic information
-- **Info** - General informational messages
-- **Warning** - Warning messages for potential issues
-- **Error** - Error messages for failures
+This enhanced version of VAutomationEvents provides:
 
-### Log Locations
-- **Console**: BepInEx console output
-- **File**: `C:\BepInEx\Logs\`
-- **Prefix**: `[VAuto]`
+✅ **Clean Architecture** - Modern, maintainable code structure
+✅ **Better Organization** - Logical grouping of functionality
+✅ **Enhanced Configuration** - JSON-based, environment-aware config
+✅ **Improved Logging** - Comprehensive service organization and visibility
+✅ **Archive System** - Legacy code preserved for reference
+✅ **Modern Patterns** - Up-to-date .NET practices and patterns
 
-### Debug Commands
-```
-.debug performance      - Show performance metrics
-.debug entities         - Show entity information
-.debug zones            - Show zone information
-.debug snapshots        - Show snapshot information
-.debug database         - Show database information
-```
-
----
-
-## Troubleshooting
-
-### Plugin doesn't load
-**Solution**: Check BepInEx logs for errors, verify all dependencies installed
-
-### Commands not working
-**Solution**: Verify admin permissions, check command syntax
-
-### Snapshot not restoring
-**Solution**: Check snapshot files exist, verify database initialized
-
-### Abilities not unlocking
-**Solution**: Check AbilityOverrideService initialized, verify player entity exists
-
-### UI not showing
-**Solution**: Check AbilitySlotUI initialized, verify OnPlayerEnter event fires
-
----
-
-## Documentation
-
-- **QUICK_REFERENCE.md** - Quick reference guide
-- **COMMANDS_SUMMARY.md** - Complete command reference
-- **CURRENT_STATUS.md** - Current status report
-- **FINAL_BUILD_REPORT.md** - Build report
-- **DEPLOYMENT_CHECKLIST.md** - Deployment checklist
-- **VERIFY_PLUGIN_STARTUP.md** - Startup verification
-
----
-
-## Build Information
-
-- **Build Status**: ✅ 0 Errors, 0 Critical Warnings
-- **Compilation**: Success
-- **Assembly Size**: ~2.5MB (Release)
-- **Target Framework**: .NET Framework 4.7.2 (IL2CPP)
-- **Compiler**: .NET 6.0 / C# 10
-
----
-
-## Requirements
-
-- **BepInEx**: 6.0+
-- **.NET Framework**: 4.7.2+
-- **V Rising**: Latest version
-- **Server Type**: Dedicated Server
-- **Memory**: 2GB+ recommended
-- **Disk Space**: 500MB+ recommended
-
----
-
-## Installation from Source
-
-```bash
-# Clone repository
-git clone https://github.com/yourusername/vauto.git
-cd vauto
-
-# Build
-dotnet build --configuration Release
-
-# Output
-# bin/Release/Automation.dll
-```
-
----
-
-## Support
-
-For issues, questions, or suggestions:
-1. Check the documentation files
-2. Review the logs in `C:\BepInEx\Logs\`
-3. Use debug commands to diagnose issues
-4. Check the troubleshooting section
-
----
-
-## License
-
-[Your License Here]
-
----
-
-## Credits
-
-- **BepInEx** - Modding framework
-- **VampireCommandFramework** - Command framework
-- **Harmony** - Game patching library
-- **V Rising** - Game
-
----
-
-## Changelog
-
-### Version 1.0.0 (January 17, 2026)
-- ✅ Initial release
-- ✅ 149 commands implemented
-- ✅ 25+ services initialized
-- ✅ Player lifecycle management
-- ✅ Snapshot system
-- ✅ Ability management
-- ✅ Zone management
-- ✅ Database persistence
-- ✅ Comprehensive logging
-- ✅ Full documentation
-
----
-
-**Status**: ✅ Production Ready
-**Version**: 1.0.0
-**Last Updated**: January 17, 2026
-**Plugin GUID**: gg.vautomation
+The system is now easier to use, maintain, and extend while preserving all the powerful automation capabilities users expect from VAutomationEvents.
