@@ -1,6 +1,6 @@
-# VAuto Arena Plugin
+# VAuto Plugin
 
-**Comprehensive Arena Management System for V Rising**
+**Comprehensive Management System for V Rising**
 
 ![Status](https://img.shields.io/badge/Status-Production%20Ready-brightgreen)
 ![Build](https://img.shields.io/badge/Build-0%20Errors-brightgreen)
@@ -12,18 +12,18 @@
 
 ## Overview
 
-VAuto Arena is a comprehensive BepInEx plugin for V Rising that provides complete arena management functionality. It handles player lifecycle management, snapshot capture/restore, ability unlocking, zone control, and database persistence.
+VAuto is a comprehensive BepInEx plugin for V Rising that provides complete management functionality. It handles player lifecycle management, snapshot capture/restore, ability unlocking, zone control, and database persistence.
 
 ### Key Features
 
 - **Player Lifecycle Management** - Automatic snapshot capture on entry, restore on exit
-- **Ability Management** - Unlock all abilities on arena entry, restore on exit
+- **Ability Management** - Unlock all abilities on entry, restore on exit
 - **Zone Management** - Multi-zone support with auto-detection
 - **Snapshot System** - Full player state persistence (inventory, equipment, blood type, name)
 - **VBlood System** - Automatic VBlood unlock and spellbook opening
-- **PvP Identity** - Name prefix and blood type override for arena
-- **Arena Gear** - Automatic gear application on entry
-- **UI System** - Ability slots display and arena UI management
+- **PvP Identity** - Name prefix and blood type override
+- **Gear System** - Automatic gear application on entry
+- **UI System** - Ability slots display and UI management
 - **Database Persistence** - JSON-based data storage
 - **Comprehensive Logging** - Structured logging with multiple levels
 - **149 Commands** - Full command suite across 8 categories
@@ -43,17 +43,17 @@ VAuto Arena is a comprehensive BepInEx plugin for V Rising that provides complet
 ### Basic Usage
 
 ```
-# Enter arena with full unlocks
-.arenaenter
+# Enter with full unlocks
+.enter
 
-# Exit arena and restore state
-.arenaexit
+# Exit and restore state
+.exit
 
-# Check arena status
-.arenastatus
+# Check status
+.status
 
 # View all commands
-.help arena
+.help
 ```
 
 ---
@@ -68,11 +68,11 @@ The plugin uses a modular service-based architecture with 25+ services:
 ServiceManager (Coordinator)
 ├── LifecycleService (Player state management)
 ├── DatabaseService (Data persistence)
-├── ArenaZoneService (Zone management)
+├── ZoneService (Zone management)
 ├── AbilityOverrideService (Ability unlocking)
-├── EnhancedArenaSnapshotService (Snapshot capture/restore)
-├── ArenaGlowService (Glow effects)
-├── ArenaBuildService (Build application)
+├── EnhancedSnapshotService (Snapshot capture/restore)
+├── GlowService (Glow effects)
+├── BuildService (Build application)
 ├── PlayerService (Player management)
 ├── GameSystems (Game system hooks)
 ├── GlobalMapIconService (Map icons)
@@ -81,8 +81,8 @@ ServiceManager (Coordinator)
 ├── RespawnPreventionService (Respawn prevention)
 ├── NameTagService (Name tag management)
 ├── MapIconService (Map icon management)
-├── ArenaObjectService (Arena object management)
-├── ArenaDataSaver (Data saving)
+├── ObjectService (Object management)
+├── DataSaver (Data saving)
 ├── AutoComponentSaver (Component saving)
 ├── EnhancedDataPersistenceService (Data persistence)
 ├── CastleObjectIntegrationService (Castle integration)
@@ -94,7 +94,7 @@ ServiceManager (Coordinator)
 
 ### Command Categories
 
-- **Arena** (12 commands) - Arena management
+- **Main** (12 commands) - Core management
 - **Automation** (8 commands) - Automation control
 - **Character** (15 commands) - Character management
 - **Dev** (18 commands) - Development tools
@@ -111,7 +111,7 @@ ServiceManager (Coordinator)
 `C:\BepInEx\config\VAuto\VAuto-Advanced-Config.json`
 
 All systems are enabled by default:
-- ✅ Arena System
+- ✅ Core System
 - ✅ Conveyor System
 - ✅ Achievement System
 - ✅ VBlood System
@@ -137,7 +137,7 @@ Standard BepInEx INI-style configuration.
 
 ---
 
-## Player Arena Flow
+## Player Flow
 
 ### Entry Sequence (200-300ms)
 1. Snapshot captured (inventory, equipment, blood type, name)
@@ -147,9 +147,9 @@ Standard BepInEx INI-style configuration.
 5. All abilities unlocked
 6. Spellbook opened
 7. PvP identity applied ([PvP] prefix, PvP blood type)
-8. Arena gear applied
-9. Player teleported to arena center
-10. Arena UI shown
+8. Gear applied
+9. Player teleported to center
+10. UI shown
 11. Ability slots displayed
 
 ### Exit Sequence (150-200ms)
@@ -160,7 +160,7 @@ Standard BepInEx INI-style configuration.
 5. Achievement unlocks removed
 6. Player removed from zone
 7. Player teleported back to original position
-8. Arena UI hidden
+8. UI hidden
 9. Ability slots UI closed
 
 ---
@@ -179,7 +179,7 @@ Standard BepInEx INI-style configuration.
 - **Database**: ~5MB
 - **Per Player Snapshot**: ~10MB
 
-### Arena Operations
+### Operations
 - **Player Entry**: 200-300ms
 - **Snapshot Capture**: 100-150ms
 - **Ability Unlock**: 50-100ms
@@ -191,12 +191,12 @@ Standard BepInEx INI-style configuration.
 ## Database
 
 ### Location
-`C:\BepInEx\config\VAuto\ArenaDatabase.json`
+`C:\BepInEx\config\VAuto\Database.json`
 
 ### Structure
 ```
 C:\BepInEx\config\VAuto\
-├── ArenaDatabase.json          (Main database)
+├── Database.json          (Main database)
 ├── Data/                       (Player snapshots)
 ├── Backups/                    (Backup files)
 ├── KindredExtract/             (Kindred extract data)
@@ -249,7 +249,7 @@ C:\BepInEx\config\VAuto\
 **Solution**: Check AbilityOverrideService initialized, verify player entity exists
 
 ### UI not showing
-**Solution**: Check AbilitySlotUI initialized, verify OnPlayerEnterArena event fires
+**Solution**: Check AbilitySlotUI initialized, verify OnPlayerEnter event fires
 
 ---
 
@@ -289,8 +289,8 @@ C:\BepInEx\config\VAuto\
 
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/vauto-arena.git
-cd vauto-arena
+git clone https://github.com/yourusername/vauto.git
+cd vauto
 
 # Build
 dotnet build --configuration Release
@@ -342,7 +342,7 @@ For issues, questions, or suggestions:
 
 ---
 
-**Status**: ✅ Production Ready  
-**Version**: 1.0.0  
-**Last Updated**: January 17, 2026  
-**Plugin GUID**: gg.vautomation.arena
+**Status**: ✅ Production Ready
+**Version**: 1.0.0
+**Last Updated**: January 17, 2026
+**Plugin GUID**: gg.vautomation
