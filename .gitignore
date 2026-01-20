@@ -95,6 +95,12 @@ builds/
 *.log
 *.tmp
 
+# JSON files - BLOCK ALL JSON FILES
+*.json
+**/*.json
+!package.json
+!package-lock.json
+
 # Markdown files (keep only the 7 essential ones)
 *.md
 !README.md

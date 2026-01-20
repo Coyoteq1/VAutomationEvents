@@ -7,7 +7,6 @@ using VampireCommandFramework;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text.Json;
 using Unity.Mathematics;
 using VAuto.Core;
 using VAuto.Utilities;
@@ -81,29 +80,21 @@ public class Plugin : BasePlugin
             EnsureDirectories();
             Log.LogInfo("[VAuto] All required directories verified/created");
 
-            // Step 1: Load unified JSON configuration
-            PluginSettings.LoadSettings();
-            Log.LogInfo("[VAuto] Unified configuration loaded");
-
-            // Step 1.5: Load additional JSON configurations
-            var jsonFiles = GetJsonConfigFiles();
-            Log.LogInfo($"[VAuto] Found {jsonFiles.Count} JSON configuration files");
-            
-            // Step 2: Initialize core systems
+            // Step 1: Initialize core systems
             InitializeCoreSystems();
             Log.LogInfo("[VAuto] Core systems initialized");
 
-            // Step 3: Initialize services (25+ services)
+            // Step 2: Initialize services (25+ services)
             InitializeServices();
             Log.LogInfo("[VAuto] Services initialized");
 
-            // Step 4: Apply Harmony patches
+            // Step 3: Apply Harmony patches
             _harmony.PatchAll(System.Reflection.Assembly.GetExecutingAssembly());
             Log.LogInfo("[VAuto] Harmony patches applied");
 
-            // Step 5: VCF auto-discovers commands via reflection
+            // Step 4: VCF auto-discovers commands via reflection
 
-            // Step 6: Initialize game systems
+            // Step 5: Initialize game systems
             InitializeGameSystems();
             Log.LogInfo("[VAuto] Game systems initialized");
 
@@ -197,114 +188,7 @@ public class Plugin : BasePlugin
         }
     }
 
-    /// <summary>
-    /// Get all JSON configuration files
-    /// </summary>
-    public static List<string> GetJsonConfigFiles()
-    {
-        var jsonFiles = new List<string>();
-        
-        // Main config files
-        var mainConfigs = new[]
-        {
-            "Settings.json",
-            "Victor2.json", 
-            "Victor3.json", 
-            "Victor4.json", 
-            "Snapchat.json"
-        };
-
-        foreach (var config in mainConfigs)
-        {
-            var path = Path.Combine(VAutoConfigDir, config);
-            if (File.Exists(path))
-            {
-                jsonFiles.Add(path);
-            }
-        }
-
-        // Arena configs
-        var arenaConfigs = new[]
-        {
-            "build.json",
-            "zone.json",
-            "snapshot.json"
-        };
-
-        foreach (var config in arenaConfigs)
-        {
-            var path = Path.Combine(VAutoArenaDir, config);
-            if (File.Exists(path))
-            {
-                jsonFiles.Add(path);
-            }
-        }
-
-        return jsonFiles;
-    }
-
-    /// <summary>
-    /// Load JSON configuration file
-    /// </summary>
-    public static T LoadJsonConfig<T>(string fileName) where T : class, new()
-    {
-        var path = Path.Combine(VAutoConfigDir, fileName);
-        try
-        {
-            if (!File.Exists(path))
-            {
-                Log?.LogWarning($"[VAuto] Config file not found: {path}");
-                return new T();
-            }
-
-            var json = File.ReadAllText(path);
-            var options = VAuto.Extensions.VRCoreStubs.SchematicService.GetJsonOptions();
-            var config = JsonSerializer.Deserialize<T>(json, options);
-            Log?.LogInfo($"[VAuto] Loaded config: {fileName}");
-            return config;
-        }
-        catch (Exception ex)
-        {
-            Log?.LogError($"[VAuto] Failed to load config {fileName}: {ex.Message}");
-            return new T();
-        }
-    }
-
-    /// <summary>
-    /// Save JSON configuration file
-    /// </summary>
-    public static void SaveJsonConfig<T>(string fileName, T config) where T : class
-    {
-        var path = Path.Combine(VAutoConfigDir, fileName);
-        try
-        {
-            var options = VAuto.Extensions.VRCoreStubs.SchematicService.GetJsonOptions();
-            var json = JsonSerializer.Serialize(config, options);
-            File.WriteAllText(path, json);
-            Log?.LogInfo($"[VAuto] Saved config: {fileName}");
-        }
-        catch (Exception ex)
-        {
-            Log?.LogError($"[VAuto] Failed to save config {fileName}: {ex.Message}");
-        }
-    }
-
-    /// <summary>
-    /// Get all available schematic files
-    /// </summary>
-    public static List<string> GetSchematicFiles()
-    {
-        var schematicDir = Path.Combine(VAutoDataDir, "Schematics");
-        var schematics = new List<string>();
-
-        if (Directory.Exists(schematicDir))
-        {
-            schematics.AddRange(Directory.GetFiles(schematicDir, "*.json"));
-        }
-
-        return schematics;
-    }
-
+    
     // Configuration properties (using BepInEx config entries)
     public static bool IsEnabled => EnablePlugin.Value;
     public static bool IsDebugMode => DebugMode.Value;

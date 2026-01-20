@@ -146,6 +146,23 @@ namespace VAuto.Services
 
             _dependencies[typeof(GlobalMapIconService)] = new List<Type>();
 
+            // Gear services
+            _dependencies[typeof(GearService)] = new List<Type>
+            {
+                typeof(PrefabResolverService),
+                typeof(PlayerInventoryService) // Assuming we create a wrapper for IPlayerInventoryService
+            };
+
+            _dependencies[typeof(ZoneEntrySystem)] = new List<Type>
+            {
+                typeof(GearService)
+            };
+
+            _dependencies[typeof(GearSwapSystem)] = new List<Type>
+            {
+                typeof(GearService)
+            };
+
             _dependencies[typeof(AutomationAPI)] = new List<Type>
             {
                 typeof(LifecycleService),
@@ -315,6 +332,14 @@ namespace VAuto.Services
                 return new GlobalMapIconServiceWrapper();
             else if (serviceType == typeof(AutomationAPI))
                 return AutomationAPI.Instance;
+            else if (serviceType == typeof(GearService))
+                return new GearServiceWrapper();
+            else if (serviceType == typeof(ZoneEntrySystem))
+                return new ZoneEntrySystemWrapper();
+            else if (serviceType == typeof(GearSwapSystem))
+                return new GearSwapSystemWrapper();
+            else if (serviceType == typeof(PlayerInventoryService))
+                return new PlayerInventoryServiceWrapper();
 
             Plugin.Log?.LogInfo($"[ServiceManager] Creating service: {serviceType.Name} - {serviceType.FullName}");
             throw new NotSupportedException($"Service type {serviceType.Name} is not supported");
@@ -1210,6 +1235,82 @@ namespace VAuto.Services
             public int GetErrorCount() => 0;
             public string GetLastError() => null;
         }
+
+        private class PlayerInventoryServiceWrapper : VAuto.Services.Interfaces.IService, IPlayerInventoryService
+        {
+            private PlayerInventoryService _service;
+            public bool IsInitialized => _service != null;
+            public ManualLogSource Log => Plugin.Logger;
+
+            public void Initialize()
+            {
+                // Simple logger using Plugin.Logger
+                _service = new PlayerInventoryService(null); // TODO: proper logger
+            }
+
+            public void Cleanup() => _service = null;
+
+            // IPlayerInventoryService implementation
+            public bool EquipItem(string playerId, string itemName, int count) => _service?.EquipItem(playerId, itemName, count) ?? false;
+            public IEnumerable<EquippedItem> GetEquippedItems(string playerId) => _service?.GetEquippedItems(playerId) ?? new List<EquippedItem>();
+            public void ClearEquippedItems(string playerId) => _service?.ClearEquippedItems(playerId);
+        }
+
+        private class GearServiceWrapper : VAuto.Services.Interfaces.IService, IGearService
+        {
+            private GearService _service;
+            public bool IsInitialized => _service != null;
+            public ManualLogSource Log => Plugin.Logger;
+
+            public void Initialize()
+            {
+                var prefabResolver = ServiceManager.GetService<PrefabResolverService>() as IPrefabResolverService;
+                var inventoryService = ServiceManager.GetService<PlayerInventoryService>() as IPlayerInventoryService;
+                _service = new GearService(prefabResolver, inventoryService, null); // TODO: proper logger
+            }
+
+            public void Cleanup() => _service = null;
+
+            // IGearService implementation
+            public bool IsAutoEquipEnabledForPlayer(string playerId) => _service?.IsAutoEquipEnabledForPlayer(playerId) ?? false;
+            public void SetAutoEquipForPlayer(string playerId, bool enabled) => _service?.SetAutoEquipForPlayer(playerId, enabled);
+            public bool EquipGearForPlayer(string playerId, IEnumerable<VAuto.Data.GearEntry> gearList) => _service?.EquipGearForPlayer(playerId, gearList) ?? false;
+            public bool StartSwapSession(string playerId, string sessionId, IEnumerable<VAuto.Data.GearEntry> swapGear) => _service?.StartSwapSession(playerId, sessionId, swapGear) ?? false;
+            public bool EndSwapSession(string playerId, string sessionId) => _service?.EndSwapSession(playerId, sessionId) ?? false;
+            public void RevertPlayerGear(string playerId) => _service?.RevertPlayerGear(playerId);
+            public IEnumerable<string> GetActiveSwapSessions(string playerId) => _service?.GetActiveSwapSessions(playerId) ?? Enumerable.Empty<string>();
+        }
+
+        private class ZoneEntrySystemWrapper : VAuto.Services.Interfaces.IService
+        {
+            private ZoneEntrySystem _service;
+            public bool IsInitialized => _service != null;
+            public ManualLogSource Log => Plugin.Logger;
+
+            public void Initialize()
+            {
+                var gearService = ServiceManager.GetService<GearService>() as IGearService;
+                _service = new ZoneEntrySystem(gearService, null); // TODO: proper logger
+            }
+
+            public void Cleanup() => _service = null;
+        }
+
+        private class GearSwapSystemWrapper : VAuto.Services.Interfaces.IService
+        {
+            private GearSwapSystem _service;
+            public bool IsInitialized => _service != null;
+            public ManualLogSource Log => Plugin.Logger;
+
+            public void Initialize()
+            {
+                var gearService = ServiceManager.GetService<GearService>() as IGearService;
+                _service = new GearSwapSystem(gearService, null); // TODO: proper logger
+            }
+
+            public void Cleanup() => _service = null;
+        }
+
         #endregion
     }
 }

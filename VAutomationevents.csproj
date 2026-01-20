@@ -1,8 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AssemblyName>Automation</AssemblyName>
@@ -69,24 +70,28 @@
     
     <!-- ProjectM Dependencies -->
     <Reference Include="ProjectM">
-      <HintPath>libs\ProjectM.dll</HintPath>
-      <Private>true</Private>
+      <HintPath>C:\BepInEx\DedicatedServerLauncher\VRisingServer\VRising_Data\Managed\ProjectM.dll</HintPath>
+      <Private>false</Private>
       <SpecificVersion>false</SpecificVersion>
     </Reference>
+    <Reference Include="ProjectM.Network">
+      <HintPath>C:\BepInEx\DedicatedServerLauncher\VRisingServer\VRising_Data\Managed\ProjectM.Network.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
     <Reference Include="ProjectM.Shared">
-      <HintPath>libs\ProjectM.Shared.dll</HintPath>
+      <HintPath>C:\BepInEx\DedicatedServerLauncher\VRisingServer\VRising_Data\Managed\ProjectM.Shared.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="ProjectM.Shared.Systems">
-      <HintPath>libs\ProjectM.Shared.Systems.dll</HintPath>
+      <HintPath>C:\BepInEx\DedicatedServerLauncher\VRisingServer\VRising_Data\Managed\ProjectM.Shared.Systems.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="ProjectM.Gameplay.Systems">
-      <HintPath>libs\ProjectM.Gameplay.Systems.dll</HintPath>
+      <HintPath>C:\BepInEx\DedicatedServerLauncher\VRisingServer\VRising_Data\Managed\ProjectM.Gameplay.Systems.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="ProjectM.Gameplay.Scripting">
-      <HintPath>libs\ProjectM.Gameplay.Scripting.dll</HintPath>
+      <HintPath>C:\BepInEx\DedicatedServerLauncher\VRisingServer\VRising_Data\Managed\ProjectM.Gameplay.Scripting.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="ProjectM.CodeGeneration">
@@ -154,31 +159,31 @@
     </Reference>
     <!-- Missing ECS attributes and low-level assemblies -->
     <Reference Include="Unity.Collections">
-      <HintPath>libs\Unity.Collections.dll</HintPath>
+      <HintPath>C:\BepInEx\DedicatedServerLauncher\VRisingServer\VRising_Data\Managed\Unity.Collections.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="Unity.Collections.LowLevel.ILSupport">
-      <HintPath>libs\Unity.Collections.LowLevel.ILSupport.dll</HintPath>
+      <HintPath>C:\BepInEx\DedicatedServerLauncher\VRisingServer\VRising_Data\Managed\Unity.Collections.LowLevel.ILSupport.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="Unity.Burst">
-      <HintPath>libs\Unity.Burst.dll</HintPath>
+      <HintPath>C:\BepInEx\DedicatedServerLauncher\VRisingServer\VRising_Data\Managed\Unity.Burst.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="Unity.Burst.Unsafe">
-      <HintPath>libs\Unity.Burst.Unsafe.dll</HintPath>
+      <HintPath>C:\BepInEx\DedicatedServerLauncher\VRisingServer\VRising_Data\Managed\Unity.Burst.Unsafe.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>libs\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>C:\BepInEx\DedicatedServerLauncher\VRisingServer\VRising_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="UnityEngine.InputLegacyModule">
-      <HintPath>C:\BepInEx\DedicatedServerLauncher\VRisingServer\BepInEx\unity-libs\UnityEngine.InputLegacyModule.dll</HintPath>
+      <HintPath>C:\BepInEx\DedicatedServerLauncher\VRisingServer\VRising_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="Stunlock.Core">
-      <HintPath>libs\Stunlock.Core.dll</HintPath>
+      <HintPath>C:\BepInEx\DedicatedServerLauncher\VRisingServer\VRising_Data\Managed\Stunlock.Core.dll</HintPath>
       <Private>false</Private>
     </Reference>
   </ItemGroup>

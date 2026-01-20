@@ -16,7 +16,7 @@ namespace VAuto.Services.Systems
     /// Supports VBlood bosses, items, and other game prefabs
     /// Updated to use industry-standard PrefabGUID patterns for V Rising modding
     /// </summary>
-    public class PrefabResolverService : IService, IServiceHealthMonitor
+    public class PrefabResolverService : IService, IServiceHealthMonitor, IPrefabResolverService
     {
         private static PrefabResolverService _instance;
         public static PrefabResolverService Instance => _instance ??= new PrefabResolverService();
