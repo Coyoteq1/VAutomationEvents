@@ -1,5 +1,5 @@
 {
   "dependencies": {
-    "@perplexity-ai/perplexity_ai": "^0.18.4"
+    "@perplexity-ai/perplexity_ai": "^0.18.5"
   }
 }
