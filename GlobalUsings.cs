@@ -8,13 +8,9 @@ global using Unity.Mathematics;
 global using Unity.Transforms;
 global using ProjectM;
 global using ProjectM.Network;
-global using PrefabGUID = ProjectM.PrefabGUID;
+global using PrefabGUID = Stunlock.Core.PrefabGUID;
 global using FixedString64Bytes = Unity.Collections.FixedString64Bytes;
-global using BuildData = ProjectM.Build.BuildData;
-global using BuildTemplate = ProjectM.Build.BuildTemplate;
-global using StructureData = ProjectM.Structures.StructureData;
-global using StructureStatus = ProjectM.Structures.StructureStatus;
-global using PermissionLevel = ProjectM.Permissions.PermissionLevel;
+
 
 // VRising mod extensions and stubs
 global using VAuto.Extensions;

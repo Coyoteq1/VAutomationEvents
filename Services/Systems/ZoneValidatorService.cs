@@ -232,7 +232,7 @@ namespace VAuto.Services.Systems
         }
     }
 
-    public class ZoneValidationResult
+    public class ZoneValidatorResult
     {
         public bool IsValid { get; set; }
         public List<string> Messages { get; set; }

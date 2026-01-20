@@ -1,0 +1,6 @@
+[33m6755da7[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m Add repository links and community details: Enhanced README.md with GitHub repository URL, Discord community link, and comprehensive project information including installation instructions and support resources.
+[33m9d9f65e[m Add comprehensive documentation: Complete rewrite of README.md with detailed architecture, features, user guide, development guide, and system overview for VAutomationEvents.
+[33me4c306b[m Remove Arena references from documentation: Updated README.md to remove all Arena-specific terminology and make it generic for the VAuto plugin system.
+[33mf20adba[m Major refactoring of LifecycleService: improved error handling, modularization, and logging. Restructured arena entry/exit logic into smaller, focused methods with better rollback capabilities and comprehensive error recovery.
+[33m6d5cf09[m Fix ServiceManager build errors - clean compilation
+[33m38bea6c[m Clean up markdown files - keep only 7 essential docs

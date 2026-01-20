@@ -198,13 +198,10 @@
     <Reference Include="ProjectM" />
     <Reference Include="ProjectM.Shared" />
     <Reference Include="ProjectM.Gameplay.Systems" />
-    <Reference Include="ProjectM.Build" />
-    <Reference Include="ProjectM.Structures" />
-    <Reference Include="ProjectM.Permissions" />
 </ItemGroup>
   
   <ItemGroup>
-    <Unity.Entities.Hybrid>
+    <Reference Include="Unity.Entities.Hybrid">
       <HintPath>libs\Unity.Entities.Hybrid.dll</HintPath>
       <Private>false</Private>
     </Reference>

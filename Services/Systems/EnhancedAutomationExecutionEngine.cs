@@ -33,7 +33,7 @@ namespace VAuto.Services.Systems
         private AILearningService _aiLearningService;
 
         // Active contexts and execution state
-        private readonly Dictionary<string, EnhancedAutomationContext> _activeContexts = new();
+        private readonly Dictionary<string, ComprehensiveValidationResult> _activeContexts = new();
         private readonly List<ExecutionLogEntry> _executionHistory = new();
 
         public bool IsInitialized => _isInitialized;
@@ -976,6 +976,101 @@ namespace VAuto.Services.Systems
 
             // Test zone creation
             _log?.LogDebug($"[TestExecution] Would create zone '{zone.Name}' at ({zone.Location.Center.X}, {zone.Location.Center.Y}, {zone.Location.Center.Z}) with radius {zone.Location.Radius}");
+        }
+
+        #endregion
+
+        #region IServiceHealthMonitor Implementation
+
+        private int _errorCount = 0;
+        private string _lastError = null;
+        private DateTime _lastHealthCheck = DateTime.UtcNow;
+
+        public ServiceHealthStatus GetHealthStatus()
+        {
+            try
+            {
+                var status = new ServiceHealthStatus
+                {
+                    ServiceName = nameof(EnhancedAutomationExecutionEngine),
+                    IsHealthy = _isInitialized && _errorCount < 10,
+                    Status = _isInitialized ? "Healthy" : "Not Initialized",
+                    LastCheck = DateTime.UtcNow,
+                    Issues = new List<string>()
+                };
+
+                if (!_isInitialized)
+                    status.Issues.Add("Service not initialized");
+                
+                if (_errorCount > 5)
+                    status.Issues.Add($"High error count: {_errorCount}");
+                
+                if (_activeContexts.Count > 100)
+                    status.Issues.Add($"Too many active contexts: {_activeContexts.Count}");
+
+                return status;
+            }
+            catch (Exception ex)
+            {
+                _log?.LogError($"Error getting health status: {ex.Message}");
+                return new ServiceHealthStatus
+                {
+                    ServiceName = nameof(EnhancedAutomationExecutionEngine),
+                    IsHealthy = false,
+                    Status = "Error",
+                    LastCheck = DateTime.UtcNow,
+                    Issues = new List<string> { $"Failed to get health status: {ex.Message}" }
+                };
+            }
+        }
+
+        public ServicePerformanceMetrics GetPerformanceMetrics()
+        {
+            try
+            {
+                return new ServicePerformanceMetrics
+                {
+                    ServiceName = nameof(EnhancedAutomationExecutionEngine),
+                    AverageResponseTime = _executionHistory.Count > 0 
+                        ? _executionHistory.Average(e => e.Duration.TotalMilliseconds) 
+                        : 0,
+                    RequestsPerSecond = _executionHistory.Count(e => 
+                        (DateTime.UtcNow - e.Timestamp).TotalSeconds <= 1),
+                    MemoryUsage = GC.GetTotalMemory(false),
+                    ActiveOperations = _activeContexts.Count,
+                    MeasuredAt = DateTime.UtcNow
+                };
+            }
+            catch (Exception ex)
+            {
+                _log?.LogError($"Error getting performance metrics: {ex.Message}");
+                return new ServicePerformanceMetrics
+                {
+                    ServiceName = nameof(EnhancedAutomationExecutionEngine),
+                    AverageResponseTime = 0,
+                    RequestsPerSecond = 0,
+                    MemoryUsage = 0,
+                    ActiveOperations = 0,
+                    MeasuredAt = DateTime.UtcNow
+                };
+            }
+        }
+
+        public int GetErrorCount()
+        {
+            return _errorCount;
+        }
+
+        public string GetLastError()
+        {
+            return _lastError;
+        }
+
+        private void IncrementErrorCount(string error)
+        {
+            _errorCount++;
+            _lastError = error;
+            _lastHealthCheck = DateTime.UtcNow;
         }
 
         #endregion

@@ -558,5 +558,172 @@ namespace VAuto.Services
             }
         }
         #endregion
+
+        #region Additional Configuration Classes
+
+        public class TestingConfig
+        {
+            public bool EnableUnitTests { get; set; } = true;
+            public bool EnableIntegrationTests { get; set; } = false;
+            public bool EnablePerformanceTests { get; set; } = false;
+            public string TestOutputDirectory { get; set; } = "TestResults";
+            public Dictionary<string, object> TestParameters { get; set; } = new();
+            public List<string> TestCategories { get; set; } = new();
+            public int TestTimeoutMs { get; set; } = 30000;
+            public bool GenerateTestReports { get; set; } = true;
+        }
+
+        public class ProfilingConfig
+        {
+            public bool EnableCPUProfiling { get; set; } = false;
+            public bool EnableMemoryProfiling { get; set; } = true;
+            public bool EnableNetworkProfiling { get; set; } = false;
+            public int ProfilingIntervalMs { get; set; } = 1000;
+            public string ProfilingOutputDirectory { get; set; } = "ProfilingResults";
+            public Dictionary<string, object> ProfilingParameters { get; set; } = new();
+            public bool GenerateProfilingReports { get; set; } = true;
+            public long MaxMemoryUsageBytes { get; set; } = 1024 * 1024 * 1024; // 1GB
+            public double MaxCPUUsagePercent { get; set; } = 80.0;
+        }
+
+        public class RateLimitConfig
+        {
+            public int MaxRequestsPerSecond { get; set; } = 100;
+            public int MaxRequestsPerMinute { get; set; } = 1000;
+            public int MaxRequestsPerHour { get; set; } = 10000;
+            public bool EnableRateLimiting { get; set; } = true;
+            public Dictionary<string, int> EndpointLimits { get; set; } = new();
+        }
+
+        public class IntegrationConfig
+        {
+            public bool EnableExternalAPIs { get; set; } = false;
+            public Dictionary<string, string> APIEndpoints { get; set; } = new();
+            public Dictionary<string, string> APIKeys { get; set; } = new();
+            public int ConnectionTimeoutSeconds { get; set; } = 30;
+            public int RetryAttempts { get; set; } = 3;
+        }
+
+        public class APIConfig
+        {
+            public bool EnableRESTAPI { get; set; } = false;
+            public int APIPort { get; set; } = 8080;
+            public string APIBasePath { get; set; } = "/api/v1";
+            public bool RequireAuthentication { get; set; } = true;
+            public List<string> AllowedOrigins { get; set; } = new();
+            public Dictionary<string, object> APISettings { get; set; } = new();
+        }
+
+        public class DocumentationConfig
+        {
+            public bool EnableSwagger { get; set; } = true;
+            public bool EnableAPIDocs { get; set; } = true;
+            public string DocsTitle { get; set; } = "VAutomation API Documentation";
+            public string DocsVersion { get; set; } = "1.0.0";
+            public string DocsDescription { get; set; } = "VAutomation Events API Documentation";
+            public Dictionary<string, object> DocumentationSettings { get; set; } = new();
+        }
+
+        public class PermissionLevel
+        {
+            public string LevelName { get; set; }
+            public int Priority { get; set; }
+            public List<string> Permissions { get; set; } = new();
+            public bool IsAdmin { get; set; } = false;
+            public Dictionary<string, object> LevelProperties { get; set; } = new();
+        }
+
+        public class BlueprintConfig
+        {
+            public bool EnableBlueprints { get; set; } = true;
+            public string BlueprintDirectory { get; set; } = "Blueprints";
+            public int MaxBlueprintsPerUser { get; set; } = 50;
+            public bool AllowSharing { get; set; } = true;
+            public Dictionary<string, object> BlueprintProperties { get; set; } = new();
+        }
+
+        public class PrefabConfig
+        {
+            public bool EnablePrefabs { get; set; } = true;
+            public string PrefabDirectory { get; set; } = "Prefabs";
+            public bool EnableCustomPrefabs { get; set; } = false;
+            public int MaxPrefabsPerUser { get; set; } = 100;
+            public Dictionary<string, object> PrefabProperties { get; set; } = new();
+        }
+
+        public class VersionConfig
+        {
+            public string CurrentVersion { get; set; } = "1.0.0";
+            public bool EnableAutoUpdate { get; set; } = false;
+            public string UpdateChannel { get; set; } = "Stable";
+            public bool CheckForUpdates { get; set; } = true;
+            public Dictionary<string, object> VersionProperties { get; set; } = new();
+        }
+
+        public class RestoreConfig
+        {
+            public bool EnableAutoRestore { get; set; } = true;
+            public int RestoreIntervalMinutes { get; set; } = 30;
+            public int MaxRestoreAttempts { get; set; } = 3;
+            public bool CreateRestorePoints { get; set; } = true;
+            public string RestoreDirectory { get; set; } = "RestorePoints";
+            public Dictionary<string, object> RestoreProperties { get; set; } = new();
+        }
+
+        public class AnalyticsConfig
+        {
+            public bool EnableAnalytics { get; set; } = false;
+            public bool EnableUserTracking { get; set; } = false;
+            public bool EnablePerformanceTracking { get; set; } = true;
+            public string AnalyticsEndpoint { get; set; } = "";
+            public Dictionary<string, object> AnalyticsProperties { get; set; } = new();
+        }
+
+        public class NotificationConfig
+        {
+            public bool EnableNotifications { get; set; } = true;
+            public bool EnableEmailNotifications { get; set; } = false;
+            public bool EnableInGameNotifications { get; set; } = true;
+            public List<string> NotificationTypes { get; set; } = new();
+            public Dictionary<string, object> NotificationProperties { get; set; } = new();
+        }
+
+        public class DebugConfig
+        {
+            public bool EnableDebugMode { get; set; } = false;
+            public bool EnableVerboseLogging { get; set; } = false;
+            public bool EnableDebugCommands { get; set; } = true;
+            public int DebugLogLevel { get; set; } = 1;
+            public Dictionary<string, object> DebugProperties { get; set; } = new();
+        }
+
+        public class PerformanceConfig
+        {
+            public bool EnableOptimization { get; set; } = true;
+            public int MaxConcurrentThreads { get; set; } = 4;
+            public long MaxMemoryUsageMB { get; set; } = 1024;
+            public bool EnableGarbageCollection { get; set; } = true;
+            public Dictionary<string, object> PerformanceProperties { get; set; } = new();
+        }
+
+        public class SecurityConfig
+        {
+            public bool EnableSecurity { get; set; } = true;
+            public bool EnableEncryption { get; set; } = false;
+            public bool EnableAuthentication { get; set; } = true;
+            public int SessionTimeoutMinutes { get; set; } = 30;
+            public Dictionary<string, object> SecurityProperties { get; set; } = new();
+        }
+
+        public class AccessLevel
+        {
+            public string LevelName { get; set; }
+            public int AccessTier { get; set; }
+            public List<string> AllowedActions { get; set; } = new();
+            public bool IsDefault { get; set; } = false;
+            public Dictionary<string, object> AccessProperties { get; set; } = new();
+        }
+
+        #endregion
     }
 }

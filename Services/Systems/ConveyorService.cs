@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using ProjectM;
 using Unity.Entities;
 using Unity.Mathematics;
-using PrefabGUID = Stunlock.Core.PrefabGUID;
 using BepInEx.Logging;
 using VAuto.Core;
 using VAuto.Data;
