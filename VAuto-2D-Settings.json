@@ -1,0 +1,293 @@
+{
+  "VAuto2DSettings": {
+    "Version": "1.0.0",
+    "Description": "2D-specific configuration for VAuto plugin - UI positioning, map icons, and 2D zone detection",
+    "PathSettings": {
+      "ConfigDirectory": "C:\\BepInEx\\config\\VAuto",
+      "UIDirectory": "C:\\BepInEx\\config\\VAuto\\UI",
+      "MapDirectory": "C:\\BepInEx\\config\\VAuto\\Maps",
+      "SettingsFile": "C:\\BepInEx\\config\\VAuto\\VAuto-2D-Settings.json"
+    },
+    "UI2DSettings": {
+      "Enabled": true,
+      "UIScale": 1.0,
+      "UIOpacity": 1.0,
+      "UITheme": "dark",
+      "AbilitySlotUIEnabled": true,
+      "AbilitySlotSize": {
+        "Width": 64.0,
+        "Height": 64.0
+      },
+      "AbilitySlotPosition": {
+        "X": 100.0,
+        "Y": 100.0
+      },
+      "AbilitySlotSpacing": 10.0,
+      "AbilitySlotColumns": 5,
+      "AbilitySlotRows": 2,
+      "ShowAbilityNames": true,
+      "ShowAbilityCooldowns": true,
+      "ShowAbilityDescriptions": false,
+      "AnimationEnabled": true,
+      "AnimationDuration": 0.3,
+      "HoverEffectEnabled": true,
+      "ClickEffectEnabled": true
+    },
+    "MapIcon2DSettings": {
+      "Enabled": true,
+      "IconSize": {
+        "Width": 32.0,
+        "Height": 32.0
+      },
+      "IconOpacity": 0.8,
+      "ShowPlayerNames": true,
+      "ShowPlayerLevels": true,
+      "ShowPlayerGuilds": false,
+      "ShowNPCNames": true,
+      "ShowNPCTypes": true,
+      "ShowArenaZones": true,
+      "ShowPortals": true,
+      "ShowGlowEffects": true,
+      "IconUpdateIntervalMs": 500,
+      "MaxIconsOnMap": 100,
+      "IconClustering": true,
+      "ClusterThreshold": 5,
+      "IconColors": {
+        "Player": "#00FF00",
+        "NPC": "#FFFF00",
+        "Boss": "#FF0000",
+        "Arena": "#0000FF",
+        "Portal": "#FF00FF",
+        "Glow": "#00FFFF"
+      }
+    },
+    "Zone2DDetection": {
+      "Enabled": true,
+      "DetectionMethod": "2D",
+      "CheckIntervalMs": 500,
+      "VisualizationEnabled": true,
+      "VisualizationOpacity": 0.3,
+      "VisualizationColor": "#0000FF",
+      "ShowZoneBoundaries": true,
+      "ShowZoneNames": true,
+      "ShowZoneInfo": true,
+      "Zones": [
+        {
+          "Name": "Arena Zone 1",
+          "Center": {
+            "X": 0.0,
+            "Y": 0.0
+          },
+          "Radius": 50.0,
+          "Shape": "Circle",
+          "Enabled": true,
+          "Color": "#0000FF"
+        },
+        {
+          "Name": "Arena Zone 2",
+          "Center": {
+            "X": 100.0,
+            "Y": 100.0
+          },
+          "Radius": 75.0,
+          "Shape": "Circle",
+          "Enabled": true,
+          "Color": "#00FF00"
+        }
+      ]
+    },
+    "Minimap2DSettings": {
+      "Enabled": true,
+      "MinimapSize": {
+        "Width": 256.0,
+        "Height": 256.0
+      },
+      "MinimapPosition": {
+        "X": 10.0,
+        "Y": 10.0
+      },
+      "MinimapOpacity": 0.8,
+      "ShowPlayerMarker": true,
+      "ShowZones": true,
+      "ShowPortals": true,
+      "ShowNPCs": true,
+      "ShowItems": false,
+      "ZoomLevel": 1.0,
+      "MinZoom": 0.5,
+      "MaxZoom": 3.0,
+      "ShowCompass": true,
+      "ShowGrid": false,
+      "GridSize": 10.0
+    },
+    "Crosshair2DSettings": {
+      "Enabled": true,
+      "CrosshairStyle": "default",
+      "CrosshairSize": 20.0,
+      "CrosshairColor": "#FFFFFF",
+      "CrosshairOpacity": 0.8,
+      "ShowCrosshair": true,
+      "ShowCrosshairDot": true,
+      "ShowCrosshairLines": true,
+      "DynamicCrosshair": true,
+      "ExpandOnAim": false,
+      "ExpandSize": 30.0
+    },
+    "HUD2DElements": {
+      "Enabled": true,
+      "HealthBarEnabled": true,
+      "HealthBarPosition": {
+        "X": 50.0,
+        "Y": 50.0
+      },
+      "HealthBarSize": {
+        "Width": 200.0,
+        "Height": 20.0
+      },
+      "ManaBarEnabled": true,
+      "ManaBarPosition": {
+        "X": 50.0,
+        "Y": 75.0
+      },
+      "ManaBarSize": {
+        "Width": 200.0,
+        "Height": 20.0
+      },
+      "BuffsEnabled": true,
+      "BuffsPosition": {
+        "X": 50.0,
+        "Y": 100.0
+      },
+      "DebuffsEnabled": true,
+      "DebuffsPosition": {
+        "X": 50.0,
+        "Y": 125.0
+      },
+      "CooldownsEnabled": true,
+      "CooldownsPosition": {
+        "X": 50.0,
+        "Y": 150.0
+      }
+    },
+    "Notification2DSettings": {
+      "Enabled": true,
+      "NotificationPosition": {
+        "X": 10.0,
+        "Y": 10.0
+      },
+      "NotificationSize": {
+        "Width": 300.0,
+        "Height": 50.0
+      },
+      "NotificationDuration": 3.0,
+      "NotificationOpacity": 0.9,
+      "ShowArenaEnterNotification": true,
+      "ShowArenaExitNotification": true,
+      "ShowAbilityUnlockNotification": true,
+      "ShowErrorNotifications": true,
+      "ShowWarningNotifications": true,
+      "ShowInfoNotifications": true,
+      "AnimateNotifications": true,
+      "NotificationSound": true
+    },
+    "Tooltip2DSettings": {
+      "Enabled": true,
+      "TooltipDelay": 0.5,
+      "TooltipDuration": 5.0,
+      "TooltipOpacity": 0.95,
+      "TooltipSize": {
+        "Width": 250.0,
+        "Height": 100.0
+      },
+      "ShowAbilityTooltips": true,
+      "ShowItemTooltips": true,
+      "ShowNPCTooltips": true,
+      "ShowZoneTooltips": true,
+      "TooltipBackground": true,
+      "TooltipBorder": true,
+      "TooltipShadow": true
+    },
+    "Camera2DSettings": {
+      "Enabled": true,
+      "CameraMode": "TopDown",
+      "CameraHeight": 10.0,
+      "CameraDistance": 15.0,
+      "CameraAngle": 45.0,
+      "CameraSmoothing": 0.1,
+      "CameraFollowPlayer": true,
+      "CameraFollowSpeed": 5.0,
+      "CameraZoomEnabled": true,
+      "CameraZoomSpeed": 2.0,
+      "MinCameraZoom": 5.0,
+      "MaxCameraZoom": 50.0,
+      "CameraRotationEnabled": false,
+      "CameraRotationSpeed": 1.0
+    },
+    "Performance2DSettings": {
+      "Enabled": true,
+      "RenderDistance": 100.0,
+      "MaxVisibleObjects": 500,
+      "LODEnabled": true,
+      "LODDistance1": 20.0,
+      "LODDistance2": 50.0,
+      "LODDistance3": 100.0,
+      "OcclusionCullingEnabled": true,
+      "ParticleEffectsEnabled": true,
+      "MaxParticles": 1000,
+      "ShadowsEnabled": false,
+      "BloomEnabled": true,
+      "MotionBlurEnabled": false,
+      "FrameRateTarget": 60,
+      "VsyncEnabled": true
+    },
+    "Accessibility2DSettings": {
+      "Enabled": true,
+      "ColorblindMode": "None",
+      "HighContrastMode": false,
+      "LargeTextEnabled": false,
+      "TextSize": 1.0,
+      "ScreenReaderEnabled": false,
+      "KeyboardNavigationEnabled": true,
+      "ControllerNavigationEnabled": true,
+      "SubtitlesEnabled": false,
+      "CaptionsEnabled": false,
+      "MotionSicknessReduction": false,
+      "FlashingEffectsReduction": false
+    },
+    "Debug2DSettings": {
+      "Enabled": false,
+      "ShowDebugGrid": false,
+      "ShowDebugColliders": false,
+      "ShowDebugBounds": false,
+      "ShowDebugPaths": false,
+      "ShowDebugInfo": false,
+      "ShowFPS": false,
+      "ShowMemoryUsage": false,
+      "ShowNetworkStats": false,
+      "DebugLogLevel": "Info",
+      "DebugDrawDistance": 100.0
+    },
+    "QuickStartGuide2D": [
+      "1. Configure UI2DSettings for ability slots",
+      "2. Enable MapIcon2DSettings for map display",
+      "3. Set Zone2DDetection for arena zones",
+      "4. Adjust Minimap2DSettings for minimap",
+      "5. Configure HUD2DElements for health/mana bars",
+      "6. Test with .ui abilities command"
+    ],
+    "Troubleshooting2D": {
+      "CommonIssues": [
+        "If UI not showing: Check UI2DSettings.Enabled",
+        "If map icons missing: Verify MapIcon2DSettings.Enabled",
+        "If zones not visible: Check Zone2DDetection.VisualizationEnabled",
+        "If performance issues: Reduce Performance2DSettings.MaxVisibleObjects",
+        "If text too small: Increase Accessibility2DSettings.TextSize"
+      ],
+      "DebugCommands": [
+        ".ui abilities",
+        ".ui minimap",
+        ".ui hud",
+        ".debug 2d"
+      ]
+    }
+  }
+}

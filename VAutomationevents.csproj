@@ -1,0 +1,287 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AssemblyName>Automation</AssemblyName>
+    <RootNamespace>VAuto</RootNamespace>
+    <LangVersion>10.0</LangVersion>
+    <OutputType>Library</OutputType>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
+    <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <Platforms>AnyCPU</Platforms>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>embedded</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <NoWarn>CS0108,CS0169,CS0649,CS8618,CS8600,CS8602,CS8603,CS8604,CS8625,CS1998,CS0109,CS0114,CS1573,CS1591,CS1701,CS1702,CS1705,CS1720,CS1735,CS1996,CS3001,CS3002,CS3003,CS3005,CS3008,CS4014,CS4019,CS7008,CS7022,CS7035,CS7069,CS8019,CS8321,CS8601,CS8609,CS8610,CS8614,CS8620,CS8621,CS8622,CS8629,CS8631,CS8632,CS8765,CS8766,CS8767,CS8769,CS8774,CS8795,CS8974,CS8981,CS9046,CS1614,CS0436</NoWarn>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  
+
+  <ItemGroup>
+    <PackageReference Include="Iced" Version="1.21.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    
+    <!-- Core Dependencies -->
+    <Reference Include="VampireCommandFramework">
+      <HintPath>libs\VampireCommandFramework.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="BepInEx.Core">
+      <HintPath>libs\BepInEx.Core.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="BepInEx.Unity.IL2CPP">
+      <HintPath>libs\BepInEx.Unity.IL2CPP.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>libs\0Harmony.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    
+    <!-- IL2CPP Runtime -->
+    <Reference Include="Il2Cppmscorlib">
+      <HintPath>libs\Il2Cppmscorlib.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Il2CppSystem">
+      <HintPath>libs\Il2CppSystem.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <!-- IL2CPP Runtime Interop - Provides runtime interop between managed and IL2CPP code -->
+    <Reference Include="Il2CppInterop.Runtime">
+      <HintPath>libs\Il2CppInterop.Runtime.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Il2CppInterop.Common">
+      <HintPath>libs\Il2CppInterop.Common.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    
+    <!-- ProjectM Dependencies -->
+    <Reference Include="ProjectM">
+      <HintPath>libs\ProjectM.dll</HintPath>
+      <Private>true</Private>
+      <SpecificVersion>false</SpecificVersion>
+    </Reference>
+    <Reference Include="ProjectM.Shared">
+      <HintPath>libs\ProjectM.Shared.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ProjectM.Shared.Systems">
+      <HintPath>libs\ProjectM.Shared.Systems.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ProjectM.Gameplay.Systems">
+      <HintPath>libs\ProjectM.Gameplay.Systems.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ProjectM.Gameplay.Scripting">
+      <HintPath>libs\ProjectM.Gameplay.Scripting.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ProjectM.CodeGeneration">
+      <HintPath>libs\ProjectM.CodeGeneration.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ProjectM.Conversion">
+      <HintPath>libs\ProjectM.Conversion.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ProjectM.Misc.Systems">
+      <HintPath>libs\ProjectM.Misc.Systems.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ProjectM.Presentation.Systems">
+      <HintPath>libs\ProjectM.Presentation.Systems.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ProjectM.ScriptableSystems">
+      <HintPath>libs\ProjectM.ScriptableSystems.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ProjectM.HUD">
+      <HintPath>libs\ProjectM.HUD.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ProjectM.CastleBuilding.Systems">
+      <HintPath>libs\ProjectM.CastleBuilding.Systems.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ProjectM.Behaviours">
+      <HintPath>libs\ProjectM.Behaviours.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ProjectM.Camera">
+      <HintPath>libs\ProjectM.Camera.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ProjectM.Terrain">
+      <HintPath>libs\ProjectM.Terrain.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ProjectM.Pathfinding">
+      <HintPath>libs\ProjectM.Pathfinding.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ProjectM.Steam">
+      <HintPath>libs\ProjectM.Steam.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    
+    <!-- Unity Dependencies -->
+    <Reference Include="Unity.Mathematics">
+      <HintPath>libs\Unity.Mathematics.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <!-- Missing core DOTS assemblies -->
+    <Reference Include="Unity.Entities">
+      <HintPath>libs\Unity.Entities.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Unity.Transforms">
+      <HintPath>libs\Unity.Transforms.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <!-- Missing ECS attributes and low-level assemblies -->
+    <Reference Include="Unity.Collections">
+      <HintPath>libs\Unity.Collections.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Unity.Collections.LowLevel.ILSupport">
+      <HintPath>libs\Unity.Collections.LowLevel.ILSupport.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Unity.Burst">
+      <HintPath>libs\Unity.Burst.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Unity.Burst.Unsafe">
+      <HintPath>libs\Unity.Burst.Unsafe.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>libs\UnityEngine.CoreModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>C:\BepInEx\DedicatedServerLauncher\VRisingServer\BepInEx\unity-libs\UnityEngine.InputLegacyModule.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Stunlock.Core">
+      <HintPath>libs\Stunlock.Core.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="Il2CppInterop.Common" Version="1.4.0" />
+    <PackageReference Include="UniTask" Version="2.3.3" />
+    
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Additional References -->
+    <Reference Include="Unity.Collections">
+      <HintPath>libs\Unity.Collections.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Unity.Entities.Hybrid">
+      <HintPath>libs\Unity.Entities.Hybrid.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+
+    <Reference Include="Unity.RenderPipelines.Core.Runtime">
+      <HintPath>libs\Unity.RenderPipelines.Core.Runtime.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Unity.Serialization">
+      <HintPath>libs\Unity.Serialization.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="VRising.GameData">
+      <HintPath>libs\VRising.GameData.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Remove="ComponentSaver\RestrictedInventory_Saver.cs" />
+    <Compile Remove="ComponentSaver\RestrictedInventory_Standalone.cs" />
+    <Compile Remove="Tests\**\*.cs" />
+    <Compile Remove="Commands\AnalyticsCommands.cs" />
+    <Compile Remove="Patches\**\*.cs" />
+    <!-- Exclude problematic services but keep the ones we need -->
+    <Compile Remove="Services\**\*.cs" />
+    <Compile Include="Services\ServiceManager.cs" />
+    <Compile Include="Services\Interfaces\*.cs" />
+    <Compile Include="Services\Systems\AutomationAPI.cs" />
+    <Compile Include="Services\Lifecycle\LifecycleService.cs" />
+    <Compile Include="Services\Lifecycle\IArenaLifecycleService.cs" />
+    <Compile Include="Services\Systems\ArenaZoneService.cs" />
+    <Compile Include="Services\Systems\ArenaBuildingService.cs" />
+    <Compile Include="Services\Systems\ArenaBuildService.cs" />
+    <Compile Include="Services\Systems\ZoneService.cs" />
+    <Compile Include="Services\Systems\ArenaGlowService.cs" />
+    <Compile Include="Services\Systems\ArenaObjectService.cs" />
+    <Compile Include="Services\Systems\GameSystems.cs" />
+    <Compile Include="Services\Systems\MapIconService.cs" />
+    <Compile Include="Services\Systems\GlobalMapIconService.cs" />
+    <Compile Include="Services\Systems\DatabaseService.cs" />
+    <Compile Include="Services\Systems\EnhancedDataPersistenceService.cs" />
+    <Compile Include="Services\Systems\EnhancedArenaSnapshotService.cs" />
+    <Compile Include="Services\Systems\AutoComponentSaver.cs" />
+    <Compile Include="Services\Systems\ArenaDataSaver.cs" />
+    <Compile Include="Services\PlayerService.cs" />
+    <Compile Include="Services\World\*.cs" />
+    <Compile Include="Services\Systems\RespawnPreventionService.cs" />
+    <Compile Include="Services\Systems\NameTagService.cs" />
+    <!-- Exclude problematic files -->
+    <!-- <Compile Remove="Core\DualCharacterManager.cs" /> -->
+    <Compile Remove="Commands\LogisticsCommands.cs" />
+    <Compile Remove="Commands\AIAssistantCommands.cs" />
+    <Compile Remove="Commands\Automation\LogisticsCommands.cs" />
+
+    <!-- Exclude command files with placeholder implementations causing build errors -->
+    <Compile Remove="Commands\Dev\AnalyticsCommands.cs" />
+    <Compile Remove="Commands\Dev\AIAssistantCommands.cs" />
+    <Compile Remove="Commands\Utilities\ShortcutCommands.cs" />
+    
+    <Compile Include="Services\AchievementUnlockService.cs" />
+    <Compile Include="Services\EventService.cs" />
+    <Compile Include="Services\Systems\AutoEnterService.cs" />
+    <Compile Include="Services\Systems\CastleObjectIntegrationService.cs" />
+    <Compile Include="Services\Systems\AbilityOverrideService.cs" />
+    <Compile Remove="KindredSchematicsHelper.cs" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <DisableImplicitNamespaceImports>true</DisableImplicitNamespaceImports>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <!-- Auto-deploy built DLL and config to BepInEx/plugins after build -->
+  <Target Name="PostBuild" AfterTargets="Build">
+    <PropertyGroup>
+      <DeployPluginsDir>C:\BepInEx\DedicatedServerLauncher\VRisingServer\BepInEx\plugins</DeployPluginsDir>
+      <ConfigSourcePath>config\gg.vautomation.arena.cfg</ConfigSourcePath>
+    </PropertyGroup>
+    <MakeDir Directories="$(DeployPluginsDir)" Condition="!Exists('$(DeployPluginsDir)')" />
+    <Copy SourceFiles="$(OutDir)$(AssemblyName).dll" DestinationFolder="$(DeployPluginsDir)" SkipUnchangedFiles="true" />
+    <!-- Copy config file from config directory -->
+    <Copy SourceFiles="$(ConfigSourcePath)" DestinationFolder="$(DeployPluginsDir)" SkipUnchangedFiles="true" Condition="Exists('$(ConfigSourcePath)')" />
+  </Target>
+</Project>

@@ -1,0 +1,34 @@
+{
+  "build1": {
+    "Armors": {
+      "Head": 1055898174,
+      "Chest": -204401621,
+      "Gloves": -1666953317,
+      "Legs": -1100602398,
+      "Boots": -1969974707,
+      "Cloak": -1666953317
+    },
+    "Weapons": [2100090213, -126076280],
+    "Consumables": [],
+    "Blood": {
+      "PrimaryType": "BloodType_Rogue",
+      "PrimaryQuality": 100.0
+    }
+  },
+  "default": {
+    "Armors": {
+      "Head": 1055898174,
+      "Chest": -204401621,
+      "Gloves": -1666953317,
+      "Legs": -1100602398,
+      "Boots": -1969974707,
+      "Cloak": -1666953317
+    },
+    "Weapons": [2100090213, -126076280],
+    "Consumables": [],
+    "Blood": {
+      "PrimaryType": "BloodType_Rogue",
+      "PrimaryQuality": 100.0
+    }
+  }
+}

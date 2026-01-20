@@ -1,0 +1,420 @@
+{
+  "VAutoConfiguration": {
+    "Version": "1.0.0",
+    "Description": "Comprehensive configuration for VAuto plugin - Conveyor System, Achievement Unlock, and Arena Management",
+    "PathSettings": {
+      "ConfigDirectory": "C:\\BepInEx\\config\\VAuto",
+      "DataDirectory": "C:\\BepInEx\\config\\VAuto\\Data",
+      "BackupDirectory": "C:\\BepInEx\\config\\VAuto\\Backups",
+      "KindredExtractDirectory": "C:\\BepInEx\\config\\VAuto\\KindredExtract",
+      "CustomUuidsDirectory": "C:\\BepInEx\\config\\VAuto\\CustomUuids",
+      "LogsDirectory": "C:\\BepInEx\\Logs",
+      "DatabaseFile": "C:\\BepInEx\\config\\VAuto\\ArenaDatabase.json",
+      "ConfigFile": "C:\\BepInEx\\config\\VAuto\\VAuto.cfg",
+      "AdvancedConfigFile": "C:\\BepInEx\\config\\VAuto\\VAuto-Advanced-Config.json"
+    },
+    "GlobalSettings": {
+      "PluginVersion": "0.2.0",
+      "PluginGuid": "gg.vautomation.arena",
+      "PluginName": "VAuto",
+      "Environment": "Production",
+      "AutoSaveEnabled": true,
+      "AutoSaveIntervalSeconds": 300,
+      "BackupEnabled": true,
+      "BackupIntervalHours": 6,
+      "MaxBackupFiles": 24,
+      "LogRotationEnabled": true,
+      "MaxLogFiles": 10,
+      "MaxLogSizeMB": 50,
+      "ConsoleLoggingEnabled": true,
+      "FileLoggingEnabled": true,
+      "StructuredLoggingEnabled": true,
+      "DebugModeEnabled": false,
+      "VerboseLoggingEnabled": false
+    },
+    "ServerSettings": {
+      "MaxPlayers": 100,
+      "MaxArenas": 20,
+      "MaxZones": 50,
+      "MaxPortals": 100,
+      "MaxGlowEffects": 500,
+      "MaxActiveVBloods": 10,
+      "CommandRateLimitPerMinute": 30,
+      "CommandCooldownSeconds": 1,
+      "EntityPoolingEnabled": true,
+      "ComponentPoolingEnabled": true,
+      "MemoryCleanupEnabled": true,
+      "GarbageCollectionIntervalSeconds": 300,
+      "NetworkSyncEnabled": true,
+      "NetworkSyncIntervalSeconds": 10,
+      "MaxNetworkRetries": 3,
+      "ConnectionTimeoutSeconds": 30
+    },
+    "ArenaSystem": {
+      "Enabled": true,
+      "AutoEnterEnabled": true,
+      "DefaultSpawnPoint": {
+        "X": 0.0,
+        "Y": 0.0,
+        "Z": 0.0
+      },
+      "ArenaRadius": 500.0,
+      "EntryCommands": [
+        "heal",
+        "unlock_all",
+        "apply_buffs"
+      ],
+      "ExitCommands": [
+        "restore_inventory",
+        "remove_buffs",
+        "cleanup_achievements"
+      ],
+      "ZoneDetection": {
+        "Enabled": true,
+        "AutoExitOnLeave": true,
+        "WarningDistance": 100.0,
+        "ExitDistance": 600.0
+      },
+      "LifecycleManagement": {
+        "CaptureInventoryOnEntry": true,
+        "CaptureEquipmentOnEntry": true,
+        "RestoreOnExit": true,
+        "HealthRestoreOnEntry": true,
+        "HealthRestoreOnExit": true
+      }
+    },
+    "ConveyorSystem": {
+      "Enabled": true,
+      "UpdateInterval": 30,
+      "BufferMultiplier": 5.0,
+      "FloorTileMultiplier": 0.75,
+      "TerritoryOwnershipRequired": true,
+      "MaxTerritories": 10,
+      "TransferPriorities": {
+        "OverflowToReceivers": 1,
+        "StationSendersToReceivers": 2,
+        "ChestSendersToStations": 3
+      },
+      "NamingConvention": {
+        "SenderPrefix": "s",
+        "ReceiverPrefix": "r",
+        "GroupSeparator": "",
+        "OverflowKeyword": "overflow"
+      },
+      "InventoryLimits": {
+        "MaxItemsPerSlot": 1000,
+        "MaxSlotsPerInventory": 50,
+        "AutoCompactEnabled": true
+      },
+      "DebugSettings": {
+        "LogTransfers": false,
+        "LogBufferCalculations": false,
+        "LogTerritoryScans": false
+      }
+    },
+    "AchievementSystem": {
+      "Enabled": true,
+      "AutoUnlockOnArenaEntry": true,
+      "AutoRemoveOnArenaExit": true,
+      "VBloodIntegrationEnabled": true,
+      "Categories": {
+        "VBloodAchievements": {
+          "Enabled": true,
+          "UnlockAllBosses": true,
+          "UnlockProgression": true,
+          "SpecialAchievements": [
+            "VBlood_All_Bosses_Defeated",
+            "VBlood_Master_Hunter",
+            "VBlood_Legendary_Slayer"
+          ]
+        },
+        "GeneralAchievements": {
+          "Enabled": true,
+          "CombatAchievements": true,
+          "ExplorationAchievements": true,
+          "CraftingAchievements": true,
+          "CastleAchievements": true
+        },
+        "ProgressionAchievements": {
+          "Enabled": true,
+          "LevelAchievements": true,
+          "SpellbookAchievements": true,
+          "AbilityTreeAchievements": true,
+          "BloodTypeAchievements": true
+        }
+      },
+      "DebugSettings": {
+        "ForceUnlockForTesting": false,
+        "LogAchievementUnlocks": true,
+        "DetailedStatistics": true
+      }
+    },
+    "VBloodSystem": {
+      "Enabled": true,
+      "MapperEnabled": false,
+      "UnlockSystemEnabled": true,
+      "BossDatabase": {
+        "AlphaWolf": {
+          "GuidHash": -1905777458,
+          "Name": "Alpha Wolf",
+          "Category": "Beast",
+          "Level": 20,
+          "Location": "Farbane Woods",
+          "Drops": ["Werewolf Heart", "Silver Ore", "Wolf Hide"],
+          "Enabled": true,
+          "Health": 2500.0
+        },
+        "Errol": {
+          "GuidHash": -1541423745,
+          "Name": "Errol the Stonebreaker",
+          "Category": "Human",
+          "Level": 27,
+          "Location": "Stonebreaker Quarry",
+          "Drops": ["Stonebreaker's Mace", "Quarry Hammer", "Stone Dust"],
+          "Enabled": true,
+          "Health": 3500.0
+        }
+      },
+      "SpawnSettings": {
+        "DefaultSpawnHeight": 2.0,
+        "SpawnCooldown": 30,
+        "MaxActiveVBloods": 5
+      }
+    },
+    "InventoryManagement": {
+      "EnhancedInventoryEnabled": true,
+      "AutoSaveEnabled": true,
+      "SnapshotSettings": {
+        "MaxSnapshotsPerPlayer": 10,
+        "SnapshotRetentionDays": 7,
+        "AutoCleanupEnabled": true
+      },
+      "EquipmentManagement": {
+        "CaptureEquipmentOnArenaEntry": true,
+        "RestoreEquipmentOnArenaExit": true,
+        "DefaultGearSets": {
+          "Warrior": ["Sword", "Shield", "HeavyArmor"],
+          "Rogue": ["Daggers", "LightArmor", "Bow"],
+          "Scholar": ["Staff", "Robes", "Spellbook"],
+          "Brute": ["Axe", "HeavyArmor", "Shield"]
+        }
+      }
+    },
+    "CharacterSystem": {
+      "DualCharacterEnabled": false,
+      "PracticeCharacterEnabled": false,
+      "CharacterSwapSettings": {
+        "PreserveStats": true,
+        "PreserveInventory": true,
+        "PreserveProgression": false
+      }
+    },
+    "CastleSystem": {
+      "Enabled": true,
+      "HeartRadius": 50.0,
+      "EnhancementLevel": 1,
+      "TerritoryManagement": {
+        "AutoCalculateTerritories": false,
+        "MaxTerritoriesPerPlayer": 3,
+        "TerritoryOverlapAllowed": false
+      }
+    },
+    "BuildSystem": {
+      "Enabled": true,
+      "SchematicManagement": {
+        "DefaultSchematics": ["Wall", "Floor", "Door"],
+        "MaxSchematicsPerPlayer": 50,
+        "ShareSchematics": false
+      },
+      "BuildModeSettings": {
+        "BuildModeEnabled": false,
+        "NoClipEnabled": false,
+        "InfiniteResources": false
+      }
+    },
+    "PlantSystem": {
+      "Enabled": true,
+      "PlantDatabase": {
+        "Categories": ["Decorative", "Crops", "Herbs", "Magical"],
+        "GrowthSettings": {
+          "DefaultGrowthTimeHours": 3,
+          "GrowthTickInterval": 60
+        }
+      }
+    },
+    "ZoneSystem": {
+      "Enabled": true,
+      "AutoEnterZones": [],
+      "ZoneSettings": {
+        "DefaultRadius": 100.0,
+        "MaxZones": 20,
+        "ZonePersistence": false
+      }
+    },
+    "PortalSystem": {
+      "Enabled": true,
+      "PortalSettings": {
+        "MaxPortals": 10,
+        "PortalCooldown": 5,
+        "RequireLineOfSight": false
+      }
+    },
+    "GlowSystem": {
+      "Enabled": true,
+      "GlowSettings": {
+        "DefaultColor": "blue",
+        "Duration": 300,
+        "MaxGlowEffects": 50
+      }
+    },
+    "DebugSystem": {
+      "Enabled": true,
+      "DebugCommands": {
+        "EntityTracking": true,
+        "PerformanceMonitoring": true,
+        "MemoryProfiling": false,
+        "NetworkDebugging": false
+      },
+      "LogSettings": {
+        "ConsoleLogging": true,
+        "FileLogging": true,
+        "LogRotation": true,
+        "MaxLogFiles": 10,
+        "MaxLogSizeMB": 50
+      }
+    },
+    "PerformanceSettings": {
+      "UpdateIntervals": {
+        "ArenaSystem": 1,
+        "ConveyorSystem": 30,
+        "InventorySystem": 60,
+        "DebugSystem": 5
+      },
+      "OptimizationSettings": {
+        "EntityPoolingEnabled": true,
+        "ComponentPoolingEnabled": true,
+        "MemoryCleanupEnabled": true,
+        "GarbageCollectionInterval": 300
+      },
+      "ThreadingSettings": {
+        "UseBackgroundThreads": true,
+        "MaxBackgroundThreads": 4,
+        "ThreadPriority": "Normal"
+      }
+    },
+    "SecuritySettings": {
+      "AdminOnlyCommands": [
+        "arenaenter",
+        "arenaexit",
+        "conveyorenable",
+        "achievementsforce",
+        "debug"
+      ],
+      "PermissionLevels": {
+        "Player": 0,
+        "VIP": 1,
+        "Moderator": 2,
+        "Admin": 3,
+        "Owner": 4
+      },
+      "RateLimiting": {
+        "Enabled": true,
+        "MaxCommandsPerMinute": 30,
+        "CooldownBetweenCommands": 1
+      }
+    },
+    "IntegrationSettings": {
+      "ExternalAPIs": {
+        "DiscordWebhookEnabled": false,
+        "DiscordWebhookURL": "",
+        "SteamAPIEnabled": false,
+        "SteamAPIKey": ""
+      },
+      "DatabaseSettings": {
+        "Enabled": true,
+        "ConnectionString": "Data Source=arena.db",
+        "BackupEnabled": true,
+        "BackupIntervalHours": 24
+      },
+      "NetworkSettings": {
+        "EnableNetworkSync": true,
+        "SyncInterval": 10,
+        "MaxNetworkRetries": 3
+      }
+    },
+    "CustomFeatures": {
+      "FeatureFlags": {
+        "ExperimentalFeatures": false,
+        "BetaFeatures": false,
+        "DeveloperMode": false
+      },
+      "CustomCommands": [],
+      "CustomEvents": [],
+      "CustomIntegrations": []
+    },
+    "MaintenanceSettings": {
+      "AutoRestart": {
+        "Enabled": false,
+        "RestartTime": "03:00",
+        "WarningMinutes": 30
+      },
+      "CleanupSettings": {
+        "TempFileCleanup": true,
+        "LogCleanup": true,
+        "CacheCleanup": true,
+        "CleanupIntervalHours": 24
+      },
+      "HealthMonitoring": {
+        "Enabled": true,
+        "HealthCheckInterval": 60,
+        "AlertThresholds": {
+          "MemoryUsageMB": 1024,
+          "CPUUsagePercent": 80,
+          "DiskSpaceMB": 1024
+        }
+      }
+    },
+    "FeatureDocumentation": {
+      "ConveyorSystem": {
+        "Description": "Automated material flow between linked inventories",
+        "HowToUse": "Name chests 's0' (senders) and 'r0' (receivers) for group 0",
+        "Commands": [".logisticsconveyor enable", ".logisticsconveyor status", ".logisticsconveyor list"],
+        "Configuration": "Adjust buffer multipliers and update intervals in ConveyorSystem section"
+      },
+      "AchievementSystem": {
+        "Description": "Automatic achievement unlocking on arena entry",
+        "HowToUse": "Achievements unlock automatically when entering arena",
+        "Commands": [".achievements status", ".achievements list", ".achievements unlock"],
+        "Configuration": "Enable/disable categories in AchievementSystem section"
+      },
+      "ArenaSystem": {
+        "Description": "Complete arena management with auto-entry/exit",
+        "HowToUse": "Use .arenaenter to enter with full unlocks",
+        "Commands": [".arenaenter", ".arenaexit", ".arenastatus", ".arenah eal"],
+        "Configuration": "Configure entry/exit chains in ArenaSystem section"
+      }
+    },
+    "QuickStartGuide": [
+      "1. Configure ArenaSystem for automatic unlocks",
+      "2. Enable ConveyorSystem for material flow",
+      "3. Set AchievementSystem.AutoUnlockOnArenaEntry to true",
+      "4. Test with .arena enter command",
+      "5. Monitor with debug commands",
+      "6. Adjust settings based on server needs"
+    ],
+    "Troubleshooting": {
+      "CommonIssues": [
+        "If achievements don't unlock: Check AchievementSystem.Enabled",
+        "If conveyor doesn't work: Verify inventory naming (s# and r#)",
+        "If arena entry fails: Check ArenaSystem.Enabled and permissions",
+        "If performance issues: Adjust PerformanceSettings.UpdateIntervals"
+      ],
+      "DebugCommands": [
+        ".debug performance",
+        ".achievements status",
+        ".logisticsconveyor debug",
+        ".arenastatus"
+      ]
+    }
+  }
+}

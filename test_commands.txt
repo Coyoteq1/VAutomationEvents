@@ -1,0 +1,30 @@
+VAuto Arena Commands Test
+
+Available Commands:
+1. .help - Show available commands
+2. .enter - Enter arena at the default spawn
+3. .exit - Exit arena and restore snapshot
+
+Test Sequence:
+1. Connect to V Rising server with the mod loaded
+2. Type: .help
+   Expected: "Commands: .help, .enter, .exit"
+
+3. Type: .enter
+   Expected: "Entered arena" or error message if already in arena
+
+4. Type: .exit
+   Expected: "Exited arena" or error if not in arena
+
+Additional Arena Commands (from ArenaCommands.cs):
+- .arena enter
+- .arena exit
+- .arena heal
+- .arena loadout
+- .arena practice
+- .arena reset
+- .arena status
+
+VBlood Hook Test:
+- When in arena, all VBloods should be unlocked
+- VBloodHookService.IsVBloodUnlocked() returns true for hooked players
