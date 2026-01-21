@@ -1,9 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Unity.Entities;
 using Unity.Mathematics;
 using ProjectM;
 using ProjectM.Network;
+
+namespace UnityEngine
+{
+    public class World {}
+}
 
 namespace VAuto.Core
 {
@@ -115,46 +120,118 @@ namespace VAuto.Core
             public int Priority;
         }
         #endregion
+
+        #region Core VAuto functionality
+        public static class VAutoCore
+        {
+            #region Core Properties
+            public static EntityManager EntityManager => default;
+            public static UnityEngine.World World => null;
+            public static ServerTime ServerTime => new ServerTime();
+            public static PrefabCollection PrefabCollection => new PrefabCollection();
+            public static bool IsInitialized => true;
+            #endregion
+        }
+        
+        public class PrefabCollection
+        {
+            public Dictionary<string, System.Guid> Prefabs { get; } = new Dictionary<string, System.Guid>();
+            
+            public System.Guid GetPrefabGUID(string name)
+            {
+                return Prefabs.TryGetValue(name, out var guid) ? guid : System.Guid.Empty;
+            }
+            
+            public void AddPrefab(string name, System.Guid guid)
+            {
+                Prefabs[name] = guid;
+            }
+        }
+        #endregion
+    }
+    
+    // BepInEx stubs
+    public class BasePlugin
+    {
+        public virtual ManualLogSource Log { get; } = new ManualLogSource();
+        public virtual ConfigFile Config { get; } = new ConfigFile();
+        
+        public virtual void Load() {}
+        public virtual bool Unload() => true;
+    }
+
+    // Harmony stubs
+    public class Harmony
+    {
+        public Harmony(string id) {}
+        public static Harmony CreateAndPatchAll(System.Reflection.Assembly assembly) 
+        { 
+            return new Harmony("VAuto"); 
+        }
+        public void PatchAll(System.Reflection.Assembly assembly) {}
+        public void UnpatchSelf() {}
+    }
+
+    // ProjectM stubs
+    public class User {}
+    public class Translation {}
+    public class Coroutine {}
+    public class ActivateVBloodAbilitySystem {}
+    public class DebugEventsSystem {}
+    public class ServerTime {}
+    public class ModifyUnitStatBuff_DOTS {}
+}
+
+namespace BepInEx
+{
+    public static class Paths
+    {
+        public static string ConfigPath => "./config";
+    }
+    
+    public class BepInPluginAttribute : Attribute
+    {
+        public BepInPluginAttribute(string guid, string name, string version) {}
+    }
+
+    public class BepInDependencyAttribute : Attribute
+    {
+        public BepInDependencyAttribute(string dependency) {}
+    }
+
+    public class BepInProcessAttribute : Attribute
+    {
+        public BepInProcessAttribute(string processName) {}
     }
 }
 
+namespace BepInEx.Configuration
+{
+    public class ConfigFile {}
+}
 
-
-
-
-
-
-
-
-
-
-    /// <summary>
-    /// Core VAuto functionality - EntityManager, World, ServerTime, etc.
-    /// </summary>
-    public static class VAutoCore
+namespace BepInEx.Logging
+{
+    public class ManualLogSource 
     {
-        #region Core Properties
-        public static EntityManager EntityManager => World.EntityManager;
-        public static World World => Unity.Entities.World.DefaultGameObjectInjectionWorld;
-        public static ServerTime ServerTime => new ServerTime();
-        public static PrefabCollection PrefabCollection => new PrefabCollection();
-        public static bool IsInitialized => true;
-        #endregion
+        public void LogInfo(string message) {}
+        public void LogError(string message) {}
+        public void LogDebug(string message) {}
+        public void LogWarning(string message) {}
     }
-    /// <summary>
-    /// Prefab Collection for managing prefabs
-    /// </summary>
-    public class PrefabCollection
+    public class Logging {}
+}
+
+namespace VampireCommandFramework
+{
+    public class CommandGroupAttribute : Attribute {}
+}
+
+namespace Unity.Entities
+{
+    [AttributeUsage(AttributeTargets.Class)]
+    public class UpdateAfterAttribute : Attribute
     {
-        public Dictionary<string, System.Guid> Prefabs { get; } = new Dictionary<string, System.Guid>();
-        
-        public System.Guid GetPrefabGUID(string name)
-        {
-            return Prefabs.TryGetValue(name, out var guid) ? guid : System.Guid.Empty;
-        }
-        
-        public void AddPrefab(string name, System.Guid guid)
-        {
-            Prefabs[name] = guid;
-        }
+        public UpdateAfterAttribute(Type systemType) {}
     }
+}

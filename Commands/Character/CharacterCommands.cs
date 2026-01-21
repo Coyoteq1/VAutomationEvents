@@ -8,11 +8,10 @@ using VAuto.Services;
 
 namespace VAuto.Commands.Character
 {
-    /// <summary>
+    /// <summary>   
     /// Character commands - pure character swapping operations.
     /// Separate from arena system - no arena lifecycle interactions.
     /// </summary>
-    [CommandGroup("ch")]
     public static class CharacterCommands
     {
         public static void CharacterCommand(ChatCommandContext ctx, string action, string args)
@@ -40,7 +39,7 @@ namespace VAuto.Commands.Character
             }
         }
 
-        [Command("create", adminOnly: true, usage: ".ch create")]
+        [Command("create", adminOnly: true, usage: ".create")]
         public static void CreateCharacterCommand(ChatCommandContext ctx)
         {
             try
@@ -60,6 +59,18 @@ namespace VAuto.Commands.Character
                 }
 
                 var dualState = DualCharacterManager.GetOrCreateState(platformId, normalCharacter);
+
+                // Spawn the PvP character if not exists
+                if (dualState.PvPCharacter == Entity.Null || !VRCore.EM.Exists(dualState.PvPCharacter))
+                {
+                    dualState.PvPCharacter = PvPCharacterSpawner.SpawnPvPCharacter(userEntity, platformId);
+                    if (dualState.PvPCharacter == Entity.Null)
+                    {
+                        ctx.Reply("Failed to spawn PvP character.");
+                        return;
+                    }
+                }
+
                 ctx.Reply("PvP character created successfully!");
             }
             catch (Exception ex)
@@ -69,7 +80,7 @@ namespace VAuto.Commands.Character
             }
         }
 
-        [Command("enter", adminOnly: true, usage: ".ch enter")]
+        [Command("enter", adminOnly: true, usage: ".enter")]
         public static void EnterCharacterCommand(ChatCommandContext ctx)
         {
             try
@@ -79,14 +90,14 @@ namespace VAuto.Commands.Character
 
                 if (!DualCharacterManager.HasDualState(platformId))
                 {
-                    ctx.Reply("No PvP character found. Use .ch create first.");
+                    ctx.Reply("No PvP character found. Use .create first.");
                     return;
                 }
 
                 var state = DualCharacterManager.GetState(platformId);
                 if (state.PvPCharacter == Entity.Null || !VRCore.EM.Exists(state.PvPCharacter))
                 {
-                    ctx.Reply("PvP character not available. Use .ch create first.");
+                    ctx.Reply("PvP character not available. Use .create first.");
                     return;
                 }
 
@@ -112,7 +123,7 @@ namespace VAuto.Commands.Character
             }
         }
 
-        [Command("exit", adminOnly: true, usage: ".ch exit")]
+        [Command("exit", adminOnly: true, usage: ".exit")]
         public static void ExitCharacterCommand(ChatCommandContext ctx)
         {
             try
@@ -149,7 +160,7 @@ namespace VAuto.Commands.Character
             }
         }
 
-        [Command("swap", adminOnly: true, usage: ".ch swap")]
+        [Command("swap", adminOnly: true, usage: ".swap")]
         public static void SwapCharacterCommand(ChatCommandContext ctx)
         {
             try
@@ -159,14 +170,14 @@ namespace VAuto.Commands.Character
 
                 if (!DualCharacterManager.HasDualState(platformId))
                 {
-                    ctx.Reply("No dual character setup found. Use .ch create first.");
+                    ctx.Reply("No dual character setup found. Use .create first.");
                     return;
                 }
 
                 var state = DualCharacterManager.GetState(platformId);
                 if (state.PvPCharacter == Entity.Null || !VRCore.EM.Exists(state.PvPCharacter))
                 {
-                    ctx.Reply("PvP character not available. Use .ch create first.");
+                    ctx.Reply("PvP character not available. Use .create first.");
                     return;
                 }
 
@@ -194,7 +205,7 @@ namespace VAuto.Commands.Character
             }
         }
 
-        [Command("status", adminOnly: true, usage: ".ch status")]
+        [Command("status", adminOnly: true, usage: ".status")]
         public static void StatusCommand(ChatCommandContext ctx)
         {
             try

@@ -3,6 +3,8 @@ using VAuto.Automation;
 using VAuto.Data;
 using VAuto.Services.Interfaces;
 using VAuto.EventAdapters;
+using BepInEx.Logging;
+using VampireCommandFramework;
 
 namespace VAuto.Services.Systems
 {

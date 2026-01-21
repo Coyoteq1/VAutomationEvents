@@ -10,6 +10,7 @@ using System.IO;
 using Unity.Mathematics;
 using VAuto.Core;
 using VAuto.Utilities;
+using VAuto.Services.Systems;
 
 namespace VAuto;
 
@@ -29,7 +30,6 @@ public class Plugin : BasePlugin
     internal static ConfigurationManager Config;
     private static Harmony _harmony;
 
-    public static Harmony Harmony => _harmony;
     public static ManualLogSource Logger => Log;
     public static Plugin Instance { get; private set; }
     public static string ConfigPath => BepInEx.Paths.ConfigPath;
@@ -39,34 +39,51 @@ public class Plugin : BasePlugin
     public static bool GetConfigBool(string section, string key, bool defaultValue = false) => Config?.GetConfigBool(section, key, defaultValue) ?? defaultValue;
     public static int GetConfigInt(string section, string key, int defaultValue = 0) => Config?.GetConfigInt(section, key, defaultValue) ?? defaultValue;
     public static float GetConfigFloat(string section, string key, float defaultValue = 0f) => Config?.GetConfigFloat(section, key, defaultValue) ?? defaultValue;
-    public static float3 GetConfigFloat3(string section, string key, float3 defaultValue) => Config?.GetConfigFloat3(section, key, defaultValue) ?? defaultValue;
+    public static float3 jsonFloat3(string section, string key, float3 defaultValue) => Config?.GetConfigFloat3(section, key, defaultValue) ?? defaultValue;
 
-    // BepInEx Configuration Entries
+    // BepInEx Configuration Entries for SettingsTypes
     public static ConfigEntry<bool> EnablePlugin { get; private set; }
     public static ConfigEntry<bool> DebugMode { get; private set; }
     public static ConfigEntry<string> LogLevel { get; private set; }
     
-    // Arena Configuration
-    public static ConfigEntry<bool> ArenaEnable { get; private set; }
-    public static ConfigEntry<string> ArenaCenter { get; private set; }
-    public static ConfigEntry<float> ArenaRadius { get; private set; }
-    public static ConfigEntry<float> ArenaEnterRadius { get; private set; }
-    public static ConfigEntry<float> ArenaExitRadius { get; private set; }
-    public static ConfigEntry<float> ArenaCheckInterval { get; private set; }
+    // Zone Settings from SettingsTypes
+    public static ConfigEntry<float> ZoneRadius { get; private set; }
+    public static ConfigEntry<float> ZoneEnterRadius { get; private set; }
+    public static ConfigEntry<float> ZoneExitRadius { get; private set; }
     
-    // Services Configuration
-    public static ConfigEntry<bool> AutomationEnable { get; private set; }
-    public static ConfigEntry<bool> DatabaseEnable { get; private set; }
-    public static ConfigEntry<string> DatabasePath { get; private set; }
-    public static ConfigEntry<bool> RespawnEnable { get; private set; }
-    public static ConfigEntry<int> RespawnCooldown { get; private set; }
+    // Automation Settings from SettingsTypes
+    public static ConfigEntry<bool> AutomationEnabled { get; private set; }
+    public static ConfigEntry<int> AutomationUpdateInterval { get; private set; }
+    public static ConfigEntry<bool> AutomationDebugLogging { get; private set; }
+    
+    // Database Settings from SettingsTypes
+    public static ConfigEntry<int> DatabaseConnectionTimeout { get; private set; }
+    public static ConfigEntry<bool> DatabaseAutoSave { get; private set; }
+
+    // JSON Settings from SettingsTypes
+    public static ConfigEntry<string> JsonConfiguration { get; private set; }
+
+    // UI Settings from SettingsTypes
+    public static ConfigEntry<bool> UIEnabled { get; private set; }
+    public static ConfigEntry<string> UITheme { get; private set; }
+    public static ConfigEntry<float> UIFontSize { get; private set; }
+    
+    // Performance Settings from SettingsTypes
+    public static ConfigEntry<bool> PerformanceEnabled { get; private set; }
+    public static ConfigEntry<bool> PerformanceProfiling { get; private set; }
+    public static ConfigEntry<long> PerformanceMaxMemoryMB { get; private set; }
+    
+    // Security Settings from SettingsTypes
+    public static ConfigEntry<bool> SecurityEnabled { get; private set; }
+    public static ConfigEntry<bool> SecurityAuthentication { get; private set; }
+    public static ConfigEntry<int> SecuritySessionTimeout { get; private set; }
 
     public override void Load()
     {
         Instance = this;
         Log = base.Log;
         Cfg = base.Config;
-        _harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
+        _harmony = Harmony.CreateAndPatchAll(System.Reflection.Assembly.GetExecutingAssembly());
 
         Log.LogInfo($"[VAuto] Loading {MyPluginInfo.PLUGIN_NAME} v{MyPluginInfo.PLUGIN_VERSION}");
         Log.LogInfo($"[VAuto] Plugin GUID: {MyPluginInfo.PLUGIN_GUID}");
@@ -80,21 +97,30 @@ public class Plugin : BasePlugin
             EnsureDirectories();
             Log.LogInfo("[VAuto] All required directories verified/created");
 
-            // Step 1: Initialize core systems
+            // Step 1: Initialize JSON services for zones and snapshots
+            ZoneService.Initialize();
+            SnapshotService.Initialize();
+            ZoneManager.Initialize();
+            Log.LogInfo("[VAuto] JSON services initialized");
+
+            // Step 2: Initialize core systems
             InitializeCoreSystems();
             Log.LogInfo("[VAuto] Core systems initialized");
 
-            // Step 2: Initialize services (25+ services)
+            // Step 3: Initialize services (25+ services)
             InitializeServices();
             Log.LogInfo("[VAuto] Services initialized");
 
-            // Step 3: Apply Harmony patches
-            _harmony.PatchAll(System.Reflection.Assembly.GetExecutingAssembly());
-            Log.LogInfo("[VAuto] Harmony patches applied");
+            // Step 4: Wire up all systems and events
+            SystemWiring.WireUpSystems();
+            Log.LogInfo("[VAuto] Systems wired and integrated");
 
-            // Step 4: VCF auto-discovers commands via reflection
+            // Step 5: Harmony patches already applied during initialization
+            Log.LogInfo("[VAuto] Harmony patches already applied");
 
-            // Step 5: Initialize game systems
+            // Step 5: VCF auto-discovers commands via reflection
+
+            // Step 6: Initialize game systems
             InitializeGameSystems();
             Log.LogInfo("[VAuto] Game systems initialized");
 
@@ -108,7 +134,7 @@ public class Plugin : BasePlugin
     }
 
     /// <summary>
-    /// Initialize BepInEx configuration entries
+    /// Initialize BepInEx configuration entries using SettingsTypes
     /// </summary>
     private void InitializeConfiguration()
     {
@@ -118,26 +144,45 @@ public class Plugin : BasePlugin
         Config = new ConfigurationManager(configPath, arenaConfigPath);
         
         // Core Settings
-        EnablePlugin = Config.Bind("Core Settings", "Enable Plugin", true, "Enable or disable the VAuto plugin");
-        DebugMode = Config.Bind("Core Settings", "Debug Mode", false, "Enable debug logging");
-        LogLevel = Config.Bind("Core Settings", "Log Level", "Info", "Set logging level (Debug, Info, Warning, Error)");
+        EnablePlugin = Config.Bind("Core", "Enable Plugin", true, "Enable or disable the VAuto plugin");
+        DebugMode = Config.Bind("Core", "Debug Mode", false, "Enable debug logging");
+        LogLevel = Config.Bind("Core", "Log Level", "Info", "Set logging level (Debug, Info, Warning, Error)");
         
-        // Arena Settings
-        ArenaEnable = Config.Bind("Arena Settings", "Enable Arena", true, "Enable arena functionality");
-        ArenaCenter = Config.Bind("Arena Settings", "Arena Center", "-1000, 5, -500", "Arena center coordinates (x, y, z)");
-        ArenaRadius = Config.Bind("Arena Settings", "Arena Radius", 50f, "Arena radius in meters");
-        ArenaEnterRadius = Config.Bind("Arena Settings", "Enter Radius", 50f, "Arena auto-enter radius in meters");
-        ArenaExitRadius = Config.Bind("Arena Settings", "Exit Radius", 75f, "Arena auto-exit radius in meters");
-        ArenaCheckInterval = Config.Bind("Arena Settings", "Check Interval", 3f, "Arena proximity check interval in seconds");
+        // Zone Settings from SettingsTypes.ZoneSettings
+        ZoneRadius = Config.Bind("Zone", "Radius", 50f, "Zone radius in meters");
+        ZoneEnterRadius = Config.Bind("Zone", "Enter Radius", 45f, "Zone entry radius in meters");
+        ZoneExitRadius = Config.Bind("Zone", "Exit Radius", 55f, "Zone exit radius in meters");
         
-        // Services Settings
-        AutomationEnable = Config.Bind("Services Settings", "Enable Automation", true, "Enable automation services");
-        DatabaseEnable = Config.Bind("Services Settings", "Enable Database", true, "Enable database persistence");
-        DatabasePath = Config.Bind("Services Settings", "Database Path", "./VAuto_Data/database.db", "Database file path");
-        RespawnEnable = Config.Bind("Services Settings", "Enable Respawn Prevention", true, "Enable respawn prevention system");
-        RespawnCooldown = Config.Bind("Services Settings", "Respawn Cooldown", 30, "Default respawn cooldown in seconds");
+        // Automation Settings from SettingsTypes.AutomationSettings
+        AutomationEnabled = Config.Bind("Automation", "Enabled", true, "Enable automation system");
+        AutomationUpdateInterval = Config.Bind("Automation", "Update Interval Ms", 1000, "Automation update interval in milliseconds");
+        AutomationDebugLogging = Config.Bind("Automation", "Enable Debug Logging", false, "Enable automation debug logging");
         
-        Log.LogInfo("[VAuto] BepInEx configuration initialized");
+        // Database Settings from SettingsTypes.DatabaseSettings
+        DatabaseEnabled = Config.Bind("Database", "Enabled", true, "Enable database system");
+        DatabaseConnectionString = Config.Bind("Database", "Connection String", "", "Database connection string");
+        DatabaseConnectionTimeout = Config.Bind("Database", "Connection Timeout Seconds", 30, "Database connection timeout in seconds");
+        DatabaseAutoSave = Config.Bind("Database", "Enable Auto Save", true, "Enable database auto-save");
+        
+        // UI Settings from SettingsTypes.UISettings
+        UIEnabled = Config.Bind("UI", "Enabled", true, "Enable UI system");
+        UITheme = Config.Bind("UI", "Theme", "Default", "UI theme");
+        UIFontSize = Config.Bind("UI", "Font Size", 14f, "UI font size");
+        
+        // Performance Settings from SettingsTypes.PerformanceSettings
+        PerformanceEnabled = Config.Bind("Performance", "Enabled", true, "Enable performance monitoring");
+        PerformanceProfiling = Config.Bind("Performance", "Enable Profiling", false, "Enable performance profiling");
+        PerformanceMaxMemoryMB = Config.Bind("Performance", "Max Memory Usage MB", 1024L, "Maximum memory usage in MB");
+        
+        // Security Settings from SettingsTypes.SecuritySettings
+        SecurityEnabled = Config.Bind("Security", "Enabled", true, "Enable security system");
+        SecurityAuthentication = Config.Bind("Security", "Enable Authentication", true, "Enable authentication");
+        SecuritySessionTimeout = Config.Bind("Security", "Session Timeout Minutes", 30, "Session timeout in minutes");
+
+        // JSON Settings from SettingsTypes.JsonSettings
+        JsonConfiguration = Config.Bind("JSON", "Configuration", EmbeddedSettingsJson, "JSON configuration data");
+
+        Log.LogInfo("[VAuto] BepInEx configuration initialized with SettingsTypes");
     }
 
     private static void InitializeCoreSystems()
@@ -189,38 +234,56 @@ public class Plugin : BasePlugin
     }
 
     
-    // Configuration properties (using BepInEx config entries)
+    // Configuration properties (using SettingsTypes-based BepInEx config entries)
     public static bool IsEnabled => EnablePlugin.Value;
     public static bool IsDebugMode => DebugMode.Value;
     public static string CurrentLogLevel => LogLevel.Value;
-    public static bool IsZoneEnabled => ArenaEnable.Value;
-    public static float3 ZoneCenter
-    {
-        get
-        {
-            var coords = ArenaCenter.Value.Split(',');
-            if (coords.Length == 3)
-            {
-                return new float3(float.Parse(coords[0]), float.Parse(coords[1]), float.Parse(coords[2]));
-            }
-            return new float3(-1000, 5, -500);
-        }
-    }
-    public static float ZoneRadiusValue => ArenaRadius.Value;
-    public static float ZoneEnterRadiusValue => ArenaEnterRadius.Value;
-    public static float ZoneExitRadiusValue => ArenaExitRadius.Value;
-    public static float ZoneCheckIntervalValue => ArenaCheckInterval.Value;
-    public static bool IsRespawnEnabled => RespawnEnable.Value;
-    public static int RespawnCooldownValue => RespawnCooldown.Value;
-    public static bool IsAutomationEnabled => AutomationEnable.Value;
-    public static bool IsDatabaseEnabled => DatabaseEnable.Value;
-    public static string DatabasePathValue => DatabasePath.Value;
+    
+    // Zone Settings from SettingsTypes.ZoneSettings
+    public static float ZoneRadiusValue => ZoneRadius.Value;
+    public static float ZoneEnterRadiusValue => ZoneEnterRadius.Value;
+    public static float ZoneExitRadiusValue => ZoneExitRadius.Value;
+    
+    // Automation Settings from SettingsTypes.AutomationSettings
+    public static bool IsAutomationEnabled => AutomationEnabled.Value;
+    public static int AutomationUpdateIntervalValue => AutomationUpdateInterval.Value;
+    public static bool IsAutomationDebugLogging => AutomationDebugLogging.Value;
+    
+    // Database Settings from SettingsTypes.DatabaseSettings
+    public static bool IsDatabaseEnabled => DatabaseEnabled.Value;
+    public static string DatabaseConnectionStringValue => DatabaseConnectionString.Value;
+    public static int DatabaseConnectionTimeoutValue => DatabaseConnectionTimeout.Value;
+    public static bool IsDatabaseAutoSave => DatabaseAutoSave.Value;
+    
+    // UI Settings from SettingsTypes.UISettings
+    public static bool IsUIEnabled => UIEnabled.Value;
+    public static string UIThemeValue => UITheme.Value;
+    public static float UIFontSizeValue => UIFontSize.Value;
+    
+    // Performance Settings from SettingsTypes.PerformanceSettings
+    public static bool IsPerformanceEnabled => PerformanceEnabled.Value;
+    public static bool IsPerformanceProfiling => PerformanceProfiling.Value;
+    public static long PerformanceMaxMemoryMBValue => PerformanceMaxMemoryMB.Value;
+    
+    // Security Settings from SettingsTypes.SecuritySettings
+    public static bool IsSecurityEnabled => SecurityEnabled.Value;
+    public static bool IsSecurityAuthentication => SecurityAuthentication.Value;
+    public static int SecuritySessionTimeoutValue => SecuritySessionTimeout.Value;
+
+    // JSON Settings from SettingsTypes.JsonSettings
+    public static string JsonConfigurationValue => JsonConfiguration.Value;
 
     public override bool Unload()
     {
         Log.LogInfo("[VAuto] Unloading plugin");
         try
         {
+            // Unwire all systems and cleanup events
+            SystemWiring.UnwireSystems();
+            
+            // Cleanup snapshot service and file watcher
+            SnapshotService.Cleanup();
+            
             _harmony?.UnpatchSelf();
             Log.LogInfo("[VAuto] Plugin unloaded successfully");
             return true;
@@ -1069,4 +1132,3 @@ EnablePrefabGUIDConverter = true
     public const string EmbeddedSnapshotJson = @"{""version"": ""2.1.0"", ""lastUpdated"": ""2026-01-17T09:44:00Z"", ""description"": ""Exceptional snapshot data with comprehensive player states and system configurations"", ""metadata"": {""totalSnapshots"": 5, ""compressionEnabled"": true, ""validationEnabled"": true, ""backupEnabled"": true, ""autoCleanup"": true}, ""snapshots"": [{""id"": ""snapshot_001"", ""playerId"": 123456789, ""characterName"": ""ArenaChampion"", ""timestamp"": ""2026-01-17T09:00:00Z"", ""location"": {""x"": -1000.0, ""y"": 5.0, ""z"": -500.0}, ""rotation"": [0.0, 90.0, 0.0], ""health"": 100.0, ""blood"": 100.0, ""level"": 50, ""experience"": 250000, ""inventory"": [{""itemId"": 238268650, ""quantity"": 10, ""equipped"": true}, {""itemId"": 1055898174, ""quantity"": 5, ""equipped"": false}], ""abilities"": [{""abilityId"": -1996241419, ""cooldown"": 0.0, ""level"": 3}], ""buffs"": [], ""zone"": ""exceptional_default"", ""status"": ""Active"", ""lastActivity"": ""2026-01-17T09:00:00Z""}, {""id"": ""snapshot_002"", ""playerId"": 987654321, ""characterName"": ""BuilderMaster"", ""timestamp"": ""2026-01-17T08:30:00Z"", ""location"": {""x"": -950.0, ""y"": 10.0, ""z"": -450.0}, ""rotation"": [0.0, 45.0, 0.0], ""health"": 85.0, ""blood"": 90.0, ""level"": 35, ""experience"": 150000, ""inventory"": [{""itemId"": 1392314162, ""quantity"": 20, ""equipped"": false}], ""abilities"": [], ""buffs"": [{""buffId"": 12345, ""duration"": 300.0, ""stackCount"": 1}], ""zone"": ""custom_zone_1"", ""status"": ""Building"", ""lastActivity"": ""2026-01-17T08:30:00Z""}, {""id"": ""snapshot_003"", ""playerId"": 555666777, ""characterName"": ""HarvesterPro"", ""timestamp"": ""2026-01-17T07:15:00Z"", ""location"": {""x"": -1050.0, ""y"": 0.0, ""z"": -550.0}, ""rotation"": [0.0, 180.0, 0.0], ""health"": 95.0, ""blood"": 95.0, ""level"": 42, ""experience"": 200000, ""inventory"": [{""itemId"": 1982551454, ""quantity"": 50, ""equipped"": false}], ""abilities"": [], ""buffs"": [], ""zone"": ""resource_zone"", ""status"": ""Harvesting"", ""lastActivity"": ""2026-01-17T07:15:00Z""}, {""id"": ""snapshot_004"", ""playerId"": 111222333, ""characterName"": ""CrafterElite"", ""timestamp"": ""2026-01-17T06:00:00Z"", ""location"": {""x"": -900.0, ""y"": 15.0, ""z"": -400.0}, ""rotation"": [0.0, 270.0, 0.0], ""health"": 100.0, ""blood"": 100.0, ""level"": 48, ""experience"": 230000, ""inventory"": [{""itemId"": 205207385, ""quantity"": 30, ""equipped"": false}], ""abilities"": [], ""buffs"": [], ""zone"": ""crafting_zone"", ""status"": ""Crafting"", ""lastActivity"": ""2026-01-17T06:00:00Z""}, {""id"": ""snapshot_005"", ""playerId"": 444555666, ""characterName"": ""AdminObserver"", ""timestamp"": ""2026-01-17T05:00:00Z"", ""location"": {""x"": -1000.0, ""y"": 50.0, ""z"": -500.0}, ""rotation"": [0.0, 0.0, 0.0], ""health"": 100.0, ""blood"": 100.0, ""level"": 80, ""experience"": 500000, ""inventory"": [], ""abilities"": [], ""buffs"": [], ""zone"": ""admin_zone"", ""status"": ""Observing"", ""lastActivity"": ""2026-01-17T05:00:00Z""}], ""globalSettings"": {""autoSave"": true, ""maxSnapshots"": 100, ""cleanupInterval"": 3600, ""compressionEnabled"": true, ""validationEnabled"": true, ""backupEnabled"": true, ""maxSnapshotAge"": 604800, ""snapshotInterval"": 300, ""dataRetentionPolicy"": ""Intelligent"", ""anomalyDetection"": true}, ""systemState"": {""activePlayers"": 5, ""totalZones"": 10, ""activeArenas"": 1, ""runningServices"": 15, ""memoryUsage"": 1024, ""cpuUsage"": 45.5, ""networkLatency"": 25, ""uptime"": 86400}, ""zoneStates"": [{""zoneId"": ""exceptional_default"", ""name"": ""Exceptional Arena"", ""playerCount"": 1, ""status"": ""Active"", ""lastUpdate"": ""2026-01-17T09:00:00Z""}, {""zoneId"": ""custom_zone_1"", ""name"": ""Building Zone"", ""playerCount"": 1, ""status"": ""Active"", ""lastUpdate"": ""2026-01-17T08:30:00Z""}], ""serviceStates"": [{""serviceName"": ""ArenaService"", ""status"": ""Running"", ""uptime"": 86400, ""memoryUsage"": 128}, {""serviceName"": ""ZoneService"", ""status"": ""Running"", ""uptime"": 86400, ""memoryUsage"": 96}, {""serviceName"": ""AutomationService"", ""status"": ""Running"", ""uptime"": 86400, ""memoryUsage"": 150}], ""performanceMetrics"": {""averageFrameTime"": 16.7, ""maxFrameTime"": 50.0, ""totalEntities"": 5000, ""activeCoroutines"": 25, ""networkPacketsSent"": 10000, ""networkPacketsReceived"": 9500}, ""backupInfo"": {""lastBackup"": ""2026-01-17T08:00:00Z"", ""backupCount"": 24, ""totalBackupSize"": 52428800, ""compressionRatio"": 0.75}}";
 
 }
-

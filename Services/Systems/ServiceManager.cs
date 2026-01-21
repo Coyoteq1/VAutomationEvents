@@ -312,6 +312,8 @@ namespace VAuto.Services
                 return new PlayerServiceWrapper();
             else if (serviceType == typeof(MapIconService))
                 return new MapIconServiceWrapper();
+            else if (serviceType == typeof(LocalizationService))
+                return new LocalizationServiceWrapper();
             else if (serviceType == typeof(GameSystems))
                 return new GameSystemsWrapper();
             else if (serviceType == typeof(RespawnPreventionService))
@@ -918,10 +920,10 @@ namespace VAuto.Services
         {
             public bool IsInitialized => MapIconService.IsInitialized;
             public ManualLogSource Log => MapIconService.Log;
-            
+
             public void Initialize() => MapIconService.Initialize();
             public void Cleanup() => MapIconService.Cleanup();
-            
+
             public ServiceHealthStatus GetHealthStatus()
             {
                 return new ServiceHealthStatus
@@ -932,7 +934,7 @@ namespace VAuto.Services
                     LastCheck = DateTime.UtcNow
                 };
             }
-            
+
             public ServicePerformanceMetrics GetPerformanceMetrics()
             {
                 return new ServicePerformanceMetrics
@@ -942,7 +944,40 @@ namespace VAuto.Services
                     MeasuredAt = DateTime.UtcNow
                 };
             }
-            
+
+            public int GetErrorCount() => 0;
+            public string GetLastError() => null;
+        }
+
+        private class LocalizationServiceWrapper : VAuto.Services.Interfaces.IService, VAuto.Services.Interfaces.IServiceHealthMonitor
+        {
+            public bool IsInitialized => LocalizationService.IsInitialized;
+            public ManualLogSource Log => LocalizationService.Log;
+
+            public void Initialize() => LocalizationService.Initialize();
+            public void Cleanup() => LocalizationService.Cleanup();
+
+            public ServiceHealthStatus GetHealthStatus()
+            {
+                return new ServiceHealthStatus
+                {
+                    ServiceName = "LocalizationService",
+                    IsHealthy = IsInitialized,
+                    Status = IsInitialized ? "Running" : "Stopped",
+                    LastCheck = DateTime.UtcNow
+                };
+            }
+
+            public ServicePerformanceMetrics GetPerformanceMetrics()
+            {
+                return new ServicePerformanceMetrics
+                {
+                    ServiceName = "LocalizationService",
+                    ActiveOperations = LocalizationService.GetLocalizationCount(),
+                    MeasuredAt = DateTime.UtcNow
+                };
+            }
+
             public int GetErrorCount() => 0;
             public string GetLastError() => null;
         }

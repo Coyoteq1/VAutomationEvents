@@ -464,7 +464,7 @@ namespace VAuto.Services.Lifecycle
             _log?.LogInfo($"[Lifecycle] Applying VBlood hook and abilities for {platformId}.");
             ApplyVBloodHook(platformId);
             AbilityOverrideService.Instance.UnlockAllAbilities(userEntity, serverCharacter);
-            VAuto.Core.VBloodMapper.VBloodUnlockSystem.EnableVBloodUnlockMode(serverCharacter);
+            VAuto.Core.VBloodMapper .VBloodUnlockSystem.EnableVBloodUnlockMode(serverCharacter);
             VAuto.Core.VBloodMapper.VBloodUnlockSystem.OpenSpellbookUI(serverCharacter);
             try
             {
@@ -492,7 +492,7 @@ namespace VAuto.Services.Lifecycle
             // Override blood type
             if (VAuto.Core.Core.TryRead(serverCharacter, out Blood blood))
             {
-                blood.BloodType = new PrefabGUID(Plugin.GetConfigInt("Arena.Lifecycle", "PvPBloodTypeGuid", -1464869978));
+                blood.BloodType = new PrefabGUID(Plugin.jsonInt("Arena.Lifecycle", "PvPBloodTypeGuid", -1464869978));   
                 blood.Quality = 100.0f;
                 VAuto.Core.Core.Write(serverCharacter, blood);
                 _log?.LogInfo($"[Lifecycle] Set PvP blood type for {platformId}.");
@@ -503,7 +503,7 @@ namespace VAuto.Services.Lifecycle
         {
             var platformId = VAuto.Core.Core.EntityManager.GetComponentData<User>(VAuto.Core.Core.EntityManager.GetComponentData<PlayerCharacter>(serverCharacter).UserEntity).PlatformId;
             _log?.LogInfo($"[Lifecycle] Applying arena gear for {platformId}.");
-            var buildName = Plugin.GetConfigValue("Arena.Lifecycle", "DefaultBuildName", "Dracula_Scholar");
+            var buildName = Plugin.jsonString("Arena.Lifecycle", "DefaultBuildName", "Dracula_Scholar");
             if (!ArenaBuildService.ApplyBuild(serverCharacter, buildName))
             {
                 _log?.LogWarning($"[Lifecycle] Failed to apply arena gear for {platformId}.");
@@ -513,7 +513,7 @@ namespace VAuto.Services.Lifecycle
         private void TeleportPlayerToArena(Entity serverCharacter)
         {
             var platformId = VAuto.Core.Core.EntityManager.GetComponentData<User>(VAuto.Core.Core.EntityManager.GetComponentData<PlayerCharacter>(serverCharacter).UserEntity).PlatformId;
-            var arenaCenter = Plugin.GetConfigFloat3("Arena.Lifecycle", "ArenaCenter", new float3(-1000f, 5f, -500f));
+            var arenaCenter = Plugin.jsonFloat3("Arena.Lifecycle", "ArenaCenter", new float3(-1000f, 5f, -500f));
             _log?.LogInfo($"[Lifecycle] Teleporting {platformId} to arena center {arenaCenter}.");
             FastTeleport(serverCharacter, arenaCenter);
         }

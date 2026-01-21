@@ -4,7 +4,7 @@ using VAuto.Services.Interfaces;
 
 namespace VAuto.Services.Systems
 {
-    public static class ZoneService
+    public static class ZoneManager
     {
         public static bool IsInitialized => ArenaZoneService.Instance.IsInitialized;
         public static ManualLogSource Log => ArenaZoneService.Instance.Log;

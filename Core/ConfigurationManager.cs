@@ -89,6 +89,11 @@ public class ConfigurationManager : IDisposable
     #endregion
 
     #region Configuration Access
+    
+    public BepInEx.Configuration.ConfigEntry<T> Bind<T>(string section, string key, T defaultValue, string description = "")
+    {
+        return new BepInEx.Configuration.ConfigEntry<T>(key, defaultValue, description);
+    }
 
     public string GetConfigValue(string section, string key, string defaultValue = "")
     {
@@ -224,7 +229,7 @@ public class ConfigurationManager : IDisposable
                     _configSections[sectionKey] = new Dictionary<string, string>();
                 }
 
-                var oldValue = _configSections[sectionKey].GetValueOrDefault(request.Key.ToLower(), "");
+                var oldValue = _configSections[sectionKey].ContainsKey(request.Key.ToLower()) ? _configSections[sectionKey][request.Key.ToLower()] : "";
                 _configSections[sectionKey][request.Key.ToLower()] = request.Value;
 
                 Plugin.Logger?.LogDebug($"[ConfigManager] Updated [{request.Section}]{request.Key}: '{oldValue}' -> '{request.Value}'");
@@ -395,7 +400,7 @@ public class ConfigurationManager : IDisposable
             // Parse key-value pairs
             if (trimmedLine.Contains("=") && !string.IsNullOrEmpty(currentSection))
             {
-                var parts = trimmedLine.Split('=', 2);
+                var parts = trimmedLine.Split(new char[] { '=' }, 2);
                 if (parts.Length == 2)
                 {
                     var key = parts[0].Trim();

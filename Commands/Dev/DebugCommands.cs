@@ -9,6 +9,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
 using VampireCommandFramework;
+using BepInEx.Logging;
 using VAuto.Core;
 using VAuto.Services;
 using static VAuto.Core.MissingTypes;

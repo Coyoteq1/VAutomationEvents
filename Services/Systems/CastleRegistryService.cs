@@ -7,6 +7,7 @@ using VAuto.Services.Interfaces;
 using VAuto.Core;
 using VAuto.Data;
 using BepInEx.Logging;
+using VampireCommandFramework;
 
 namespace VAuto.Services.Systems
 {

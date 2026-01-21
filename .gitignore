@@ -95,9 +95,11 @@ builds/
 *.log
 *.tmp
 
-# JSON files - BLOCK ALL JSON FILES
+# JSON files - BLOCK ALL JSON FILES EXCEPT SPECIFIC ONES
 *.json
 **/*.json
+!zones.json
+!snapshots.json
 !package.json
 !package-lock.json
 

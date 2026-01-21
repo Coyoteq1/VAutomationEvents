@@ -36,10 +36,10 @@ namespace VAuto.Core
                     state = new DualCharacterState
                     {
                         NormalCharacter = normalCharacter,
-                        ArenaCharacter = Entity.Null,
-                        IsArenaActive = false,
-                        ArenaCreatedAt = DateTime.UtcNow,
-                        ArenaNeedsRespawn = false,
+                        PvPCharacter = Entity.Null,
+                        IsPvPActive = false,
+                        PvPCreatedAt = DateTime.UtcNow,
+                        PvPNeedsRespawn = false,
                         LastSwapTime = DateTime.MinValue,
                         OriginalBloodType = string.Empty,
                         ArenaBloodType = "Rogue",
@@ -80,37 +80,57 @@ namespace VAuto.Core
         // Back-compat with older naming used by Commands/Character/CharacterCommands.cs
         public static bool SwitchToPvP(ulong platformId, Entity userEntity)
         {
-            try
+            lock (_lock)
             {
-                // TODO: Implement CharacterSwapService
-                Plugin.Logger?.LogError("[DualCharacterManager] CharacterSwapService not implemented");
-                return false;
-                
-                // Original code (commented out):
-                // return CharacterSwapService.ForceActivateCharacter(platformId, userEntity, activateArena: true);
-            }
-            catch (Exception ex)
-            {
-                Plugin.Logger?.LogError($"[DualCharacterManager] Error in SwitchToPvP: {ex.Message}");
-                return false;
+                if (!_states.TryGetValue(platformId, out var state)) return false;
+                if (state.PvPCharacter == Entity.Null || !VRCore.EM.Exists(state.PvPCharacter)) return false;
+
+                // Freeze normal character
+                CharacterFreezeService.Freeze(state.NormalCharacter);
+
+                // Unfreeze PvP character
+                CharacterFreezeService.Unfreeze(userEntity, state.PvPCharacter);
+
+                // Swap positions
+                if (VRCore.EM.HasComponent<Unity.Transforms.Translation>(state.NormalCharacter) &&
+                    VRCore.EM.HasComponent<Unity.Transforms.Translation>(state.PvPCharacter))
+                {
+                    var normalPos = VRCore.EM.GetComponentData<Unity.Transforms.Translation>(state.NormalCharacter);
+                    VRCore.EM.SetComponentData(state.PvPCharacter, normalPos);
+                    VRCore.EM.SetComponentData(state.NormalCharacter, new Unity.Transforms.Translation { Value = new float3(-1000, 5, -500) });
+                }
+
+                state.IsPvPActive = true;
+                state.LastSwapTime = DateTime.UtcNow;
+                return true;
             }
         }
 
         public static bool SwitchToNormal(ulong platformId, Entity userEntity)
         {
-            try
+            lock (_lock)
             {
-                // TODO: Implement CharacterSwapService
-                Plugin.Logger?.LogError("[DualCharacterManager] CharacterSwapService not implemented");
-                return false;
-                
-                // Original code (commented out):
-                // return CharacterSwapService.ForceActivateCharacter(platformId, userEntity, activateArena: false);
-            }
-            catch (Exception ex)
-            {
-                Plugin.Logger?.LogError($"[DualCharacterManager] Error in SwitchToNormal: {ex.Message}");
-                return false;
+                if (!_states.TryGetValue(platformId, out var state)) return false;
+                if (state.PvPCharacter == Entity.Null || !VRCore.EM.Exists(state.PvPCharacter)) return false;
+
+                // Freeze PvP character
+                CharacterFreezeService.Freeze(state.PvPCharacter);
+
+                // Unfreeze normal character
+                CharacterFreezeService.Unfreeze(userEntity, state.NormalCharacter);
+
+                // Swap positions
+                if (VRCore.EM.HasComponent<Unity.Transforms.Translation>(state.NormalCharacter) &&
+                    VRCore.EM.HasComponent<Unity.Transforms.Translation>(state.PvPCharacter))
+                {
+                    var pvpPos = VRCore.EM.GetComponentData<Unity.Transforms.Translation>(state.PvPCharacter);
+                    VRCore.EM.SetComponentData(state.NormalCharacter, pvpPos);
+                    VRCore.EM.SetComponentData(state.PvPCharacter, new Unity.Transforms.Translation { Value = new float3(-1000, 5, -500) });
+                }
+
+                state.IsPvPActive = false;
+                state.LastSwapTime = DateTime.UtcNow;
+                return true;
             }
         }
     }
